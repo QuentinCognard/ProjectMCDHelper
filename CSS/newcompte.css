@@ -1,0 +1,15 @@
+
+
+label{
+display: block;
+width: 150px;
+float: left;
+}
+
+ul{
+  list-style: none;
+}
+
+ul li{
+  margin-bottom: 1%;
+}
