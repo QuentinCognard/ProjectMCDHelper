@@ -33,7 +33,7 @@
 
         <li>
           <label for 'mail'>Email: </label>
-          <input type='adress' name='mail'>
+          <input type='email' name='mail'>
         </li>
 
         <li>
