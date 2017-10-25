@@ -12,6 +12,8 @@
     $file_db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
     $file_db->exec("CREATE TABLE IF NOT EXISTS USER(
       idUser INTEGER PRIMARY KEY,
+      nomUser TEXT,
+      prenomUser TEXT,
       login TEXT,
       mdp TEXT,
       adresseMail TEXT

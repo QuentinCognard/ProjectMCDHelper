@@ -13,14 +13,16 @@
 
     // UTILISATEURS
     $user = array(
-      array(1,"lukas","lukas","lucas.filleul@gmail.com"),
-      array(2,"louis","louis","louis@gmail.com"),
-      array(3,"autre","autre","autre@gmail.com")
+      array(1,"FILLEUL","Lucas","lukas","lukas","lucas.filleul@gmail.com"),
+      array(2,"BELHEN","Louis","louis","louis","louis@gmail.com"),
+      array(3,"AUTRE","autre","autre","autre","autre@gmail.com")
     );
-    $insert = "INSERT INTO USER (idUser, login,mdp,adresseMail)
-    VALUES (:idUser,:login,:mdp,:adresseMail)";
+    $insert = "INSERT INTO USER (idUser,nomUser,prenomUser, login,mdp,adresseMail)
+    VALUES (:idUser,:nomUser,:prenomUser,:login,:mdp,:adresseMail)";
     $stmt = $file_db->prepare($insert);
     $stmt->bindParam(':idUser', $idUser);
+    $stmt->bindParam(':nomUser', $nomUser);
+    $stmt->bindParam(':prenomUser', $prenomUser);
     $stmt->bindParam(':login', $login);
     $stmt->bindParam(':mdp', $mdp);
     $stmt->bindParam(':adresseMail', $adresseMail);
@@ -28,9 +30,11 @@
 
     foreach($user as $u){
       $idUser = $u[0];
-      $login = $u[1];
-      $mdp = $u[2];
-      $adresseMail = $u[3];
+      $nomUser = $u[1];
+      $prenomUser = $u[2];
+      $login = $u[3];
+      $mdp = $u[4];
+      $adresseMail = $u[5];
       $stmt->execute();
     }
     echo "Users rentrées<br>";
