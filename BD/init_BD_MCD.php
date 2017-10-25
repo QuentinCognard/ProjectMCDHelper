@@ -43,9 +43,11 @@
     $file_db->exec("CREATE TABLE IF NOT EXISTS ATTRIBUTS(
       idAttribut INTEGER PRIMARY KEY,
       idProjet INTEGER,
+      idConteneur INTEGER,
       nomAttribut TEXT,
       genreAttribut TEXT,
       typeAttribut TEXT,
+      valeurAttribut TEXT,
       Actif INTEGER
     )");
     echo "BD Attributs initialisée<br>";
@@ -57,13 +59,6 @@
       positionEntite TEXT
     )");
     echo "BD Entite initialisée<br>";
-
-    $file_db->exec("CREATE TABLE IF NOT EXISTS ATTDANSENT(
-      idEntite INTEGER,
-      idAttribut INTEGER,
-      PRIMARY KEY (idEntite, idAttribut)
-    )");
-    echo "BD relations attributs dans entite initialisée<br>";
 
     $file_db->exec("CREATE TABLE IF NOT EXISTS RELATION(
       idRelation INTEGER PRIMARY KEY,
@@ -81,12 +76,6 @@
     )");
     echo "BD relations concerne tels entites initialisée<br>";
 
-    $file_db->exec("CREATE TABLE IF NOT EXISTS ATTDANSREL(
-      idRelation INTEGER,
-      idAttribut INTEGER,
-      PRIMARY KEY (idRelation, idAttribut)
-    )");
-    echo "BD relations attributs dans relation initialisée<br>";
     }
     catch(PDOException $e){
       echo $e->getMessage();
