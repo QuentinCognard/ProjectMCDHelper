@@ -8,7 +8,7 @@
   <header>
     <h1>Exerciseur MCD</h1>
   </header>
-  <article>
+  <article id='connexion'>
     <?php
     function verification(){
       $file_db = new PDO("sqlite:../BD/BD.sqlite");
@@ -25,15 +25,16 @@
     }
   if ($_SERVER["REQUEST_METHOD"]=="GET"){
     echo "<form method='POST' action='connexion.php'>";
+    echo "<fieldset> <legend>Connexion</legend>";
     $html ="<p>Identifiant: ";
     $html.="<input type='text' name='login'><br></p>";
     $html.="<p>Mot de passe: ";
     $html.="<input type='password' name='mdp'><br></p>";
-    $html.="<a href='' alt='Mot de passe oublié ?'>";
-    $html.="<input type='submit' value='Connexion'><br></p>";
+    $html.="<a href=''>Mot de passe oublié ?</a></p>";
+    $html.="<section id='boutons'><input id='co' type='submit' value='Connexion'><br>";
+    $html.="<input id='compte' type='button' value='Créer un compte' OnClick='window.location.href=\'ajout_user.php'/></section>";
     echo $html;
-    echo "</form>";
-    echo "<input type='button' value='Créer un compte' OnClick='window.location.href=\'connexion.php'/>";
+    echo "</fieldset></form>";
   }
   else{
     verification();
