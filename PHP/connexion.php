@@ -24,17 +24,16 @@
       $file_db = null;
     }
   if ($_SERVER["REQUEST_METHOD"]=="GET"){
-    echo "<form method='POST' action='connexion.php'>";
-    echo "<fieldset> <legend>Connexion</legend>";
+    echo "<fieldset><legend>Connexion</legend><form method='POST' action='connexion.php'>";
     $html ="<p>Identifiant: ";
     $html.="<input type='text' name='login'><br></p>";
     $html.="<p>Mot de passe: ";
     $html.="<input type='password' name='mdp'><br></p>";
     $html.="<a href=''>Mot de passe oublié ?</a></p>";
-    $html.="<section id='boutons'><input id='co' type='submit' value='Connexion'><br>";
-    $html.="<input id='compte' type='button' value='Créer un compte' OnClick='window.location.href=\'ajout_user.php'/></section>";
+    $html.="<section id='boutons'><input id='co' type='submit' value='Connexion'></form><br>";
+    $html.="<a href='ajout_user.php'><input id='compte' type='button' value='Créer un compte'></a></section>";
     echo $html;
-    echo "</fieldset></form>";
+    echo "</fieldset>";
   }
   else{
     verification();
