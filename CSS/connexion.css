@@ -1,0 +1,12 @@
+h1{
+  font-family: "Arial Narrow";
+  text-align: center;
+  font-size: 50px;
+}
+article{
+  border-style: solid;
+  padding: 20px;
+  margin-left: 250px;
+  margin-right: 250px;
+  text-align: center;
+}
