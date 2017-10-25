@@ -10,21 +10,33 @@
   </header>
   <article>
     <?php
-    $file_db = new PDO("sqlite:../BD/BD.sqlite");
-    $file_db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+    function verification(){
+      $file_db = new PDO("sqlite:../BD/BD.sqlite");
+      $file_db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+      $requetelogin = $file_db->query("SELECT mdp FROM USER where login ='$_POST[login]'");
+      $donnees = $requetelogin->fetch();
+      if($donnees[0] == $_POST['mdp']){
+        echo "BIENVENU !!!!!!!!!! :D";
+      }
+      else{
+        echo "PAS DE USER BRO";
+      }
+      $file_db = null;
+    }
+  if ($_SERVER["REQUEST_METHOD"]=="GET"){
     echo "<form method='POST' action='connexion.php'>";
     $html ="<p>Identifiant: ";
-    $html.="<input type='text' name='identifiant'><br></p>";
+    $html.="<input type='text' name='login'><br></p>";
     $html.="<p>Mot de passe: ";
-    $html.="<input type='text' name='mdp'><br></p>";
+    $html.="<input type='password' name='mdp'><br></p>";
     $html.="<a href='' alt='Mot de passe oublié ?'>";
     $html.="<input type='submit' value='Connexion'><br></p>";
-    echo "</form>";
     echo $html;
+    echo "</form>";
     echo "<input type='button' value='Créer un compte' OnClick='window.location.href=\'connexion.php'/>";
-
-
-  if ($_SERVER["REQUEST_METHOD"]=="POST"){
+  }
+  else{
+    verification();
   }
   ?>
   </article>
