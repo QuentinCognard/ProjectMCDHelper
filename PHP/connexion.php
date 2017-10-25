@@ -28,7 +28,7 @@
     $html ="<p>Identifiant: ";
     $html.="<input type='text' name='login'><br></p>";
     $html.="<p>Mot de passe: ";
-    $html.="<input type='text' name='mdp'><br></p>";
+    $html.="<input type='password' name='mdp'><br></p>";
     $html.="<a href='' alt='Mot de passe oublié ?'>";
     $html.="<input type='submit' value='Connexion'><br></p>";
     echo $html;
