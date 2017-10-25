@@ -26,9 +26,9 @@
   if ($_SERVER["REQUEST_METHOD"]=="GET"){
     echo "<fieldset><legend>Connexion</legend><form method='POST' action='connexion.php'>";
     $html ="<p>Identifiant: ";
-    $html.="<input type='text' name='login'><br></p>";
+    $html.="<input type='text' name='login' required><br></p>";
     $html.="<p>Mot de passe: ";
-    $html.="<input type='password' name='mdp'><br></p>";
+    $html.="<input type='password' name='mdp' required><br></p>";
     $html.="<a href=''>Mot de passe oublié ?</a></p>";
     $html.="<section id='boutons'><input id='co' type='submit' value='Connexion'></form><br>";
     $html.="<a href='ajout_user.php'><input id='compte' type='button' value='Créer un compte'></a></section>";
