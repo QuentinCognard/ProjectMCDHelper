@@ -34,6 +34,20 @@
 {% endblock %}
 {% block content %}
 <h1>{{ title }}</h1>
+<form action="/ma-page-de-traitement" method="post">
+    <div>
+        <label for="login">Login :</label>
+        <input type="text" id="login" />
+    </div>
+    <div>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" />
+    </div>
+
+    <div class="button">
+        <button type="submit">Connexion</button>
+    </div>
+</form>
 {% block main %}
 {% endblock %}
 {% endblock %}
