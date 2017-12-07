@@ -8,4 +8,6 @@ def home():
 	return render_template("connexion.html", title= "Premier template avec Flask")
 
 
-
+@app.route("/projets")
+def page_projets():
+	return render_template("accueil_projet.html")
