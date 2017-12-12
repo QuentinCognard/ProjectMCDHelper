@@ -12,6 +12,15 @@ label{
 form{
 width: 250px;
 height: 250px;
-margin-left: 40px;
+margin-left: 42%;
 margin-top:  50px;
+padding-left: 30px;
+border-width:1px;
+border-style:solid;
+border-color:black;
+}
+
+body
+{
+
 }

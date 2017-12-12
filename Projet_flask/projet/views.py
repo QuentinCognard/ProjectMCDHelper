@@ -5,7 +5,4 @@ from flask import render_template
 
 @app.route("/")
 def home():
-	return render_template("connexion.html", title= "Premier template avec Flask")
-
-
-
+	return render_template("connexion.html", title= "Exerciseur MCD")

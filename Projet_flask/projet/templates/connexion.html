@@ -11,6 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% endblock %}
 {% block content %}
+<body>
+<h1> {{title}} </h1>
 <form action="/ma-page-de-traitement" method="post">
     <div>
         <label for="login">Login :</label>
@@ -25,6 +27,7 @@
         <button type="submit">Connexion</button>
     </div>
 </form>
+</body>
 {% block main %}
 {% endblock %}
 {% endblock %}
