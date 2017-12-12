@@ -15,7 +15,7 @@
     $user = array(
       array(1,"FILLEUL","Lucas","lukas","lukas","lucas.filleul@gmail.com"),
       array(2,"BELHEN","Louis","louis","louis","louis@gmail.com"),
-      array(3,"AUTRE","autre","autre","autre","autre@gmail.com")
+      array(3,"Admin","baby","admin","admin","admin@gmail.com")
     );
     $insert = "INSERT INTO USER (idUser,nomUser,prenomUser, login,mdp,adresseMail)
     VALUES (:idUser,:nomUser,:prenomUser,:login,:mdp,:adresseMail)";
