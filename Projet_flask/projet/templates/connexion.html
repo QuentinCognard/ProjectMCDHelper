@@ -1,0 +1,30 @@
+{% extends "bootstrap/base.html" %}
+{% block title %} {{ title }} {% endblock %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet"
+  href="{{ url_for ('static', filename ='base.css') }}"/>
+{% endblock %}
+{% block metas %}
+{{ super() }}
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% endblock %}
+{% block content %}
+<form action="/ma-page-de-traitement" method="post">
+    <div>
+        <label for="login">Login :</label>
+        <input type="text" id="login" />
+    </div>
+    <div>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" />
+    </div>
+
+    <div class="button">
+        <button type="submit">Connexion</button>
+    </div>
+</form>
+{% block main %}
+{% endblock %}
+{% endblock %}
