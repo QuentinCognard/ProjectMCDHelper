@@ -11,6 +11,7 @@ class ConnexionForm(FlaskForm):
 
 @app.route("/")
 def home():
+
 	f = ConnexionForm(login="",password="")
 	return render_template("connexion.html", title= "Exerciseur MCD", form=f)
 
@@ -26,3 +27,10 @@ def traitement():
 			return render_template("connexion.html", title= "Exerciseur MCD", form=ferreur)
 	f = ConnexionForm(login="",password="")
 	return render_template("connexion.html", title= "Exerciseur MCD", form=f)
+
+	return render_template("connexion.html", title= "Premier template avec Flask")
+
+
+@app.route("/projets")
+def page_projets():
+	return render_template("accueil_projet.html")

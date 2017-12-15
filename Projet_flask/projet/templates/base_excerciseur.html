@@ -1,0 +1,21 @@
+
+{% extends "bootstrap/base.html" %}
+  {% block styles %}
+  {{ super() }}
+    <link rel="stylesheet" href= "{{url_for('static',filename='accueil_projet.css') }}"/>
+
+  {% endblock %}
+
+{% block content %}
+  {% block header %}
+  <header>
+    <form action='/'>
+      <input type="submit" value="Déconnexion" id="deco">
+    </form>
+    <h1 id="title"> Excerciseur MCD </h1>
+    <div id= "lien">
+    <a id="linkprofil" href="#"> <img id="profile" src='./static/logo_profile.jpg'> </a>
+  </div>
+  </header>
+  {% endblock %}
+  {% endblock %}
