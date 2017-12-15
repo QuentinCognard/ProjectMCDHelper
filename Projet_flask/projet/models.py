@@ -11,6 +11,6 @@ class User(db.Model, UserMixin):
 
 
 
-def get_user(id,mdp):
-    User = User.query.filter(User.id==id).all()
+def get_user(login):
+    User = User.query.filter(User.login==login).all()
     return User

@@ -14,12 +14,9 @@
 <body>
 <h1> {{title}} </h1>
 
-<form role="form" method="POST" action="{{url_for('traitement')}}">
+<form method="POST" action="">
     <div>
-      {{ form.login.label }} {{ form.login(size=20, class_="from-control")}}
-      {{ form.password.label }} {{ form.password(size=20, class_="from-control")}}
-      <input class="btn btn-default" type="submit" value="Se connecter">
-        <!-- <label for="login">Login :</label>
+        <label for="login">Login :</label>
         <input type="text" id="login" placeholder='{{ login }}' required/>
     </div>
     <div>
@@ -28,9 +25,10 @@
     </div>
 
     <div class="button">
-        <button type="submit">Connexion</button> -->
+        <button type="submit">Connexion</button>
     </div>
 </form>
+<p> Mauvais mot de passe </p>
 </body>
 {% block main %}
 {% endblock %}
