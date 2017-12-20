@@ -34,3 +34,19 @@ def traitement():
 @app.route("/projets")
 def page_projets():
 	return render_template("accueil_projet.html")
+
+# @app.route("/projets/<idProj>/")
+# def page_projet_perso(idProj):
+	# proj = get_proj(idProj)
+	# if proj:
+	# 	return render_template("consult_own_project.html", projet = proj)
+	# else:
+	# 	return "Projet inconnu"
+	# Pour plus tard
+@app.route("/projets/0")
+def page_projet_perso():
+	return render_template("consult_own_project.html")
+
+@app.route("/projets/0/new-mcd")
+def page_creer_mcd():
+	return render_template("create_mcd.html")
