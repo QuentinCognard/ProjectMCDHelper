@@ -1,4 +1,8 @@
-#mesprojets{
+.projets{
   margin: 1em;
-  border-style: groove;
+}
+
+legend{
+  margin-top: 1em;
+  padding-left: 1em;
 }

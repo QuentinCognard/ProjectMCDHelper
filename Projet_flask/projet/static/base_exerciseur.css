@@ -1,5 +1,5 @@
 *{
-  font-family:"American Typewriter",serif;
+  font-family:"DejaVu Sans Mono";
 }
 header{
   display: flex;
@@ -10,7 +10,9 @@ header{
   background-color: red;
   color: white;
   padding: 0.4em;
-  box-shadow: 0px 0px 15px grey;
+  box-shadow: 0px 1px 1px grey;
+  margin-left: 1em;
+  font-weight: bold;
 }
 #title{
   flex: 1 0 80%;
