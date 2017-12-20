@@ -1,0 +1,41 @@
+{% extends "base_excerciseur.html" %}
+{% block contain %}
+{{ super () }}
+<h1>Ajouter un projet :</h1>
+<form role="form" method="POST" action=#>
+  {{ form.hidden_tag() }}
+  <div class=
+        {% if form.name.errors %}
+        "form-groupe has-error"
+        {% else %}
+        "form-group"
+        {% endif %}
+        >
+        {{ form.name.label }} {{ form.name(size=50,class_="form-control") }}
+  </div>
+  {% if form.name.errors %}
+  <ul class="list-group">
+    {% for e in form.name.errors %}
+    <li class="list-group-item list-group-item-danger">{{ e }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <div class=
+        {% if form.description.errors %}
+        "form-groupe has-error"
+        {% else %}
+        "form-group"
+        {% endif %}
+        >
+        {{ form.description.label }} {{ form.description(size=50,class_="form-control") }}
+  </div>
+  {% if form.description.errors %}
+  <ul class="list-group">
+    {% for e in form.description.errors %}
+    <li class="list-group-item list-group-item-danger">{{ e }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <input class="btn btn-default" type="submit" value="Enregistrez">
+</form>
+{% endblock %}

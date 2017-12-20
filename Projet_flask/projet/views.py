@@ -34,3 +34,18 @@ def traitement():
 @app.route("/projets")
 def page_projets():
 	return render_template("accueil_projet.html")
+from flask_wtf import FlaskForm
+from wtforms import StringField, HiddenField, validators
+from wtforms.validators import DataRequired
+
+class ProjetForm(FlaskForm):
+	id = HiddenField('id')
+	name = StringField('Nom Projet',[validators.Length(min=4, max=25)])
+	description =StringField('Description',[validators.Length(min=10, max=150)])
+
+@app.route("/projets/add", methods=['GET', 'POST'])
+def add_projets():
+	P = ProjetForm(name="",description="")
+	return render_template(
+		"add-projet.html",
+		form=P)
