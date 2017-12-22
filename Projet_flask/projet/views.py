@@ -31,19 +31,19 @@ def traitement():
 	return render_template("connexion.html", title= "Premier template avec Flask")
 
 
-@app.route("/projets")
+@app.route("/projets")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
 def page_projets():
 	return render_template("accueil_projet.html")
 from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField, validators
 from wtforms.validators import DataRequired
 
-class ProjetForm(FlaskForm):
+class ProjetForm(FlaskForm):#Formulaire de création de projet
 	id = HiddenField('id')
 	name = StringField('Nom Projet',[validators.Length(min=4, max=25)])
 	description =StringField('Description',[validators.Length(min=10, max=150)])
 
-@app.route("/projets/add", methods=['GET', 'POST'])
+@app.route("/projets/add", methods=['GET', 'POST'])# Page de création d'un projet
 def add_projets():
 	P = ProjetForm(name="",description="")
 	return render_template(

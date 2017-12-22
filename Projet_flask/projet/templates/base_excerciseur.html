@@ -1,14 +1,11 @@
-
-{% extends "bootstrap/base.html" %}
+{% extends "bootstrap/base.html" %}<!--Css bootstrap -->
   {% block styles %}
   {{ super() }}
-    <link rel="stylesheet" href= "{{url_for('static',filename='base_exerciseur.css') }}"/>
-
+    <link rel="stylesheet" href= "{{url_for('static',filename='base_exerciseur.css') }}"/><!--Css base_exerciseur -->
   {% endblock %}
-
-{% block content %}
+{% block content %}<!--Block body de la page -->
   {% block header %}
-  <header>
+  <header> <!-- Header contenant le bouton de déconnexion et profil-->
     <form action='/'>
       <input type="submit" value="Déconnexion" id="deco">
     </form>
