@@ -1,37 +1,48 @@
-{% extends "bootstrap/base.html" %}
-{% block title %} {{ title }} {% endblock %}
+{% extends "bootstrap/base.html" %} <!-- extends pour unifier l'ensemble de nos pages pour avoir la même stucture -->
+{% block title %} {{ title }} {% endblock %} <!-- block title pour le titre de notre page -->
 {% block styles %}
 {{ super() }}
 <link rel="stylesheet"
-  href="{{ url_for ('static', filename ='base.css') }}"/>
+  href="{{ url_for ('static', filename ='base.css') }}"/> <!-- Intégration du premier ficher .css se trouvant dans
+  le dossier static -->
+
+<link rel="stylesheet"
+  href="{{ url_for ('static', filename ='base2.css') }}"/> <!-- Intégration du second ficher .css se trouvant dans
+  le dossier static -->
 {% endblock %}
-{% block metas %}
-{{ super() }}
-<meta charset="utf-8">
+
+{% block matas %} <!-- block metas pour définir le type d'encodage-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+  </head>
 {% endblock %}
-{% block content %}
-<body>
-<h1> {{title}} </h1>
 
-<form role="form" method="POST" action="{{url_for('traitement')}}">
-    <div>
-      {{ form.login.label }} {{ form.login(size=20, class_="from-control")}}
-      {{ form.password.label }} {{ form.password(size=20, class_="from-control")}}
-      <input class="btn btn-default" type="submit" value="Se connecter">
-        <!-- <label for="login">Login :</label>
-        <input type="text" id="login" placeholder='{{ login }}' required/>
-    </div>
-    <div>
-        <label for="password">Mot de passe :</label>
-        <input type="password" id="password" required />
-    </div>
+{% block content %} <!-- block principal -->
+  <body>
 
-    <div class="button">
-        <button type="submit">Connexion</button> -->
-    </div>
-</form>
-</body>
-{% block main %}
+    <h1> {{title}} </h1>
+
+    <div class="container">
+
+      <form class="form-signin"> <!-- debut de notre formulaire de connexion -->
+        <h2 class="form-signin-heading">Connexion</h2>
+        <label for="inputLogin" class="sr-only">Login</label>
+        <input type="inputLogin" id="inputLogin" class="form-control" placeholder="Login" required autofocus> <!-- champ du login-->
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required> <!-- champ du password-->
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Souvenez vous de moi
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Connexion</button> <!-- bouton de connexion pour la validation-->
+      </form>
+
+    </div> <!-- /container -->
+  </body>
 {% endblock %}
-{% endblock %}
+</html>
