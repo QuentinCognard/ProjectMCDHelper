@@ -1,8 +1,11 @@
-{% extends "base.html" %}
-{% block main %}
+{% extends "base_excerciseur.html" %}
+{% block content %}
+{{ super() }}
+<!-- Bouton ajouter MCD -->
   <div class="jumbotron">
-    <h1 class="display-3">Consulter Projet</h1>
-    <p class="lead"></p>
-    <p><a class="btn btn-lg btn-success" href="0/new-mcd" role="button">Ajouter MCD</a></p>
+    <div class="container">
+      <h1 class="display-3">Nom du projet</h1>
+      <p><a class="btn btn-primary btn-lg" href="0/new-mcd" role="button">AjouterMCD &raquo;</a></p>
+    </div>
   </div>
 {% endblock %}

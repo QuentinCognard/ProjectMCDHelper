@@ -1,13 +1,18 @@
-{% extends "base.html" %}
-{% block main %}
+{% extends "base_excerciseur.html" %}
+{% block content %}
+{{ super() }}
 <form class="bd-example">
   <fieldset>
     <legend>Nouveau MCD</legend>
+
+<!-- fixe: Nom du MCD -->
 
     <p>
       <label for="input">Nom du MCD :</label>
       <input type="text" id="namemcd" placeholder="Nom du MCD" required />
     </p>
+
+<!-- Cette div devra se répéter autant de fois qu'il y a d'attributs -->
 
     <div class="attribut">
       <p>
