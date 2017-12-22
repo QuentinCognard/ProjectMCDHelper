@@ -49,3 +49,23 @@ def add_projets():
 	return render_template(
 		"add-projet.html",
 		form=P)
+
+# route vers un projet perso en fonction de l'ID
+
+# @app.route("/projets/<idProj>/")
+# def page_projet_perso(idProj):
+	# proj = get_proj(idProj)
+	# if proj:
+	# 	return render_template("consult_own_project.html", projet = proj)
+	# else:
+	# 	return "Projet inconnu"
+	# Pour plus tard
+@app.route("/projets/0")
+def page_projet_perso():
+	return render_template("consult_own_project.html")
+
+# route vers la creation d'un MCD en fonction de l'ID du projet
+
+@app.route("/projets/0/new-mcd")
+def page_creer_mcd():
+	return render_template("create_mcd.html")

@@ -1,0 +1,63 @@
+{% extends "base_excerciseur.html" %}
+{% block content %}
+{{ super() }}
+<form class="bd-example">
+  <fieldset>
+    <legend>Nouveau MCD</legend>
+
+<!-- fixe: Nom du MCD -->
+
+    <p>
+      <label for="input">Nom du MCD :</label>
+      <input type="text" id="namemcd" placeholder="Nom du MCD" required />
+    </p>
+
+<!-- Cette div devra se répéter autant de fois qu'il y a d'attributs -->
+
+    <div class="attribut">
+      <p>
+        <label for="input">Nom de l'attribut :</label>
+        <input type="text" id="nameatt" placeholder="Nom de l'attribut" />
+      </p>
+
+      <p>
+        <label for="select">Type de l'attribut :</label>
+        <select id="typeatt">
+          <option value="">Choisir...</option>
+            <option value="">Integer</option>
+            <option value="">Float</option>
+            <option value="">String</option>
+            <option value="">Char</option>
+            <option value="">Date</option>
+        </select>
+      </p>
+
+      <p>
+        <label for="input">Valeur :</label>
+        <input type="number" id="valeuratt" placeholder="0" />
+      </p>
+
+      <p>
+        <label for="input">Quantité :</label>
+        <input type="number" id="quantite" placeholder="0" />
+      </p>
+
+      <p>
+        <label for="select">Genre :</label>
+        <select id="genreatt">
+          <option value="">Masculin</option>
+            <option value="">Féminin</option>
+        </select>
+      </p>
+    </div>
+
+    <p>
+      <p><a href="/projets" role="button">annuler</a></p>
+    </p>
+    <p>
+      <button type="submit">Valider</button>
+    </p>
+
+  </fieldset>
+</form>
+{% endblock %}
