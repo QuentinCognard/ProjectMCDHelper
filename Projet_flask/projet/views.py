@@ -9,10 +9,10 @@ class ConnexionForm(FlaskForm):
 	login = StringField('Login', validators=[DataRequired()])
 	password = PasswordField('Mot de passe', validators=[DataRequired()])
 
-@app.route("/")
+@app.route("/") #route pour la page de connexion
 def home():
 
-	f = ConnexionForm(login="",password="")
+	f = ConnexionForm(login="",password="") #Utilisation du connexionForm pour mettre en forme notre fomulaire de connexion.
 	return render_template("connexion.html", title= "Exerciseur MCD", form=f)
 
 @app.route("/traitement", methods=("POST",))
