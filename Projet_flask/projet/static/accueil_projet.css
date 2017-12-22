@@ -1,25 +1,13 @@
-*{
-  font-family:"American Typewriter",serif;
+.projets{
+  margin: 1em;
 }
-header{
-  display: flex;
-}
-#deco{
-  margin-top: 2em;
-  flex: 1 0 25%;
-  background-color: red;
-  color: white;
-  padding: 0.4em;
-  box-shadow: 0px 0px 15px grey;
-}
-#title{
-  flex: 1 0 80%;
-  text-align: center;
-  font-weight: bold;
-  text-decoration: underline;
-}
-#profile{
+
+legend{
   margin-top: 1em;
-  width: 100px;
-  float: right;
+  padding-left: 1em;
+}
+
+a, a:hover{
+  color:black;
+  text-decoration:none;
 }
