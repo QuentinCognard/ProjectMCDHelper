@@ -1,0 +1,13 @@
+.projets{
+  margin: 1em;
+}
+
+legend{
+  margin-top: 1em;
+  padding-left: 1em;
+}
+
+a, a:hover{
+  color:black;
+  text-decoration:none;
+}
