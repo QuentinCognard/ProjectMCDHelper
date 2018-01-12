@@ -1,0 +1,10 @@
+{% extends "bootstrap/base.html" %} <!-- extends pour unifier l'ensemble de nos pages pour avoir la même stucture -->
+{% block content %}
+{% if current_user.is_authenticated %}
+<h1>Coucou {{current_user.login}}</h1>
+<a href="{{url_for('deconnexion')}}"> Se déconnecter </a>
+{% else %}
+<h1> Tu est pas Co batard !</h1>
+<a href="{{url_for('connexion')}}"> Se connecter </a>
+{% endif %}
+{% endblock %}
