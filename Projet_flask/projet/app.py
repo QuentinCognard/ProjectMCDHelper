@@ -26,5 +26,5 @@ def mkpath(p):
 
 from flask_sqlalchemy import SQLAlchemy
 
-app.config['SQLALCHEMY_DATABASE_URI'] = ('sqlite:///'+mkpath('MCDBD.db'))
+app.config['SQLALCHEMY_DATABASE_URI'] = ('sqlite:///'+mkpath('../MCDBD.db'))
 db = SQLAlchemy(app)
