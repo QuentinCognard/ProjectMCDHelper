@@ -1,0 +1,11 @@
+{% extends "base_excerciseur.html" %}
+{% block styles %}
+{{ super() }}
+  <link rel="stylesheet" href= "{{url_for('static',filename='accueil_projet.css') }}"/>
+
+{% endblock %}
+{% block contain %}
+  {% for membres in membresProj %}
+    <p> {{ membres.user_login }} est : {{ membres.droit_id }} </p>
+  {% endfor %}
+{% endblock %}

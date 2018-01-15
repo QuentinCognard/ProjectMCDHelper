@@ -60,9 +60,10 @@ def deconnexion():
 # 	return render_template("connexion.html", title= "Premier template avec Flask")
 
 
-@app.route("/projets")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
-def page_projets():
-	return render_template("accueil_projet.html")
+@app.route("/projets/<string:username>")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
+def page_projets(username):
+	proj=get_projet_user(username)
+	return render_template("accueil_projet.html",proj=proj)
 from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField, validators
 from wtforms.validators import DataRequired
@@ -73,7 +74,6 @@ class ProjetForm(FlaskForm):#Formulaire de création de projet
 	def createProjet(self,name,description):
 		P=Projet(nomProj=name,nomMCD="",descProj=description)
 		db.session.add(P)
-		db.session.commit()
 
 class DroitProjForm(FlaskForm):
 	login=SelectField('Login',choices=get_all_login())
@@ -82,13 +82,24 @@ class DroitProjForm(FlaskForm):
 @app.route("/projets/add/<string:username>", methods=['GET', 'POST'])# Page de création d'un projet
 def add_projets(username):
 	P = ProjetForm(request.form)
-	D = DroitProjForm(request.form)
 	if request.method == 'POST': #Si le formulaire a été rempli
 		P.createProjet(P.name.data,P.description.data) #création nouveau projet
-		return redirect(url_for("page_projets"))
+		gerer=Gerer(get_Projet_byName(P.name.data).id, username, 1)
+		db.session.add(gerer)
+		db.session.commit()
+		return redirect(url_for("page_projets",username=username))
 	return render_template(
 		"add-projet.html",
-		form=P,form2=D ,username=username)
+		form=P ,username=username)
+
+@app.route("/projets/<string:username>/<string:nomProj>/parametres")
+def parametresProj(username,nomProj):
+	return render_template("parametres.html",username=username,nomProj=nomProj)
+
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres")
+def membres(username,nomProj):
+	membresProj=get_gerer_byProjet(nomProj)
+	return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj)
 
 # route vers un projet perso en fonction de l'ID
 

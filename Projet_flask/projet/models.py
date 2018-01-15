@@ -23,7 +23,6 @@ class Droit(db.Model):
     nomDroit = db.Column(db.String(100))
     descDroit = db.Column(db.String(500))
 
-
 class Gerer(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"))
@@ -33,7 +32,10 @@ class Gerer(db.Model):
     user = db.relationship("User", foreign_keys=[user_login], backref=db.backref("userGerer", lazy="dynamic"))
     droit = db.relationship("Droit", foreign_keys=[droit_id], backref=db.backref("droitGerer", lazy="dynamic"))
 
-
+    def __init__(self,projet_id,user_login,droit_id):
+        self.projet_id=projet_id
+        self.user_login=user_login
+        self.droit_id=droit_id
 class Entite(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key = True)
@@ -93,3 +95,10 @@ def get_all_droit():
     for d in droits:
         res.append((d.id,d.nomDroit))
     return res
+def get_projet_user(username):
+    res=Gerer.query.filter(Gerer.user_login==username).all()
+    return res
+def get_Projet_byName(name):
+    return Projet.query.filter(Projet.nomProj==name).first()
+def get_gerer_byProjet(nomProj):
+    return Gerer.query.join(Projet).filter(Projet.nomProj==nomProj).all()
