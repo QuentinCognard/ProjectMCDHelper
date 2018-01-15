@@ -3,18 +3,19 @@
 {% block styles %}
 {{ super() }}
 <link rel="stylesheet"
-  href="{{ url_for ('static', filename ='base.css') }}"/>
+  href="{{ url_for ('static', filename ='base.css') }}"/> <!-- Intégration du ficher .css se trouvant dans
+  le dossier static -->
 {% endblock %}
 {% block metas %}
 {{ super() }}
-<meta charset="utf-8">
+<meta charset="utf-8"> <!-- block metas pour définir le type d'encodage-->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% endblock %}
 {% block content %}
 <body>
 <h1> {{title}} </h1>
 
-<form method="POST" action="">
+<form method="POST" action=""> <!-- debut formulaire dans le cas d'une erreur -->
     <div>
         <label for="login">Login :</label>
         <input type="text" id="login" placeholder='{{ login }}' required/>
