@@ -29,12 +29,16 @@
       </p>
 
       <p>
+        <button class ="btn btn-info" type="submit" onClick="ajouteAttribut()">Ajouter Attribut</button>
+      </p>
+
+      <p>
         <label for="input"> Clé primaire </label>
           <input id="checkprimary" type="checkbox">
       </p>
 
         <p>
-          <button class ="btn btn-primary" type="submit">Ajouter Entité</button>
+          <button class ="btn btn-primary" type="submit" onClick="ajouteEntite()">Ajouter Entité</button>
         </p>
     </div>
 
@@ -47,4 +51,52 @@
 
   </fieldset>
 </form>
+
+<script>
+  // supprime une entite
+  function removeEntite(id){
+    var parent = document.querySelector(".fieldset");
+    var child = document.getElementById("att"+id);
+    parent.removeChild(child);
+  }
+
+  // supprime un attribut d'une entite
+  function removeAttribut(id){
+    var parent = document.querySelector(".fieldset");
+    var child = document.getElementById("att"+id);
+    parent.removeChild(child);
+  }
+
+  // ajoute une entite
+  function ajouteEntite(){
+      var divEntite = document.createElement("div");
+      divEntite.className="attribut";
+      divEntite.id = "att"+nbAtt;
+
+      ajouteSuppButton(divEntite);
+      ajouteNom(divEntite);
+      ajouteCle(divEntite);
+      ajouteAttributBouton(divEntite);
+      // ajouteValeur(divAttribut);
+      // ajouteQuantite(divAttribut);
+      // ajouteGenre(divAttribut);
+
+      var divActuel = document.querySelector(".ajouteAttribut");
+      document.querySelector(".fieldset").insertBefore(divEntite, divActuel);
+  }
+
+  // ajoute le bouton de supression 
+  function ajouteSuppButton(divAttribut){
+    var bouton = document.createElement("button");
+    divAttribut.appendChild(bouton);
+    var textBouton = document.createTextNode("-");
+    bouton.appendChild(textBouton);
+    bouton.className = "suppBout";
+    bouton.type = "button";
+    bouton.id = nbAtt;
+    bouton.onclick = function(){removeAttribut(this.id)};
+  }
+
+
+</script>
 {% endblock %}
