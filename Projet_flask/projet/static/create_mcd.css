@@ -11,3 +11,7 @@ div {
   padding-left: 3%;
   padding-right: 3%;
 }
+
+.attEntite {
+    border-top:: 1px solid grey;
+}

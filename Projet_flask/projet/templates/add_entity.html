@@ -16,6 +16,7 @@
         <input type="text" id="nameent" placeholder="Nom de l'entité" />
       </p>
 
+    <div class="attEntite">
       <p>
         <label for="select">Nom attribut :</label>
         <select id="typeatt">
@@ -29,14 +30,15 @@
       </p>
 
       <p>
-        <button class ="btn btn-info" type="submit" onClick="ajouteAttribut()">Ajouter Attribut</button>
-      </p>
-
-      <p>
         <label for="input"> Clé primaire </label>
           <input id="checkprimary" type="checkbox">
       </p>
 
+      <p>
+        <button class ="btn btn-info" type="submit" onClick="ajouteAttribut()">Ajouter Attribut</button>
+      </p>
+    </div>
+    
         <p>
           <button class ="btn btn-primary" type="submit" onClick="ajouteEntite()">Ajouter Entité</button>
         </p>
@@ -85,7 +87,7 @@
       document.querySelector(".fieldset").insertBefore(divEntite, divActuel);
   }
 
-  // ajoute le bouton de supression 
+  // ajoute le bouton de supression
   function ajouteSuppButton(divAttribut){
     var bouton = document.createElement("button");
     divAttribut.appendChild(bouton);
