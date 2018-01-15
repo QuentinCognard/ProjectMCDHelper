@@ -2,62 +2,152 @@
 {% block content %}
 {{ super() }}
 <form class="bd-example">
-  <fieldset>
+  <fieldset class="fieldset">
     <legend>Nouveau MCD</legend>
 
 <!-- fixe: Nom du MCD -->
-
     <p>
       <label for="input">Nom du MCD :</label>
       <input type="text" id="namemcd" placeholder="Nom du MCD" required />
     </p>
 
-<!-- Cette div devra se répéter autant de fois qu'il y a d'attributs -->
+<!-- Ce bouton appelle la fonction javascript qui génère une nouvelle div de saisie d'attributs -->
+    <button type="button" class="ajouteAttribut" onClick="ajouteElement()">Ajouter attribut</button>
 
-    <div class="attribut">
-      <p>
-        <label for="input">Nom de l'attribut :</label>
-        <input type="text" id="nameatt" placeholder="Nom de l'attribut" />
-      </p>
-
-      <p>
-        <label for="select">Type de l'attribut :</label>
-        <select id="typeatt">
-          <option value="">Choisir...</option>
-            <option value="">Integer</option>
-            <option value="">Float</option>
-            <option value="">String</option>
-            <option value="">Char</option>
-            <option value="">Date</option>
-        </select>
-      </p>
-
-      <p>
-        <label for="input">Valeur :</label>
-        <input type="number" id="valeuratt" placeholder="0" />
-      </p>
-
-      <p>
-        <label for="input">Quantité :</label>
-        <input type="number" id="quantite" placeholder="0" />
-      </p>
-
-      <p>
-        <label for="select">Genre :</label>
-        <select id="genreatt">
-          <option value="">Masculin</option>
-            <option value="">Féminin</option>
-        </select>
-      </p>
-    </div>
-
+<!-- annule la création du MCD -->
     <p>
-      <p><a href="/projets" role="button">annuler</a></p>
+      <a href="/projets/0" role="button">annuler</a>
     </p>
+
+<!-- valide cette étape -->
     <p>
       <button type="submit">Valider</button>
     </p>
 
   </fieldset>
 </form>
+
+<!-- script d'ajout d'un attribut -->
+<script>
+  function ajouteElement(){
+      var divAttribut = document.createElement("div");
+      divAttribut.class="attribut";
+
+      ajouteNom(divAttribut);
+      ajouteType(divAttribut);
+      ajouteValeur(divAttribut);
+      ajouteQuantite(divAttribut);
+      ajouteGenre(divAttribut);
+
+      var divActuel = document.querySelector(".ajouteAttribut");
+      document.querySelector(".fieldset").insertBefore(divAttribut, divActuel);
+  }
+
+  function ajouteNom(divAttribut){
+      var p1 = document.createElement("p");
+      divAttribut.appendChild(p1)
+      var labNomAtt = document.createElement("label");
+      labNomAtt.for="input";
+      var textNom = document.createTextNode("Nom de l'attribut");
+      labNomAtt.appendChild(textNom);
+      var inputNomAtt = document.createElement("input");
+      inputNomAtt.type="text";
+      inputNomAtt.class="nameatt";
+      inputNomAtt.placeholder="Nom de l'attribut :";
+      p1.appendChild(labNomAtt);
+      p1.appendChild(inputNomAtt);
+  }
+
+  function ajouteType(divAttribut){
+      var p2 = document.createElement("p");
+      divAttribut.appendChild(p2);
+      var labTypeAtt = document.createElement("label");
+      labTypeAtt.for = "select";
+      var textType = document.createTextNode("Type de l'attribut :");
+      labTypeAtt.appendChild(textType);
+      var selTypeAtt = document.createElement("select");
+      selTypeAtt.class = "typeatt";
+      p2.appendChild(labTypeAtt);
+      p2.appendChild(selTypeAtt);
+      var opt1 = document.createElement("option");
+      var opt2 = document.createElement("option");
+      var opt3 = document.createElement("option");
+      var opt4 = document.createElement("option");
+      var opt5 = document.createElement("option");
+      opt1.value = "integer";
+      opt2.value = "float";
+      opt3.value = "string";
+      opt4.value = "char";
+      opt5.value = "date";
+      var textOpt1 = document.createTextNode("Integer");
+      var textOpt2 = document.createTextNode("Float");
+      var textOpt3 = document.createTextNode("String");
+      var textOpt4 = document.createTextNode("Char");
+      var textOpt5 = document.createTextNode("Date");
+      opt1.appendChild(textOpt1);
+      opt2.appendChild(textOpt2);
+      opt3.appendChild(textOpt3);
+      opt4.appendChild(textOpt4);
+      opt5.appendChild(textOpt5);
+      selTypeAtt.appendChild(opt1);
+      selTypeAtt.appendChild(opt2);
+      selTypeAtt.appendChild(opt3);
+      selTypeAtt.appendChild(opt4);
+      selTypeAtt.appendChild(opt5);
+  }
+
+  function ajouteValeur(divAttribut){
+      var p3 = document.createElement("p");
+      divAttribut.appendChild(p3);
+      var labValAtt = document.createElement("label");
+      labValAtt.for = "input";
+      var textValAtt = document.createTextNode("Valeur :");
+      labValAtt.appendChild(textValAtt);
+      var inputValAtt = document.createElement("input");
+      inputValAtt.type="number";
+      inputValAtt.class="valeuratt";
+      inputValAtt.placeholder="0";
+      p3.appendChild(labValAtt);
+      p3.appendChild(inputValAtt);
+  }
+
+  function ajouteQuantite(divAttribut){
+      var p4 = document.createElement("p");
+      divAttribut.appendChild(p4);
+      var labQteAtt = document.createElement("label");
+      labQteAtt.for = "input";
+      var textQteAtt = document.createTextNode("Quantite :");
+      labQteAtt.appendChild(textQteAtt);
+      var inputQteAtt = document.createElement("input");
+      inputQteAtt.type="number";
+      inputQteAtt.class="quantiteatt";
+      inputQteAtt.placeholder="0";
+      p4.appendChild(labQteAtt);
+      p4.appendChild(inputQteAtt);
+  }
+
+  function ajouteGenre(divAttribut){
+      var p5 = document.createElement("p");
+      divAttribut.appendChild(p5);
+      var labGenreAtt = document.createElement("label");
+      labGenreAtt.for="select";
+      var textGenreAtt = document.createTextNode("Genre :");
+      labGenreAtt.appendChild(textGenreAtt);
+      var selGenreAtt = document.createElement("select");
+      selGenreAtt.class="genreatt";
+      var opt6 = document.createElement("option");
+      var opt7 = document.createElement("option");
+      opt6.value="masculin";
+      opt7.value="feminin";
+      var textOpt6 = document.createTextNode("Masculin");
+      var textOpt7 = document.createTextNode("Feminin");
+      opt6.appendChild(textOpt6);
+      opt7.appendChild(textOpt7);
+      selGenreAtt.appendChild(opt6);
+      selGenreAtt.appendChild(opt7);
+      p5.appendChild(labGenreAtt);
+      p5.appendChild(selGenreAtt);
+  }
+</script>
+
 {% endblock %}
