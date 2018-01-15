@@ -71,20 +71,24 @@ class ProjetForm(FlaskForm):#Formulaire de création de projet
 	name = StringField('Nom Projet',[validators.Length(min=4, max=25)])
 	description =StringField('Description',[validators.Length(min=10, max=150)])
 	def createProjet(self,name,description):
-		idmax=get_idmax()
-		P=Projet(id=idmax+1,name=name,nameMCD="",description=description)
+		P=Projet(nomProj=name,nomMCD="",descProj=description)
 		db.session.add(P)
 		db.session.commit()
 
-@app.route("/projets/add", methods=['GET', 'POST'])# Page de création d'un projet
-def add_projets():
+class DroitProjForm(FlaskForm):
+	login=SelectField('Login',choices=get_all_login())
+	droit=SelectField('Droit',choices=get_all_droit())
+
+@app.route("/projets/add/<string:username>", methods=['GET', 'POST'])# Page de création d'un projet
+def add_projets(username):
 	P = ProjetForm(request.form)
-	if request.method == 'POST':
-		P.createProjet(P.name,P.description)
+	D = DroitProjForm(request.form)
+	if request.method == 'POST': #Si le formulaire a été rempli
+		P.createProjet(P.name.data,P.description.data) #création nouveau projet
 		return redirect(url_for("page_projets"))
 	return render_template(
 		"add-projet.html",
-		form=P)
+		form=P,form2=D ,username=username)
 
 # route vers un projet perso en fonction de l'ID
 

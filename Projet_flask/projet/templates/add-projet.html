@@ -1,6 +1,10 @@
 {% extends "base_excerciseur.html" %}
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('static', filename='addProjet.css')}}">
+{% endblock %}
 {% block contain %}
-{{ super () }}
+{% if current_user.login==username %}
 <h1>Ajouter un projet :</h1>
 <form role="form" method="POST"><!--Formulaire de création de projet-->
 {{ form.hidden_tag() }}
@@ -20,6 +24,46 @@
     {% endfor %}
   </ul>
   {% endif %}
+    <label id="membres"> Membres:</label>
+    <div id="log">
+      {{form2.login.label}} <h10>{{current_user.login}}</h10>
+    </div>
+    <div id="droit">
+      {{form2.droit.label}} {{ form2.droit(disabled=true) }}
+    </div>
+    <br>
+    <div id="log" class=
+          {% if form2.login.errors %}
+          "form-groupe has-error"
+          {% else %}
+          "form-group"
+          {% endif %}
+          >
+          {{form2.login.label}} {{ form2.login() }}<!--Affichage formulaire -->
+      </div>
+    {% if form2.login.errors %}<!--Gestion des erreurs -->
+    <ul class="list-group">
+      {% for e in form2.login.errors %}
+      <li class="list-group-item list-group-item-danger">{{ e }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <div id="droit" class=
+          {% if form2.droit.errors %}
+          "form-groupe has-error"
+          {% else %}
+          "form-group"
+          {% endif %}
+          >
+          {{form2.droit.label}} {{ form2.droit() }}<!--Affichage formulaire -->
+    </div>
+    {% if form2.droit.errors %}<!--Gestion des erreurs -->
+    <ul class="list-group">
+      {% for e in form2.droit.errors %}
+      <li class="list-group-item list-group-item-danger">{{ e }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
   <div class=
         {% if form.description.errors %}
         "form-groupe has-error"
@@ -38,4 +82,7 @@
   {% endif %}
   <input class="btn btn-default" type="submit" value="Enregistrez">
 </form>
+{% else %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% endif %}
 {% endblock %}

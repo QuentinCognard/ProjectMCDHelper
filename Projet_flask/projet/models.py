@@ -79,3 +79,17 @@ def get_proj(idProj):
 @login_manager.user_loader
 def load_user(login):
     return User.query.get(login)
+
+def get_all_login():
+    users=User.query.all()
+    res=[]
+    for u in users:
+        res.append((u.login,u.login))
+    return res
+
+def get_all_droit():
+    droits=Droit.query.all()
+    res=[]
+    for d in droits:
+        res.append((d.id,d.nomDroit))
+    return res
