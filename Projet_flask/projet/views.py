@@ -127,7 +127,7 @@ def add_projets():
 def page_projet_perso():
 	return render_template("consult_own_project.html")
 
-<<<<<<< HEAD
+# <<<<<<< HEAD
 @app.route("/projets")
 def page_projets():
 	return render_template("accueil_projet.html")
@@ -146,8 +146,8 @@ def page_projets():
 def page_projet_perso():
 	return render_template("consult_own_project.html")
 
-=======
->>>>>>> Arthur/master
+# =======
+# >>>>>>> Arthur/master
 # route vers la creation d'un MCD en fonction de l'ID du projet
 
 @app.route("/projets/0/new-mcd")
