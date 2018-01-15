@@ -2,7 +2,7 @@
 {% block contain %}
 {{ super () }}
 <h1>Ajouter un projet :</h1>
-<form role="form" method="POST" action=#><!--Formulaire de création de projet-->
+<form role="form" method="POST"><!--Formulaire de création de projet-->
 {{ form.hidden_tag() }}
   <div class=
         {% if form.name.errors %}
@@ -10,12 +10,12 @@
         {% else %}
         "form-group"
         {% endif %}
-        >}
+        >
         {{ form.name.label }} {{ form.name(size=50,class_="form-control") }}<!--Affichage formulaire -->
   </div>
-  {% if form.name.errors %}}<!--Gestion des erreurs -->
+  {% if form.name.errors %}<!--Gestion des erreurs -->
   <ul class="list-group">
-    {% for e in form.name.errors %}}<!--Gestion des erreurs -->
+    {% for e in form.name.errors %}<!--Gestion des erreurs -->
     <li class="list-group-item list-group-item-danger">{{ e }}</li>
     {% endfor %}
   </ul>
@@ -29,7 +29,7 @@
         >
         {{ form.description.label }} {{ form.description(size=50,class_="form-control") }}<!--Affichage formulaire -->
   </div>
-  {% if form.description.errors %}}<!--Gestion des erreurs -->
+  {% if form.description.errors %}<!--Gestion des erreurs -->
   <ul class="list-group">
     {% for e in form.description.errors %}
     <li class="list-group-item list-group-item-danger">{{ e }}</li>

@@ -1,9 +1,10 @@
 from .app import app
 from .app import db
-from flask import render_template
+from flask import render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField
 from wtforms.validators import DataRequired
+from .models import *
 
 class ConnexionForm(FlaskForm):
 	login = StringField('Login', validators=[DataRequired()])
@@ -39,13 +40,20 @@ from wtforms import StringField, HiddenField, validators
 from wtforms.validators import DataRequired
 
 class ProjetForm(FlaskForm):#Formulaire de création de projet
-	id = HiddenField('id')
 	name = StringField('Nom Projet',[validators.Length(min=4, max=25)])
 	description =StringField('Description',[validators.Length(min=10, max=150)])
+	def createProjet(self,name,description):
+		idmax=get_idmax()
+		P=Projet(id=idmax+1,name=name,nameMCD="",description=description)
+		db.session.add(P)
+		db.session.commit()
 
 @app.route("/projets/add", methods=['GET', 'POST'])# Page de création d'un projet
 def add_projets():
-	P = ProjetForm(name="",description="")
+	P = ProjetForm(request.form)
+	if request.method == 'POST':
+		P.createProjet(P.name,P.description)
+		return redirect(url_for("page_projets"))
 	return render_template(
 		"add-projet.html",
 		form=P)
