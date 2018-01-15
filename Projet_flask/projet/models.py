@@ -36,6 +36,7 @@ class Gerer(db.Model):
         self.projet_id=projet_id
         self.user_login=user_login
         self.droit_id=droit_id
+
 class Entite(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key = True)

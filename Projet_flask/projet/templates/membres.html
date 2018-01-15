@@ -6,6 +6,7 @@
 {% endblock %}
 {% block contain %}
   {% for membres in membresProj %}
-    <p> {{ membres.user_login }} est : {{ membres.droit_id }} </p>
+    <p>{{ membres.user_login }}: {{ membres.droit.nomDroit }}</p>
   {% endfor %}
+  <a href="{{ url_for('add_membre',username=username,nomProj=nomProj)}}"> Ajouter Membre</a>
 {% endblock %}

@@ -101,6 +101,14 @@ def membres(username,nomProj):
 	membresProj=get_gerer_byProjet(nomProj)
 	return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj)
 
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres/add", methods=['GET', 'POST'])
+def add_membre(username,nomProj):
+	D=DroitProjForm(request.form)
+	if request.method=="POST":
+		db.session.add(Gerer(get_Projet_byName(nomProj).id,D.login.data,D.droit.data))
+		db.session.commit()
+		return redirect(url_for("membres",username=username,nomProj=nomProj))
+	return render_template("add-membre.html",username=username,nomProj=nomProj,form=D)
 # route vers un projet perso en fonction de l'ID
 
 # @app.route("/projets/<idProj>/")
