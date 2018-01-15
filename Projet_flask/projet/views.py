@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+# <<<<<<< HEAD
 from .app import app
 from .app import db
 from flask import render_template
@@ -9,7 +9,7 @@ from wtforms.validators import DataRequired
 class ConnexionForm(FlaskForm):
 	login = StringField('Login', validators=[DataRequired()])
 	password = PasswordField('Mot de passe', validators=[DataRequired()])
-=======
+# =======
 from .app import *
 from flask import *
 from flask_wtf import *
@@ -23,7 +23,7 @@ class LoginForm(FlaskForm):
 	login = StringField('Login :')
 	password = PasswordField('Mot de passe :')
 	next = HiddenField()
->>>>>>> Arthur/master
+# >>>>>>> Arthur/master
 
 	def get_authenticated_user(self):
 		user = User.query.get(self.login.data)
@@ -37,7 +37,7 @@ class LoginForm(FlaskForm):
 
 @app.route("/") #route pour la page de connexion
 def home():
-<<<<<<< HEAD
+# <<<<<<< HEAD
 
 	f = ConnexionForm(login="",password="")
 	return render_template("connexion.html", title= "Exerciseur MCD", form=f)
@@ -56,7 +56,7 @@ def traitement():
 	return render_template("connexion.html", title= "Exerciseur MCD", form=f)
 
 	return render_template("connexion.html", title= "Premier template avec Flask")
-=======
+# =======
 	return render_template("home.html", title= "Exerciseur MCD")
 
 @app.route("/login/", methods=('GET', 'POST'))
@@ -113,7 +113,7 @@ def add_projets():
 		form=P)
 
 # route vers un projet perso en fonction de l'ID
->>>>>>> Arthur/master
+# >>>>>>> Arthur/master
 
 # @app.route("/projets/<idProj>/")
 # def page_projet_perso(idProj):
@@ -128,9 +128,9 @@ def page_projet_perso():
 	return render_template("consult_own_project.html")
 
 # <<<<<<< HEAD
-@app.route("/projets")
-def page_projets():
-	return render_template("accueil_projet.html")
+# @app.route("/projets")
+# def page_projets():
+# 	return render_template("accueil_projet.html")
 
 # route vers un projet perso en fonction de l'ID
 
@@ -142,9 +142,9 @@ def page_projets():
 	# else:
 	# 	return "Projet inconnu"
 	# Pour plus tard
-@app.route("/projets/0")
-def page_projet_perso():
-	return render_template("consult_own_project.html")
+# @app.route("/projets/0")
+# def page_projet_perso():
+# 	return render_template("consult_own_project.html")
 
 # =======
 # >>>>>>> Arthur/master
