@@ -26,6 +26,10 @@ class LoginForm(FlaskForm):
 def home():
 	return render_template("home.html", title= "Exerciseur MCD")
 
+@app.route("/lucas/test/") #route pour la page de connexion
+def lucas():
+	return render_template("test.html")
+
 @app.route("/login/", methods=('GET', 'POST'))
 def connexion():
 	f = LoginForm()
