@@ -1,0 +1,31 @@
+{% extends "base_excerciseur.html" %}
+{% block content %}
+{{ super() }}
+<form class="bd-example">
+  <fieldset>
+    <legend>Nouveau MCD</legend>
+
+
+<!-- Ce paragraphe devra se répéter autant de fois qu'il y a de relation -->
+
+  <!-- Exemple d'affichage de relation entre 2 entités , boucle for -->
+    <div class="border border-dark">
+      <p>Relation simple entre Entité1/Entité2</p>
+      <p>
+        <button type="submit">Supprimer</button>
+      </p>
+      <p>
+        <a href="/projets/0/new_relation1" class="btn btn-default" role="button">Modifier</a>
+      </p>
+    </div>
+
+    <a href="/projets/0/new_relation1" class="btn btn-default" role="button">Ajouter une relation</a>
+
+    <a href="/projets/0/mcd_resume" class="btn btn-default" role="button">Valider</a>
+
+
+
+
+  </fieldset>
+</form>
+{% endblock %}

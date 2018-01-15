@@ -1,13 +1,11 @@
-{% extends "bootstrap/base.html" %} <!-- extends pour unifier l'ensemble de nos pages pour avoir la même stucture -->
+{% extends "bootstrap/base.html" %}
 {% block title %} {{ title }} {% endblock %}
 {% block styles %}
 <link rel="stylesheet"
-  href="{{ url_for ('static', filename ='home.css') }}"/> <!-- Intégration du ficher .css se trouvant dans
-  le dossier static -->
-{% endblock %}
+  href="{{ url_for ('static', filename ='home.css') }}"/>
 {% endblock %}
 {% block metas %}
-<meta charset="utf-8"> <!-- block metas pour définir le type d'encodage-->
+<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% endblock %}
 {% block content %}

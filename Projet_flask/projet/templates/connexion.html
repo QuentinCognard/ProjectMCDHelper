@@ -20,6 +20,32 @@
     <meta name="author" content="">
   </head>
 {% endblock %}
+<<<<<<< HEAD
+{% block content %}
+<body>
+<h1> {{title}} </h1>
+
+<form role="form" method="POST" action="{{url_for('traitement')}}">
+    <div>
+      {{ form.login.label }} {{ form.login(size=20, class_="from-control")}}
+      {{ form.password.label }} {{ form.password(size=20, class_="from-control")}}
+      <input class="btn btn-default" type="submit" value="Se connecter">
+        <!-- <label for="login">Login :</label>
+        <input type="text" id="login" placeholder='{{ login }}' required/>
+    </div>
+    <div>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" required />
+    </div>
+
+    <div class="button">
+        <button type="submit">Connexion</button> -->
+    </div>
+</form>
+</body>
+{% block main %}
+{% endblock %}
+=======
 
 {% block content %} <!-- block principal -->
   <body>
@@ -39,5 +65,6 @@
 
     </div> <!-- /container -->
   </body>
+>>>>>>> Arthur/master
 {% endblock %}
 </html>
