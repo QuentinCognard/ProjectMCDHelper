@@ -21,7 +21,7 @@ a, a:hover{
 #membres{
   display: block;
 }
-#modif{
-  display: flex;
-  flex-wrap: nowrap;
+#input{
+  display: block;
+  margin-top: 1em;
 }

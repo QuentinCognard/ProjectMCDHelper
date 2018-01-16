@@ -9,7 +9,7 @@
   {% for membres in membresProj %}
     <p>{{ membres.user_login }}: {{ membres.droit.nomDroit }}</p>
   {% endfor %}
-  <a href="{{ url_for('add_membre',username=username,nomProj=nomProj)}}">Ajouter Membre</a>
+  <a href="{{ url_for('add_membre',username=username,nomProj=nomProj)}}"><input type="Submit" value="Ajouter Membre"></a>
 </div>
   <div id="modif">
   <select id="select">
@@ -30,8 +30,10 @@
       document.location.href="/projets/{{ current_user.login }}/"+nomProj+"/parametres/membres/modif/"+droit+"/"+nom
     }
     </script>
-    <input type="Submit" value="Modifier" onclick="modifier()">
-
+    <div id="input">
+      <input type="Submit" value="Modifier" onclick="modifier()">
+      <input type="Submit" value="Supprimer" onclick="supprimer()">
+    </div>
 </div>
 {% with messages = get_flashed_messages() %}
   {% if messages %}
