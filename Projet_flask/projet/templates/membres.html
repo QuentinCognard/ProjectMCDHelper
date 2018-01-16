@@ -29,6 +29,11 @@
       console.log(nomProj)
       document.location.href="/projets/{{ current_user.login }}/"+nomProj+"/parametres/membres/modif/"+droit+"/"+nom
     }
+    function supprimer(){
+      var nom=document.getElementById("select").value
+      var nomProj='{{ nomProj }}'
+      document.location.href="/projets/{{ current_user.login }}/"+nomProj+"/parametres/membres/supprimer/"+nom
+    }
     </script>
     <div id="input">
       <input type="Submit" value="Modifier" onclick="modifier()">

@@ -99,6 +99,7 @@ def parametresProj(username,nomProj):
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres")
 def membres(username,nomProj):
 	membresProj=get_gerer_byProjet(nomProj)
+	print(User.query.all())
 	return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres/add", methods=['GET', 'POST'])
@@ -119,6 +120,17 @@ def modifier_membres(username,nomProj,droit,nom):
 	else:
 		flash(" impossible : "+nom+" est master")
 	return redirect(url_for("membres",username=username,nomProj=nomProj))
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/supprimer/<string:nom>", methods=['GET','PÔST'])
+def supprimer_membres(username,nomProj,nom):
+	if( get_nom_droit(get_gerer_byNom(nomProj,nom).droit_id) != "master"):
+		idProj=get_Projet_byName(nomProj).id
+		db.session.delete(get_gerer_byNom(nomProj,nom))
+		db.session.commit()
+		flash(""+nom+" à été supprimer de la liste des membres")
+	else:
+		flash("impossible : "+nom+" est master")
+	return redirect(url_for("membres",username=username,nomProj=nomProj))
+
 
 # @app.route("/projets/<idProj>/")
 # def page_projet_perso(idProj):
