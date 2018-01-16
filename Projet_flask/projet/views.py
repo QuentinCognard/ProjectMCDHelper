@@ -6,6 +6,9 @@ from wtforms.validators import *
 from flask_login import login_user, current_user, login_required, logout_user
 from .models import *
 from hashlib import sha256
+from werkzeug.utils import secure_filename
+import os
+import shutil
 
 class LoginForm(FlaskForm):
 	login = StringField('Login :')
@@ -61,6 +64,7 @@ def lucas(id_projet):
 @app.route("/login/", methods=('GET', 'POST'))
 def connexion():
 	f = LoginForm()
+	f_bis = CreerCompteForm()
 	if not f.is_submitted():
 		f.next.data = request.args.get("next")
 	elif f.validate_on_submit():
@@ -69,7 +73,7 @@ def connexion():
 			login_user(user)
 			next = f.next.data or url_for("page_projets_bis",username=user.login)
 			return redirect(next)
-	return render_template("home.html", title= "Exerciseur MCD",form=f)
+	return render_template("home.html", title= "Exerciseur MCD",form=f_bis)
 
 @app.route("/profil/")
 @login_required
@@ -100,7 +104,7 @@ def save_compte():
 			user.image = filename
 			f.save(os.path.join(mkpath('static/images/User/'), filename))
 		db.session.commit()
-		return redirect(url_for('home'))
+		return redirect(url_for('accueil_compte'))
 	return redirect(url_for('editer_compte'))
 
 
@@ -114,7 +118,6 @@ def deconnexion():
 @app.route("/creer_compte/",methods=('GET', 'POST'))
 def creer_compte():
 	f = CreerCompteForm()
-	print(f.password)
 	if f.validate():
 		user = User.query.get(f.login.data)
 		if user is not None:
@@ -123,7 +126,7 @@ def creer_compte():
 			m = sha256()
 			m.update(f.password.data.encode())
 			passwd = m.hexdigest()
-			o = User(login = f.login.data, password = passwd)
+			o = User(prenom = f.prenom.data, nom = f.nom.data, mail = f.mail.data, login = f.login.data, password = passwd)
 			db.session.add(o)
 			db.session.commit()
 			login_user(o)
@@ -170,9 +173,12 @@ class ProjetForm(FlaskForm):#Formulaire de création de projet
 		P=Projet(nomProj=name,nomMCD="",descProj=description)
 		db.session.add(P)
 
+# class DroitProjForm(FlaskForm):
+# 	login=SelectField('Login',choices=get_all_login())
+# 	droit=SelectField('Droit',choices=get_all_droit())
 class DroitProjForm(FlaskForm):
-	login=SelectField('Login',choices=get_all_login())
-	droit=SelectField('Droit',choices=get_all_droit())
+	login=SelectField('Login',choices=[])
+	droit=SelectField('Droit',choices=[])
 
 @app.route("/projets/add/<string:username>", methods=['GET', 'POST'])# Page de création d'un projet
 def add_projets(username):

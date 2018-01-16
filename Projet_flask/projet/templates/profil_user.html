@@ -5,10 +5,11 @@
 			href= "{{ url_for('static', filename='details.css') }}" >
 {% endblock %}
 {% block main %}
+<a href="{{ url_for('deconnexion')}}">Se déconnecter</a>
 {% if sujet == 'accueil' %}
     <h1>Mon profil : {{ user.login }}</h1>
       {% if user.image == None %}
-        <section>
+        <section class="sinfoto">
         <h4>Nom : {% if user.nom == None %}Pas de nom{% else %}{{user.nom}}{% endif %}</h4>
         <h4>Prénom : {% if user.prenom == None %}Pas de prénom{% else %}{{user.prenom}}{% endif %}</h4>
 				<h4>Mail : {{user.mail}}</h4>
@@ -18,7 +19,7 @@
         </section>
       {% else %}
       <section class="details">
-		      <img width="27%" src="{{ url_for('static', filename='imagesbis/User/' + (user.image | string))}}" alt="Image non chargée">
+		      <img width="27%" src="{{ url_for('static', filename='images/User/' + (user.image | string))}}" alt="Image non chargée">
 		      <aside>
 		        <h4>Nom : {% if user.nom == None %}Pas de nom{% else %}{{user.nom}}{% endif %}</h4>
 		        <h4>Prénom : {% if user.prenom == None %}Pas de prénom{% else %}{{user.prenom}}{% endif %}</h4>
