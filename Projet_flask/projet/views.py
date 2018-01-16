@@ -92,6 +92,10 @@ def add_projets(username):
 	return render_template(
 		"add-projet.html",
 		form=P ,username=username)
+@app.route("/projets/<string:username>/<string:nomProj>/description")
+def description(username,nomProj):
+	membres=get_gerer_byProjet(get_Projet_byName(nomProj))
+	return render_template("description-projet.html",projet=get_Projet_byName(nomProj),membres=membres)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres")
 def parametresProj(username,nomProj):

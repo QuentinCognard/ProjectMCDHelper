@@ -28,8 +28,10 @@
       <section class="projets">
         {% for p in tousproj %}
         <div id="tousproj">
+          <a href="{{url_for('description',username=current_user.login,nomProj=p.nomProj)}}">
             <img src="{{url_for('static',filename='dossier.png')}}">
             <h4>{{p.nomProj}}</h4>
+          </a>
         </div>
         {% endfor %}
       </section>
