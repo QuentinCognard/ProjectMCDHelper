@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet"
+			href= "{{ url_for('static', filename='details.css') }}" >
+{% endblock %}
+{% block main %}
+{% if sujet == 'accueil' %}
+    <h1>Mon profil : {{ user.login }}</h1>
+      {% if user.image == None %}
+        <section>
+        <h4>Nom : {% if user.nom == None %}Pas de nom{% else %}{{user.nom}}{% endif %}</h4>
+        <h4>Prénom : {% if user.prenom == None %}Pas de prénom{% else %}{{user.prenom}}{% endif %}</h4>
+				<h4>Mail : {{user.mail}}</h4>
+        <form class="form-listing" method="POST" action="{{ url_for('editer_compte')}}">
+          <button type="submit">Editer</button>
+        </form>
+        </section>
+      {% else %}
+      <section class="details">
+		      <img width="27%" src="{{ url_for('static', filename='imagesbis/User/' + (user.image | string))}}" alt="Image non chargée">
+		      <aside>
+		        <h4>Nom : {% if user.nom == None %}Pas de nom{% else %}{{user.nom}}{% endif %}</h4>
+		        <h4>Prénom : {% if user.prenom == None %}Pas de prénom{% else %}{{user.prenom}}{% endif %}</h4>
+						<h4>Mail : {{user.mail}}</h4>
+			      {% if current_user.is_authenticated %}
+			      <form class="form-listing" method="POST" action="{{ url_for('editer_compte')}}">
+			        <button type="submit">Editer</button>
+			      </form>
+						{% endif %}
+		    	</aside>
+  		</section>
+    {% endif %}
+{% elif sujet == 'edit' %}
+<h2>Edition du compte :</h2>
+<form class="formentry" role="form" enctype="multipart/form-data" method="POST" action="{{ url_for('save_compte') }}">
+  {{ form.hidden_tag() }}
+  <div class="form-group">
+    {{ form.nom.label}}{{form.nom(size=50, class_="from-control")}}<br>
+    {{ form.prenom.label}}{{form.prenom(size=50, class_="from-control")}}<br>
+    {{ form.photo.label}}{{form.photo(accept=".jpg")}}<br>
+  </div>
+  <input class="formentrybutton" type="submit" value="Valider">
+</form>
+{% else %}
+{% endif %}
+{% endblock %}

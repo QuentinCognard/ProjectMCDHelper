@@ -21,6 +21,12 @@ class LoginForm(FlaskForm):
 		passwd = m.hexdigest()
 		return user if passwd == user.password else None
 
+class UserForm(FlaskForm):
+	id = HiddenField('id')
+	nom = StringField('Nom :')
+	prenom = StringField('Prénom :')
+	photo = FileField('Photo de profil :')
+
 
 @app.route("/") #route pour la page de connexion
 def home():
@@ -51,6 +57,41 @@ def connexion():
 			next = f.next.data or url_for("home")
 			return redirect(next)
 	return render_template("connexion.html",form = f)
+
+@app.route("/profil/")
+@login_required
+def accueil_compte():
+	user = current_user
+	return render_template("profil_user.html", sujet='accueil', user = user)
+
+@app.route("/profil/editer/", methods=('GET', 'POST'))
+@login_required
+def editer_compte():
+	user = current_user
+	form = UserForm(nom = user.nom, prenom = user.prenom, photo = user.image)
+	return render_template("profil_user.html", sujet='edit', user = user, form = form)
+
+@app.route("/profil/save_edit/", methods=('GET', 'POST'))
+@login_required
+def save_compte():
+	user = current_user
+	form = UserForm()
+	if form.validate_on_submit():
+		if form.nom.data != "":
+			user.nom = form.nom.data
+		if form.prenom.data != "":
+			user.prenom = form.prenom.data
+		print(form.photo.data)
+		print("####################################")
+		if form.photo.data != "":
+			f = form.photo.data
+			filename = secure_filename(f.filename)
+			user.image = filename
+			f.save(os.path.join(mkpath('static/images/User/'), filename))
+		db.session.commit()
+		return redirect(url_for('home'))
+	return redirect(url_for('editer_compte'))
+
 
 @app.route("/logout/")
 def deconnexion():
