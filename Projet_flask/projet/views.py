@@ -40,6 +40,7 @@ def connexion():
 	return render_template("connexion.html",form = f)
 
 @app.route("/logout/")
+@login_required
 def deconnexion():
 	logout_user()
 	return redirect(url_for('home'))
@@ -61,6 +62,7 @@ def deconnexion():
 
 
 @app.route("/projets")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
+@login_required
 def page_projets():
 	return render_template("accueil_projet.html")
 from flask_wtf import FlaskForm
@@ -90,11 +92,13 @@ def add_projets():
 	# 	return "Projet inconnu"
 	# Pour plus tard
 @app.route("/projets/0")
+@login_required
 def page_projet_perso():
 	return render_template("consult_own_project.html")
 
 # route vers la creation d'un MCD en fonction de l'ID du projet
 
 @app.route("/projets/0/new-mcd")
+@login_required
 def page_creer_mcd():
 	return render_template("create_mcd.html")
