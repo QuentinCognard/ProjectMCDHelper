@@ -1,0 +1,50 @@
+h1{
+  color: orange;
+}
+ul{
+  list-style: none;
+}
+body {
+  padding-top: 5rem;
+}
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+/*#img {
+  width:10%;
+  height: 10%;
+}*/
+/*.entite{
+ width:15%;
+ border-collapse: collapse;
+ background-color: white;
+}
+.entite section{
+  border:solid;
+}*/
+#canvas{
+  border: solid;
+}
+/*.relation{
+ width:15%;
+ border-collapse: collapse;
+ background-color: white;
+}
+.relation section {
+  border: solid;
+  padding: 10px;
+  text-align: center;
+  border-radius: 2em / 5em;
+}
+#head{
+  text-align: center;
+}
+#grille{
+background-image: url("images/image_de_fond.png");
+width:90vw;
+height: 60vh;
+margin-left: 5%;
+border:solid;
+overflow:auto;
+}*/

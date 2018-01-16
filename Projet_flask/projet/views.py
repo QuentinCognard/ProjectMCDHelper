@@ -26,9 +26,18 @@ class LoginForm(FlaskForm):
 def home():
 	return render_template("home.html", title= "Exerciseur MCD")
 
-@app.route("/lucas/test/") #route pour la page de connexion
-def lucas():
-	return render_template("test.html")
+@app.route("/lucas/test/<id_projet>", methods=('GET', 'POST')) #route pour la page de connexion
+def lucas(id_projet):
+	listeEntite = Entite.query.filter(Entite.projet_id == id_projet).all()
+	mon_dictionnaire = {}
+	for e in listeEntite:
+		mon_dictionnaire[e] = Attributs.query.filter(Attributs.projet_id == id_projet, Attributs.entite_id == e.id).all()
+	listeRelation = Relation.query.filter(Relation.projet_id == id_projet).all()
+	# listeRelationEntite = []
+	# for e in listeEntite:
+	# 	listeRelationEntite.append(RelationEntite.query.filter(entite.id == e.id).all())
+	# , liste_attribut = listeAttribut,liste_relation = listeRelation,liste_entite_relation = listeRelationEntite
+	return render_template("test.html", dic_entite_attribut = mon_dictionnaire, liste_relation = listeRelation)
 
 @app.route("/login/", methods=('GET', 'POST'))
 def connexion():

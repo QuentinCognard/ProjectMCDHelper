@@ -1,19 +1,84 @@
-{% extends "bootstrap/base.html" %} <!-- extends pour unifier l'ensemble de nos pages pour avoir la même stucture -->
-{% block styles %}
-{{ super() }}
-  <link rel="stylesheet" href= "{{url_for('static',filename='lucas.css') }}"/><!--Css base_exerciseur -->
-{% endblock %}
-{% block content %}
+<!--
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Draggable - Default functionality</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='lucas.css')}}">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
 
-<div id="#element" ondrop="drop(event)" ondragover="allowDrop(event)">
-  <img src="{{ url_for('static', filename = 'images/arthur.jpg')}}" onmousedown="on_mouse_down_square(event)" id="drag1" width="100" height="100">
-</div>
+    var canvas = document.getElementById('canvas1');
+    var contexte = canvas.getContext('2d');
+
+    contexte.strokeStyle = '#48C';
+
+    contexte.moveTo(50,50);
+    contexte.lineTo(250,250);
+
+    contexte.stroke();
+
+  </script>
+
 <script>
-$(function(){
-    $('#element').draggable(); // appel du plugin
-});
-$('#drag').draggable({
-    containment : '#limitation'
-});
-</script>
-{% endblock %}
+  $( function() {
+    $('.entite').draggable({
+    containment : '#grille'
+    });
+    $('.relation').draggable({
+    containment : '#grille'
+    });
+    $('.line').draggable({
+    containment : '#grille'
+    });
+  });
+  </script>
+
+
+</head>
+<body id="body">
+  <section id='grille'  background="{{url_for('static', filename='images/image_de_fond.png')}}">
+    {% for (entite,att) in dic_entite_attribut.items() %}
+    <div class="entite">
+      <section id="head">{{ entite.nomEntite }}</section>
+      <section id="att">
+        <ul>
+          {% for a in att %}
+          <li>{{a.nomAttribut}}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    </div>
+    {% endfor %}
+    {% for rel in liste_relation %}
+    <div class="relation" >
+      <section id="att">{{rel.nomRelation}}</section>
+    </div>
+    {% endfor %}
+  </section>
+
+</body>
+</html> -->
+<html>
+ <head>
+   <link rel="stylesheet" href="{{url_for('static', filename='lucas.css')}}">
+  <script type="application/x-javascript">
+function draw() {
+ var canvas = document.getElementById("canvas");
+ var ctx = canvas.getContext("2d");
+
+ ctx.fillStyle = "rgb(0,0,0)";
+ ctx.fillRect (10, 10, 555, 550);
+ ctx.fillStyle = "rgb(255,255,255)";
+ ctx.fillRect (11, 11, 553, 548);
+ ctx.fillStyle = "rgb(0,0,0)";
+ ctx.fillRect (11, 100, 555, 2);
+}
+  </script>
+ </head>
+ <body onload="draw()">
+   <canvas id="canvas" width="2600" height="800"></canvas>
+ </body>
+</html>
