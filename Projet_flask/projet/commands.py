@@ -41,3 +41,39 @@ def loadgerer(filename):
         o = Gerer(projet_id=g["idProjet"],user_login=g["idUser"],droit_id=g["idDroit"])
         db.session.add(o)
     db.session.commit()
+
+@manager.command
+def loadentite(filename):
+    db.create_all()
+    entite = yaml.load(open(filename))
+    for e in entite:
+        o = Entite(id=e["id"],projet_id=e["projet_id"],nomEntite=e["nomEntite"])
+        db.session.add(o)
+    db.session.commit()
+
+@manager.command
+def loadrelation(filename):
+    db.create_all()
+    relation = yaml.load(open(filename))
+    for r in relation:
+        o = Relation(id=r["id"],projet_id=r["projet_id"],nomRelation=r["nomrelation"])
+        db.session.add(o)
+    db.session.commit()
+
+@manager.command
+def loadattributs(filename):
+    db.create_all()
+    attributs = yaml.load(open(filename))
+    for a in attributs:
+        o = Attributs(id=a["id"],projet_id=a["projet_id"],entite_id=a["entite_id"],nomAttribut=a["nomAttribut"],genreAttribut=a["genreAttribut"],typeAttribut=a["typeAttribut"],valeurAttribut=a["valeurAttribut"])
+        db.session.add(o)
+    db.session.commit()
+
+@manager.command
+def loadrelationentites(filename):
+    db.create_all()
+    rel = yaml.load(open(filename))
+    for r in rel:
+        o = RelationEntite(id=r["id"],entite_id=r["entite_id"],cardinaliteRelation=r["cardinalite"])
+        db.session.add(o)
+    db.session.commit()
