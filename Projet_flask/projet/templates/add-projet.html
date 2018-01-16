@@ -1,8 +1,12 @@
 {% extends "base_excerciseur.html" %}
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('static', filename='addProjet.css')}}">
+{% endblock %}
 {% block contain %}
-{{ super () }}
+{% if current_user.login==username %}
 <h1>Ajouter un projet :</h1>
-<form role="form" method="POST" action=#><!--Formulaire de création de projet-->
+<form role="form" method="POST"><!--Formulaire de création de projet-->
 {{ form.hidden_tag() }}
   <div class=
         {% if form.name.errors %}
@@ -10,26 +14,26 @@
         {% else %}
         "form-group"
         {% endif %}
-        >}
+        >
         {{ form.name.label }} {{ form.name(size=50,class_="form-control") }}<!--Affichage formulaire -->
   </div>
-  {% if form.name.errors %}}<!--Gestion des erreurs -->
+  {% if form.name.errors %}<!--Gestion des erreurs -->
   <ul class="list-group">
-    {% for e in form.name.errors %}}<!--Gestion des erreurs -->
+    {% for e in form.name.errors %}<!--Gestion des erreurs -->
     <li class="list-group-item list-group-item-danger">{{ e }}</li>
     {% endfor %}
   </ul>
   {% endif %}
   <div class=
-        {% if form.description.errors %}
-        "form-groupe has-error"
-        {% else %}
-        "form-group"
-        {% endif %}
-        >
-        {{ form.description.label }} {{ form.description(size=50,class_="form-control") }}<!--Affichage formulaire -->
-  </div>
-  {% if form.description.errors %}}<!--Gestion des erreurs -->
+            {% if form.description.errors %}
+            "form-groupe has-error"
+            {% else %}
+            "form-group"
+            {% endif %}
+            >
+            {{ form.description.label }} {{ form.description(size=50,class_="form-control") }}<!--Affichage formulaire -->
+      </div>
+  {% if form.description.errors %}<!--Gestion des erreurs -->
   <ul class="list-group">
     {% for e in form.description.errors %}
     <li class="list-group-item list-group-item-danger">{{ e }}</li>
@@ -38,4 +42,7 @@
   {% endif %}
   <input class="btn btn-default" type="submit" value="Enregistrez">
 </form>
+{% else %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% endif %}
 {% endblock %}

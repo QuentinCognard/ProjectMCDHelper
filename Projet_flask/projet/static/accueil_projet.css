@@ -11,3 +11,17 @@ a, a:hover{
   color:black;
   text-decoration:none;
 }
+#membres,#modif{
+  margin: 2em;
+  padding: 2em;
+  border-style:  double;
+  border-radius: 10px;
+
+}
+#membres{
+  display: block;
+}
+#input{
+  display: block;
+  margin-top: 1em;
+}

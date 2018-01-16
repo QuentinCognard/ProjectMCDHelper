@@ -1,5 +1,6 @@
 from .app import *
 from flask_login import UserMixin
+from sqlalchemy import func
 
 class User(db.Model, UserMixin):
     prenom = db.Column(db.String(100))
@@ -23,16 +24,19 @@ class Droit(db.Model):
     nomDroit = db.Column(db.String(100))
     descDroit = db.Column(db.String(500))
 
-
 class Gerer(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"))
-    user_login = db.Column(db.Integer, db.ForeignKey("user.login"))
+    user_login = db.Column(db.String, db.ForeignKey("user.login"))
     droit_id = db.Column(db.Integer, db.ForeignKey("droit.id"))
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetGerer", lazy="dynamic"))
     user = db.relationship("User", foreign_keys=[user_login], backref=db.backref("userGerer", lazy="dynamic"))
     droit = db.relationship("Droit", foreign_keys=[droit_id], backref=db.backref("droitGerer", lazy="dynamic"))
 
+    def __init__(self,projet_id,user_login,droit_id):
+        self.projet_id=projet_id
+        self.user_login=user_login
+        self.droit_id=droit_id
 
 class Entite(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -79,3 +83,35 @@ def get_proj(idProj):
 @login_manager.user_loader
 def load_user(login):
     return User.query.get(login)
+
+def get_all_login():
+    users=User.query.all()
+    res=[]
+    for u in users:
+        res.append((u.login,u.login))
+    return res
+
+def get_all_droit():
+    droits=Droit.query.all()
+    res=[]
+    for d in droits:
+        res.append((d.id,d.nomDroit))
+    return res
+
+
+def get_projet_user(username):
+    res=Gerer.query.filter(Gerer.user_login==username).all()
+    return res
+def get_Projet_byName(name):
+    return Projet.query.filter(Projet.nomProj==name).first()
+def get_gerer_byProjet(nomProj):
+    return Gerer.query.join(Projet).filter(Projet.nomProj==nomProj).all()
+def get_gerer_byNom(nomProj,nom):
+    # print(Gerer.query.join(Projet).filter(Projet.nomProj==nomProj,Gerer.user_login==nom).all())
+    return Gerer.query.join(Projet).filter(Projet.nomProj==nomProj,Gerer.user_login==nom).first()
+
+def get_id_droit(nomDroit):
+    return Droit.query.filter(Droit.nomDroit==nomDroit).first().id
+
+def get_nom_droit(id):
+    return Droit.query.filter(Droit.id==id).first().nomDroit

@@ -1,0 +1,13 @@
+#membres{
+  display: block;
+}
+#log,#droit{
+  display: inline-block;
+  margin-bottom:0.5em;
+}
+#log{
+  margin-left: 2em;
+}
+#droit>label{
+  margin-left: 2em;
+}

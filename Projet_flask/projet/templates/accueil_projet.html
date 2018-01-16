@@ -3,11 +3,11 @@
 {{ super() }}
   <link rel="stylesheet" href= "{{url_for('static',filename='home.css') }}"/>
 {% endblock %}
-  {% block contain %}<!--Affichage des listes de projets-->
+  {% block main %}
   <fieldset>
     <legend>Mes Projets</legend>
     <section class="projets">
-        <a href="{{url_for('add_projets') }}"><input type="submit" value="Ajouter un Projet" id="ajoutproj "></a>
+        <a href="{{ url_for('add_projets', username=current_user.login) }}"><input type="submit" value="Ajouter un Projet" id="ajoutproj "></a>
     </section>
     </section>
     </fieldset>

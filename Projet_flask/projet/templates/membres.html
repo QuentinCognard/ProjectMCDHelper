@@ -1,0 +1,52 @@
+{% extends "base_excerciseur.html" %}
+{% block styles %}
+{{ super() }}
+  <link rel="stylesheet" href= "{{url_for('static',filename='accueil_projet.css') }}"/>
+
+{% endblock %}
+{% block contain %}
+<div id="membres">
+  {% for membres in membresProj %}
+    <p>{{ membres.user_login }}: {{ membres.droit.nomDroit }}</p>
+  {% endfor %}
+  <a href="{{ url_for('add_membre',username=username,nomProj=nomProj)}}"><input type="Submit" value="Ajouter Membre"></a>
+</div>
+  <div id="modif">
+  <select id="select">
+    {% for membre in membresProj %}
+    <option onclick="droit('{{membre.droit.nomDroit|safe}}')" value="{{ membre.user_login }}">{{ membre.user_login }}</option>
+    {% endfor %}
+  </select>
+  <select id="resultat">
+      <option value="developpeur">developpeur</option>
+      <option value="visiteur"> visiteur</option>
+    </select>
+    <script>
+    function modifier(){
+      var nom=document.getElementById("select").value
+      var droit=document.getElementById("resultat").value
+      var nomProj='{{ nomProj }}'
+      console.log(nomProj)
+      document.location.href="/projets/{{ current_user.login }}/"+nomProj+"/parametres/membres/modif/"+droit+"/"+nom
+    }
+    function supprimer(){
+      var nom=document.getElementById("select").value
+      var nomProj='{{ nomProj }}'
+      document.location.href="/projets/{{ current_user.login }}/"+nomProj+"/parametres/membres/supprimer/"+nom
+    }
+    </script>
+    <div id="input">
+      <input type="Submit" value="Modifier" onclick="modifier()">
+      <input type="Submit" value="Supprimer" onclick="supprimer()">
+    </div>
+</div>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+{% endblock %}
