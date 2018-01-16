@@ -65,23 +65,79 @@ def deconnexion():
 @login_required
 def page_projets():
 	return render_template("accueil_projet.html")
+
+@app.route("/projets/<string:username>")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
+def page_projets(username):
+	proj=get_projet_user(username)
+	return render_template("accueil_projet.html",proj=proj)
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField, validators
 from wtforms.validators import DataRequired
 
 class ProjetForm(FlaskForm):#Formulaire de création de projet
-	id = HiddenField('id')
 	name = StringField('Nom Projet',[validators.Length(min=4, max=25)])
 	description =StringField('Description',[validators.Length(min=10, max=150)])
+	def createProjet(self,name,description):
+		P=Projet(nomProj=name,nomMCD="",descProj=description)
+		db.session.add(P)
 
-@app.route("/projets/add", methods=['GET', 'POST'])# Page de création d'un projet
-def add_projets():
-	P = ProjetForm(name="",description="")
+class DroitProjForm(FlaskForm):
+	login=SelectField('Login',choices=get_all_login())
+	droit=SelectField('Droit',choices=get_all_droit())
+
+@app.route("/projets/add/<string:username>", methods=['GET', 'POST'])# Page de création d'un projet
+def add_projets(username):
+	P = ProjetForm(request.form)
+	if request.method == 'POST': #Si le formulaire a été rempli
+		P.createProjet(P.name.data,P.description.data) #création nouveau projet
+		gerer=Gerer(get_Projet_byName(P.name.data).id, username, 1)
+		db.session.add(gerer)
+		db.session.commit()
+		return redirect(url_for("page_projets",username=username))
 	return render_template(
 		"add-projet.html",
-		form=P)
+		form=P ,username=username)
 
-# route vers un projet perso en fonction de l'ID
+@app.route("/projets/<string:username>/<string:nomProj>/parametres")
+def parametresProj(username,nomProj):
+	return render_template("parametres.html",username=username,nomProj=nomProj)
+
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres")
+def membres(username,nomProj):
+	membresProj=get_gerer_byProjet(nomProj)
+	print(User.query.all())
+	return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj)
+
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres/add", methods=['GET', 'POST'])
+def add_membre(username,nomProj):
+	D=DroitProjForm(request.form)
+	if request.method=="POST":
+		db.session.add(Gerer(get_Projet_byName(nomProj).id,D.login.data,D.droit.data))
+		db.session.commit()
+		return redirect(url_for("membres",username=username,nomProj=nomProj))
+	return render_template("add-membre.html",username=username,nomProj=nomProj,form=D)
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/modif/<string:droit>/<string:nom>",methods=['GET', 'POST'])
+def modifier_membres(username,nomProj,droit,nom):
+	if( get_nom_droit(get_gerer_byNom(nomProj,nom).droit_id) != "master"):
+		idProj=get_Projet_byName(nomProj).id
+		db.session.delete(get_gerer_byNom(nomProj,nom))
+		db.session.add(Gerer(idProj,nom,get_id_droit(droit)))
+		db.session.commit()
+	else:
+		flash(" impossible : "+nom+" est master")
+	return redirect(url_for("membres",username=username,nomProj=nomProj))
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/supprimer/<string:nom>", methods=['GET','PÔST'])
+def supprimer_membres(username,nomProj,nom):
+	if( get_nom_droit(get_gerer_byNom(nomProj,nom).droit_id) != "master"):
+		idProj=get_Projet_byName(nomProj).id
+		db.session.delete(get_gerer_byNom(nomProj,nom))
+		db.session.commit()
+		flash(""+nom+" à été supprimer de la liste des membres")
+	else:
+		flash("impossible : "+nom+" est master")
+	return redirect(url_for("membres",username=username,nomProj=nomProj))
+
 
 # @app.route("/projets/<idProj>/")
 # def page_projet_perso(idProj):
