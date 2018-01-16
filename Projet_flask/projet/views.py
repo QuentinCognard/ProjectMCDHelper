@@ -99,8 +99,10 @@ def parametresProj(username,nomProj):
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres")
 def membres(username,nomProj):
 	membresProj=get_gerer_byProjet(nomProj)
-	print(User.query.all())
-	return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj)
+	if( get_nom_droit(get_gerer_byNom(nomProj,username).droit_id) == "master"):
+		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=True)
+	else:
+		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=False)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres/add", methods=['GET', 'POST'])
 def add_membre(username,nomProj):
@@ -110,6 +112,7 @@ def add_membre(username,nomProj):
 		db.session.commit()
 		return redirect(url_for("membres",username=username,nomProj=nomProj))
 	return render_template("add-membre.html",username=username,nomProj=nomProj,form=D)
+
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/modif/<string:droit>/<string:nom>",methods=['GET', 'POST'])
 def modifier_membres(username,nomProj,droit,nom):
 	if( get_nom_droit(get_gerer_byNom(nomProj,nom).droit_id) != "master"):
@@ -120,6 +123,7 @@ def modifier_membres(username,nomProj,droit,nom):
 	else:
 		flash(" impossible : "+nom+" est master")
 	return redirect(url_for("membres",username=username,nomProj=nomProj))
+
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/supprimer/<string:nom>", methods=['GET','PÔST'])
 def supprimer_membres(username,nomProj,nom):
 	if( get_nom_droit(get_gerer_byNom(nomProj,nom).droit_id) != "master"):
