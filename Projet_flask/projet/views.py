@@ -22,6 +22,14 @@ class LoginForm(FlaskForm):
 		return user if passwd == user.password else None
 
 
+class CreerCompteForm(FlaskForm):
+	login = StringField('Login :')
+	nom = StringField('Nom :')
+	prenom = StringField('Prenom :')
+	password = PasswordField('Mot de passe :')
+	confirm_password = PasswordField('Confirmer mot de passe :')
+	mail = StringField('Mail :')
+
 @app.route("/") #route pour la page de connexion
 def home():
 	return render_template("home.html", title= "Exerciseur MCD")
@@ -58,6 +66,23 @@ def deconnexion():
 	logout_user()
 	return redirect(url_for('home'))
 
+
+@app.route("/creer_compte/",methods=('GET', 'POST'))
+def creer_compte():
+	f = CreerCompteForm()
+	if f.validate_on_submit():
+		user = User.query.get_user(f.login.data)
+		if user is not None:
+			return render_template("creerComptes.html",form = f,error=True)
+		else:
+			newuser(f.login.data,f.login.password)
+			user = User.query.get_user(f.login.data)
+			login_user(user)
+			return render_template("home.html")
+	return render_template("creerComptes.html",form = f,error=False)
+
+
+
 # @app.route("/traitement", methods=("POST",))
 # def traitement():
 # 	f = ConnexionForm()
@@ -80,7 +105,7 @@ def page_projets():
 	return render_template("accueil_projet.html")
 
 @app.route("/projets/<string:username>")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
-def page_projets(username):
+def page_projets_parcequelesfonctionsdoiventpasavoirlememenom(username):
 	proj=get_projet_user(username)
 	return render_template("accueil_projet.html",proj=proj)
 
@@ -130,6 +155,8 @@ def add_membre(username,nomProj):
 		db.session.commit()
 		return redirect(url_for("membres",username=username,nomProj=nomProj))
 	return render_template("add-membre.html",username=username,nomProj=nomProj,form=D)
+
+
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/modif/<string:droit>/<string:nom>",methods=['GET', 'POST'])
 def modifier_membres(username,nomProj,droit,nom):
 	if( get_nom_droit(get_gerer_byNom(nomProj,nom).droit_id) != "master"):
