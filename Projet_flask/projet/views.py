@@ -2,7 +2,7 @@ from .app import *
 from flask import *
 from flask_wtf import *
 from wtforms import *
-from wtforms.validators import DataRequired
+from wtforms.validators import *
 from flask_login import login_user, current_user, login_required, logout_user
 from .models import *
 from hashlib import sha256
@@ -29,16 +29,21 @@ class UserForm(FlaskForm):
 
 
 class CreerCompteForm(FlaskForm):
-	login = StringField('Login :')
-	nom = StringField('Nom :')
-	prenom = StringField('Prenom :')
-	password = PasswordField('Mot de passe :')
-	confirm_password = PasswordField('Confirmer mot de passe :')
-	mail = StringField('Mail :')
+	login = StringField('Login', [validators.Length(min=4, max=25)])
+	nom = StringField('Nom', [validators.Length(min=4, max=25)])
+	prenom = StringField('Prenom', [validators.Length(min=4, max=25)])
+	password = PasswordField('Mot de passe', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm_password', message='Mot de passe doivent etre égaux')
+    ])
+	confirm_password = PasswordField('Réécrire le mot de passe')
+	mail = StringField('Mail', [validators.Length(min=6, max=35)])
+
 
 @app.route("/") #route pour la page de connexion
 def home():
-	return render_template("home.html", title= "Exerciseur MCD")
+	f = CreerCompteForm()
+	return render_template("home.html", title= "Exerciseur MCD",form=f)
 
 @app.route("/lucas/test/<id_projet>", methods=('GET', 'POST')) #route pour la page de connexion
 def lucas(id_projet):
@@ -62,9 +67,9 @@ def connexion():
 		user = f.get_authenticated_user()
 		if user:
 			login_user(user)
-			next = f.next.data or url_for("home")
+			next = f.next.data or url_for("page_projets_bis",username=user.login)
 			return redirect(next)
-	return render_template("connexion.html",form = f)
+	return render_template("home.html", title= "Exerciseur MCD",form=f)
 
 @app.route("/profil/")
 @login_required
@@ -89,8 +94,6 @@ def save_compte():
 			user.nom = form.nom.data
 		if form.prenom.data != "":
 			user.prenom = form.prenom.data
-		print(form.photo.data)
-		print("####################################")
 		if form.photo.data != "":
 			f = form.photo.data
 			filename = secure_filename(f.filename)
@@ -111,16 +114,22 @@ def deconnexion():
 @app.route("/creer_compte/",methods=('GET', 'POST'))
 def creer_compte():
 	f = CreerCompteForm()
-	if f.validate_on_submit():
-		user = User.query.get_user(f.login.data)
+	print(f.password)
+	if f.validate():
+		user = User.query.get(f.login.data)
 		if user is not None:
-			return render_template("creerComptes.html",form = f,error=True)
+			return render_template("home.html",form = f, title = "Exerciceur de MCD", error=True)
 		else:
-			newuser(f.login.data,f.login.password)
-			user = User.query.get_user(f.login.data)
-			login_user(user)
-			return render_template("home.html")
-	return render_template("creerComptes.html",form = f,error=False)
+			m = sha256()
+			m.update(f.password.data.encode())
+			passwd = m.hexdigest()
+			o = User(login = f.login.data, password = passwd)
+			db.session.add(o)
+			db.session.commit()
+			login_user(o)
+			flash('Votre compte à bien été créer')
+			return redirect(url_for('page_projets_bis',username=o.login))
+	return render_template("home.html",form = f, title = "Exerciceur de MCD", error=False)
 
 
 
@@ -146,7 +155,7 @@ def page_projets():
 	return render_template("accueil_projet.html")
 
 @app.route("/projets/<string:username>")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
-def page_projets_parcequelesfonctionsdoiventpasavoirlememenom(username):
+def page_projets_bis(username):
 	proj=get_projet_user(username)
 	return render_template("accueil_projet.html",proj=proj)
 

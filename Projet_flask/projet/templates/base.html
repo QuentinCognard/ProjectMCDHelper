@@ -6,38 +6,11 @@
   le dossier static -->
 {% endblock %}
 <!-- {% block metas %}
-block metas pour définir le type d'encodage
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% endblock %} -->
-{% block navbar %}
-<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Music'O Gram</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-					<ul class="nav navbar-nav navbar-right">
-						{% if current_user.is_authenticated %}
-						<li><a href="{{ url_for('accueil_compte')}}">{{ current_user.login }}</a></li>
-						<li><a href="{{ url_for('deconnexion')}}"><span class="glyphicon glyphicon-log-out" title="Se déconnecter"></span></a></li>
-						{% else %}
-						<li><a href="{{ url_for('connexion')}}">Se connecter</a></li>
-						<li><a href="{{ url_for('connexion')}}"><span class="glyphicon glyphicon-log-in" title="Se connecter"></span></a></li>
-						{% endif %}
-          </ul>
-        </div>
-      </div>
-</nav>
-{% endblock %}
+
 {% block content %}
-<h1>{{ title }}</h1>
 
 {% block main %}{% endblock %}
 {% endblock %}
