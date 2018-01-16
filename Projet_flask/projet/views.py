@@ -109,7 +109,16 @@ def add_membre(username,nomProj):
 		db.session.commit()
 		return redirect(url_for("membres",username=username,nomProj=nomProj))
 	return render_template("add-membre.html",username=username,nomProj=nomProj,form=D)
-# route vers un projet perso en fonction de l'ID
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/modif/<string:droit>/<string:nom>",methods=['GET', 'POST'])
+def modifier_membres(username,nomProj,droit,nom):
+	if( get_nom_droit(get_gerer_byNom(nomProj,nom).droit_id) != "master"):
+		idProj=get_Projet_byName(nomProj).id
+		db.session.delete(get_gerer_byNom(nomProj,nom))
+		db.session.add(Gerer(idProj,nom,get_id_droit(droit)))
+		db.session.commit()
+	else:
+		flash(" impossible : "+nom+" est master")
+	return redirect(url_for("membres",username=username,nomProj=nomProj))
 
 # @app.route("/projets/<idProj>/")
 # def page_projet_perso(idProj):

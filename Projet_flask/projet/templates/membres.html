@@ -11,18 +11,35 @@
   {% endfor %}
   <a href="{{ url_for('add_membre',username=username,nomProj=nomProj)}}">Ajouter Membre</a>
 </div>
-  <script>
-    function droit(droit){
-      document.getElementById("resultat").innerHTML=droit
-      document.getElementById("resultat").value=droit
-    }
-  </script>
   <div id="modif">
   <select id="select">
     {% for membre in membresProj %}
     <option onclick="droit('{{membre.droit.nomDroit|safe}}')" value="{{ membre.user_login }}">{{ membre.user_login }}</option>
     {% endfor %}
   </select>
-  <p id="resultat">{{membresProj[0].droit.nomDroit}}</p>
+  <select id="resultat">
+      <option value="developpeur">developpeur</option>
+      <option value="visiteur"> visiteur</option>
+    </select>
+    <script>
+    function modifier(){
+      var nom=document.getElementById("select").value
+      var droit=document.getElementById("resultat").value
+      var nomProj='{{ nomProj }}'
+      console.log(nomProj)
+      document.location.href="/projets/{{ current_user.login }}/"+nomProj+"/parametres/membres/modif/"+droit+"/"+nom
+    }
+    </script>
+    <input type="Submit" value="Modifier" onclick="modifier()">
+
 </div>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 {% endblock %}

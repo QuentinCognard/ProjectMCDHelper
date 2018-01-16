@@ -26,7 +26,7 @@ class Droit(db.Model):
 class Gerer(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"))
-    user_login = db.Column(db.Integer, db.ForeignKey("user.login"))
+    user_login = db.Column(db.String, db.ForeignKey("user.login"))
     droit_id = db.Column(db.Integer, db.ForeignKey("droit.id"))
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetGerer", lazy="dynamic"))
     user = db.relationship("User", foreign_keys=[user_login], backref=db.backref("userGerer", lazy="dynamic"))
@@ -103,3 +103,12 @@ def get_Projet_byName(name):
     return Projet.query.filter(Projet.nomProj==name).first()
 def get_gerer_byProjet(nomProj):
     return Gerer.query.join(Projet).filter(Projet.nomProj==nomProj).all()
+def get_gerer_byNom(nomProj,nom):
+    # print(Gerer.query.join(Projet).filter(Projet.nomProj==nomProj,Gerer.user_login==nom).all())
+    return Gerer.query.join(Projet).filter(Projet.nomProj==nomProj,Gerer.user_login==nom).first()
+
+def get_id_droit(nomDroit):
+    return Droit.query.filter(Droit.nomDroit==nomDroit).first().id
+
+def get_nom_droit(id):
+    return Droit.query.filter(Droit.id==id).first().nomDroit
