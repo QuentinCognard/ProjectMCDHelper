@@ -63,7 +63,8 @@ def deconnexion():
 @app.route("/projets/<string:username>")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
 def page_projets(username):
 	proj=get_projet_user(username)
-	return render_template("accueil_projet.html",proj=proj)
+	projets=get_all_projets()
+	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets)
 from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField, validators
 from wtforms.validators import DataRequired
