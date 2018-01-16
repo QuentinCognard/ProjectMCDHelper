@@ -8,7 +8,9 @@
   <fieldset>
     <legend> Paramètres du projet : {{ nomProj }}</legend>
     <section class="projets">
-      <a href="{{url_for('membres',username= username ,nomProj=nomProj )}}">LES MEMBRES OUI C'EST INCROYABLE</a>
+      <div id='gestionMembres'>
+        <a  href="{{url_for('membres',username= username ,nomProj=nomProj )}}"><input type="Submit" value="Gestion des membres"></a> <p> Ajoutez, supprimez ou modifiez des membres ! </p>
+      </div>
     </section>
     </section>
     </fieldset>

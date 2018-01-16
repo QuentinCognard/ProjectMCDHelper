@@ -25,3 +25,10 @@ a, a:hover{
   display: block;
   margin-top: 1em;
 }
+#gestionMembres{
+  display: flex;
+  flex-wrap: nowrap;
+}
+#gestionMembres> a{
+  margin-right: 1em;
+}
