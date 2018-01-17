@@ -27,20 +27,15 @@
     <h1> {{title}} </h1>
 
     <div class="container">
-
-      <form class="form-signin"> <!-- debut de notre formulaire de connexion -->
+      <form class="form-signin" role="form" method="POST" enctype="multipart/form-data" action="{{ url_for('connexion')}}">
         <h2 class="form-signin-heading">Connexion</h2>
-        <label for="inputLogin" class="sr-only">Login</label>
-        <input type="inputLogin" id="inputLogin" class="form-control" placeholder="Login" required autofocus> <!-- champ du login-->
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required> <!-- champ du password-->
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="remember-me"> Souvenez vous de moi
-          </label>
-        </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Connexion</button> <!-- bouton de connexion pour la validation-->
-      </form>
+      			{{ form.hidden_tag() }}
+      			<div class="form-group">
+      				{{ form.login.label(class="sr-only")}}{{form.login(size=50, class_="from-control", id="inputPassword", placeholder="Login")}}<br>
+      				{{ form.password.label(class="sr-only")}}{{form.password(size=50, class_="from-control", id="inputPassword", placeholder="Mot de passe")}}<br>
+      			</div>
+      			<input class="formentrybutton" type="submit" value="Ajouter le morceau">
+       </form>
 
     </div> <!-- /container -->
   </body>

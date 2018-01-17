@@ -5,13 +5,12 @@
   href="{{ url_for ('static', filename ='home.css') }}"/> <!-- Intégration du ficher .css se trouvant dans
   le dossier static -->
 {% endblock %}
-{% endblock %}
-{% block metas %}
-<meta charset="utf-8"> <!-- block metas pour définir le type d'encodage-->
+<!-- {% block metas %}
+<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-{% endblock %}
+{% endblock %} -->
+
 {% block content %}
-<h1>{{ title }}</h1>
 
 {% block main %}{% endblock %}
 {% endblock %}

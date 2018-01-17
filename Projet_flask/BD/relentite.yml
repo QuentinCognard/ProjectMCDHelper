@@ -1,0 +1,6 @@
+- id: 1
+  entite_id: 1
+  cardinalite: 0-n
+- id: 1
+  entite_id: 2
+  cardinalite: 1-1

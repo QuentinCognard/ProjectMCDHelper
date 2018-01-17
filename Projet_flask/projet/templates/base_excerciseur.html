@@ -12,8 +12,8 @@
     </form>
     <h1 id="title"> Excerciseur MCD </h1>
     <div id= "lien">
-      <a id="linkprofil" href="#"> <img id="profile" src='./static/logo_profile.jpg'> </a>
-    </div>
+    <a id="linkprofil" href="#"> <img id="profile" src="{{url_for('static',filename='logo_profile.jpg')}}"> </a>
+  </div>
   </header>
   {% endblock %}
   {% block contain %}

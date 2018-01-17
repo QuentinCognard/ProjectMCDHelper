@@ -1,0 +1,6 @@
+- id: 1
+  projet_id: 1
+  nomEntite: Personne
+- id: 2
+  projet_id: 1
+  nomEntite: Chien

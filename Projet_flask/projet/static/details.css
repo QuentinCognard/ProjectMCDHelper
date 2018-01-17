@@ -1,0 +1,52 @@
+h1{
+  color: orange;
+}
+ul{
+  list-style: none;
+}
+body {
+  padding-top: 5rem;
+}
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+h1{
+  color: orange;
+}
+ul{
+  list-style: none;
+  padding: 0;
+}
+body {
+  padding-top: 5rem;
+}
+.details{
+  display: flex;
+  flex-wrap: wrap;
+  background-color: lightgrey;
+}
+.sinfoto{
+  background-color: lightgrey;
+}
+.details aside{
+  padding-left: 3%;
+}
+.morceaux{
+  border: solid;
+}
+.morceaux ul h4{
+  display: inline-block;
+  width: 150px;
+  text-align: right;
+  margin-right: 1em;
+}
+.morceaux ul *{
+  margin-top: 1em;
+}
+.morceaux h2{
+  border-bottom: 1px solid #CCC;
+}
+.morceaux ul li{
+  border-bottom: 1px solid #CCC;
+}
