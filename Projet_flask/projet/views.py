@@ -189,11 +189,15 @@ class DroitProjForm(FlaskForm):#formulaire pour avoir 2 liste déroulantes avec 
 def add_projets(username):
 	P = ProjetForm(request.form)
 	if request.method == 'POST': #Si le formulaire a été rempli
-		P.createProjet(P.name.data,P.description.data) #création nouveau projet
-		gerer=Gerer(get_Projet_byName(P.name.data).id, username, 1)
-		db.session.add(gerer)
-		db.session.commit()
-		return redirect(url_for("page_projets",username=username,n=1))
+		if P.validate_on_submit():
+			P.createProjet(P.name.data,P.description.data) #création nouveau projet
+			gerer=Gerer(get_Projet_byName(P.name.data).id, username, 1)
+			db.session.add(gerer)
+			db.session.commit()
+			return redirect(url_for("page_projets",username=username,n=1))
+		return render_template(
+			"add-projet.html",
+			form=P ,username=username)
 	return render_template(
 		"add-projet.html",
 		form=P ,username=username)
@@ -291,6 +295,8 @@ def save_modifProj(username,nomProj):
 			projetCourant.descProj = P.description.data
 		db.session.commit()
 		return redirect(url_for('parametresProj',username=username,nomProj=P.name.data))
+		flash("Le projet à bien été modifié")
+	flash("Impossible de modifié le projet, le nom ou la description est trop court(e) ou trop long")	
 	return redirect(url_for('modifProj',username=username,nomProj=nomProj))
 
 # @app.route("/projets/<idProj>/")
