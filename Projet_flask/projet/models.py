@@ -99,8 +99,21 @@ def get_all_droit():
     return res
 
 
-def get_projet_user(username):
-    return Projet.query.join(Gerer).filter(Gerer.user_login==username).all()
+def get_projet_user(username,n):
+    p= Projet.query.join(Gerer).filter(Gerer.user_login==username).all()
+    res=[]
+    indice=0
+    if len(p)<n*5-1:
+        indice=len(p)
+    else:
+        indice=n*5-1
+    if n==1:
+        start=(n-1)*5
+    else:
+        start=(n-1)*5-1
+    for i in range(start,indice):
+        res.append(p[i])
+    return res
 
 def get_Projet_byName(name):
     return Projet.query.filter(Projet.nomProj==name).first()
