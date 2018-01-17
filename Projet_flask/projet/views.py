@@ -77,8 +77,11 @@ class ProjetForm(FlaskForm):#Formulaire de création de projet
 		db.session.add(P)
 
 class DroitProjForm(FlaskForm):
-	login=SelectField('Login',choices=get_all_login())
-	droit=SelectField('Droit',choices=get_all_droit())
+	try:
+		login=SelectField('Login',choices=get_all_login())
+		droit=SelectField('Droit',choices=get_all_droit())
+	except ValueError:
+		print ("Oops!  That was no valid number.  Try again...")
 
 @app.route("/projets/add/<string:username>", methods=['GET', 'POST'])# Page de création d'un projet
 def add_projets(username):
