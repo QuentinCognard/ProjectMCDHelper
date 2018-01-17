@@ -9,6 +9,9 @@ from hashlib import sha256
 from werkzeug.utils import secure_filename
 import os
 import shutil
+from flask_wtf import FlaskForm
+from wtforms import StringField, HiddenField, validators
+from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
 	login = StringField('Login :')
@@ -46,7 +49,8 @@ class CreerCompteForm(FlaskForm):
 @app.route("/") #route pour la page de connexion
 def home():
 	f = CreerCompteForm()
-	return render_template("home.html", title= "Exerciseur MCD",form=f)
+	f_bis = LoginForm()
+	return render_template("home.html", title= "Exerciseur MCD",form_bis=f, form=f_bis)
 
 @app.route("/lucas/test/<id_projet>", methods=('GET', 'POST')) #route pour la page de connexion
 def lucas(id_projet):
@@ -71,9 +75,9 @@ def connexion():
 		user = f.get_authenticated_user()
 		if user:
 			login_user(user)
-			next = f.next.data or url_for("page_projets_bis",username=user.login)
+			next = f.next.data or url_for("page_projets",username=user.login)
 			return redirect(next)
-	return render_template("home.html", title= "Exerciseur MCD",form=f_bis)
+	return render_template("home.html", title= "Exerciseur MCD",form_bis=f_bis, form = f)
 
 @app.route("/profil/")
 @login_required
@@ -118,10 +122,11 @@ def deconnexion():
 @app.route("/creer_compte/",methods=('GET', 'POST'))
 def creer_compte():
 	f = CreerCompteForm()
+	f_bis = LoginForm()
 	if f.validate():
 		user = User.query.get(f.login.data)
 		if user is not None:
-			return render_template("home.html",form = f, title = "Exerciceur de MCD", error=True)
+			return render_template("home.html",form_bis = f, form = f_bis, title = "Exerciceur de MCD", error=True)
 		else:
 			m = sha256()
 			m.update(f.password.data.encode())
@@ -132,7 +137,7 @@ def creer_compte():
 			login_user(o)
 			flash('Votre compte à bien été créer')
 			return redirect(url_for('page_projets',username=o.login))
-	return render_template("home.html",form = f, title = "Exerciceur de MCD", error=False)
+	return render_template("home.html",form_bis = f, form = f_bis, title = "Exerciceur de MCD", error=False)
 
 
 
@@ -158,9 +163,6 @@ def page_projets(username):
 	proj=get_projet_user(username)
 	projets=get_all_projets()
 	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets)
-from flask_wtf import FlaskForm
-from wtforms import StringField, HiddenField, validators
-from wtforms.validators import DataRequired
 
 class ProjetForm(FlaskForm):#Formulaire de création de projet
 	name = StringField('Nom Projet',[validators.Length(min=4, max=25)])
