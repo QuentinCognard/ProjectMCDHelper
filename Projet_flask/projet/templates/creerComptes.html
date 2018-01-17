@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block styles %}
+{{ super() }}
+		<link rel="stylesheet"
+		 			href= "{{ url_for('static', filename='home.css') }}" >
+{% endblock %}
+{% block main %}
+{% if error %}
+  <h1> Creer un compte : Login déjà utilisé !</h1>
+  <form class="formentry" role="form" method="POST" action="{{ url_for('creer_compte') }}">
+  {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.login.label}}{{form.login(size=50, class_="from-control", placeholder="Login")}}<br>
+      {{ form.password.label}}{{form.password(size=50, class_="from-control", placeholder="Mot de passe")}}<br>
+    </div>
+    <input class="formentrybutton" type="submit" value="Creer le compte">
+  </form>
+{% else %}
+<h1> Creer un compte </h1>
+<form class="formentry" role="form" method="POST" action="{{ url_for('creer_compte') }}">
+{{ form.hidden_tag() }}
+	<div class="form-group">
+		{{ form.login.label}}{{form.login(size=50, class_="from-control", placeholder="Login")}}<br>
+		{{ form.password.label}}{{form.password(size=50, class_="from-control", placeholder="Mot de passe")}}<br>
+	</div>
+	<input class="formentrybutton" type="submit" value="Creer le compte">
+</form>
+{% endif %}
+{% endblock %}
+</html>

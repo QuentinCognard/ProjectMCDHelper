@@ -1,0 +1,17 @@
+{% extends "base_excerciseur.html" %}
+{% block styles %}
+{{ super() }}
+  <link rel="stylesheet" href= "{{url_for('static',filename='accueil_projet.css') }}"/>
+
+{% endblock %}
+  {% block contain %}
+  <fieldset>
+    <legend> Paramètres du projet : {{ nomProj }}</legend>
+    <section class="projets">
+      <div id='gestionMembres'>
+        <a  href="{{url_for('membres',username= username ,nomProj=nomProj )}}"><input type="Submit" value="Gestion des membres"></a> <p> Ajoutez, supprimez ou modifiez des membres ! </p>
+      </div>
+    </section>
+    </section>
+    </fieldset>
+  {% endblock %}
