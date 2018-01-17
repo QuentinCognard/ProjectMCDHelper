@@ -9,7 +9,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(100))
     mail = db.Column(db.String(100))
     image = db.Column(db.String(100))
-    
+
     def get_id(self):
         return self.login
 
@@ -18,6 +18,7 @@ class Projet(db.Model):
     nomProj = db.Column(db.String(100))
     nomMCD = db.Column(db.String(100))
     descProj = db.Column(db.String(500))
+    mcd_textuel = db.Column(db.String(500))
 
 class Droit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -64,13 +65,19 @@ class Relation(db.Model):
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key=True)
     nomRelation = db.Column(db.String(100))
     positionRelation = db.Column(db.String(100))
+    id_relationEntite = db.Column(db.Integer, db.ForeignKey("relationentite.id"))
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetRelationn", lazy="dynamic"))
+    relationEntite = db.relationship("Relationentite", foreign_keys=[id_relationEntite], backref=db.backref("RelationEntite", lazy="dynamic"))
 
-class RelationEntite(db.Model):
+class Relationentite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    entite_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
-    entite = db.relationship("Entite", foreign_keys=[entite_id], backref=db.backref("relationEntite", lazy="dynamic"))
-    cardinaliteRelation = db.Column(db.String(100))
+    cardinalite1 = db.Column(db.String(100))
+    cardinalite2 = db.Column(db.String(100))
+    entite1_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
+    entite2_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
+    entite1 = db.relationship("Entite", foreign_keys=[entite1_id], backref=db.backref("Entite1", lazy="dynamic"))
+    entite2 = db.relationship("Entite", foreign_keys=[entite2_id], backref=db.backref("Entite2", lazy="dynamic"))
+
 
 def get_user(login):
     User = User.query.filter(User.login==login).all()
