@@ -32,7 +32,7 @@ a, a:hover{
   display: flex;
   flex-wrap: nowrap;
 }
-#gestionMembres> a{
+#gestionMembres> a, #modifProj> a{
   margin-right: 1em;
 }
 #mesproj,#tousproj{
@@ -44,4 +44,11 @@ a, a:hover{
 }
 #ajoutproj{
   margin-left: 1em;
+}
+#sectionParam{
+  display: block;
+}
+#modifProj{
+  display: flex;
+  flex-wrap: nowrap;
 }

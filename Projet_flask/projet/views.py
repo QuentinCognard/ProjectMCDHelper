@@ -141,6 +141,7 @@ def creer_compte():
 
 
 
+
 # @app.route("/traitement", methods=("POST",))
 # def traitement():
 # 	f = ConnexionForm()
@@ -247,6 +248,25 @@ def supprimer_membres(username,nomProj,nom):
 		flash("impossible : "+nom+" est master")
 	return redirect(url_for("membres",username=username,nomProj=nomProj))
 
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj")
+def modifProj(username,nomProj):
+	P = ProjetForm(name=nomProj,descritpion=get_Projet_byName(nomProj).descProj)
+
+	return render_template('modifProj.html',form=P,username=username,nomProj=nomProj)
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj/save",methods=['GET', 'POST'])
+def save_modifProj(username,nomProj):
+	P = ProjetForm()
+	projetCourant=get_Projet_byName(nomProj)
+	print(projetCourant.nomProj)
+	print(projetCourant.descProj)
+	if P.validate_on_submit():
+		if P.name.data != "":
+			projetCourant.nomProj = P.name.data
+		if P.description.data != "":
+			projetCourant.descProj = P.description.data
+		db.session.commit()
+		return redirect(url_for('parametresProj',username=username,nomProj=P.name.data))
+	return redirect(url_for('modifProj',username=username,nomProj=nomProj))
 
 # @app.route("/projets/<idProj>/")
 # def page_projet_perso(idProj):

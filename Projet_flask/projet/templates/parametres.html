@@ -7,11 +7,24 @@
   {% block contain %}
   <fieldset>
     <legend> Paramètres du projet : {{ nomProj }}</legend>
-    <section class="projets">
+    <section class="projets" id='sectionParam'>
       <div id='gestionMembres'>
         <a  href="{{url_for('membres',username= username ,nomProj=nomProj )}}"><input type="Submit" value="Gestion des membres"></a> <p> Ajoutez, supprimez ou modifiez des membres ! </p>
+      </div> </br>
+      <div id='modifProj'>
+        <a href="{{ url_for('modifProj',username=username,nomProj=nomProj)}}"><input type="Submit" value="Modification du projet"></a> <p> Modifiez le nom et la description du projet. </p>
       </div>
     </section>
     </section>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
     </fieldset>
+
   {% endblock %}
