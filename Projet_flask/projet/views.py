@@ -131,7 +131,7 @@ def creer_compte():
 			db.session.commit()
 			login_user(o)
 			flash('Votre compte à bien été créer')
-			return redirect(url_for('page_projets_bis',username=o.login))
+			return redirect(url_for('page_projets',username=o.login))
 	return render_template("home.html",form = f, title = "Exerciceur de MCD", error=False)
 
 
@@ -152,17 +152,12 @@ def creer_compte():
 # 	return render_template("connexion.html", title= "Premier template avec Flask")
 
 
-@app.route("/projets")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
-@login_required
-def page_projets():
-	return render_template("accueil_projet.html")
-
 @app.route("/projets/<string:username>")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
-def page_projets_bis(username):
+@login_required
+def page_projets(username):
 	proj=get_projet_user(username)
 	projets=get_all_projets()
 	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets)
-
 from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField, validators
 from wtforms.validators import DataRequired
@@ -174,12 +169,10 @@ class ProjetForm(FlaskForm):#Formulaire de création de projet
 		P=Projet(nomProj=name,nomMCD="",descProj=description)
 		db.session.add(P)
 
-# class DroitProjForm(FlaskForm):
-# 	login=SelectField('Login',choices=get_all_login())
-# 	droit=SelectField('Droit',choices=get_all_droit())
 class DroitProjForm(FlaskForm):
 	login=SelectField('Login',choices=[])
 	droit=SelectField('Droit',choices=[])
+
 
 @app.route("/projets/add/<string:username>", methods=['GET', 'POST'])# Page de création d'un projet
 def add_projets(username):
@@ -195,7 +188,7 @@ def add_projets(username):
 		form=P ,username=username)
 @app.route("/projets/<string:username>/<string:nomProj>/description")
 def description(username,nomProj):
-	membres=get_gerer_byProjet(get_Projet_byName(nomProj))
+	membres=get_gerer_byProjet(get_Projet_byName(nomProj).nomProj)
 	return render_template("description-projet.html",projet=get_Projet_byName(nomProj),membres=membres)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres")
@@ -213,11 +206,14 @@ def membres(username,nomProj):
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres/add", methods=['GET', 'POST'])
 def add_membre(username,nomProj):
 	D=DroitProjForm(request.form)
+	D.login.choices=get_all_login()
+	D.droit.choices=get_all_droit()
 	if request.method=="POST":
 		db.session.add(Gerer(get_Projet_byName(nomProj).id,D.login.data,D.droit.data))
 		db.session.commit()
 		return redirect(url_for("membres",username=username,nomProj=nomProj))
 	return render_template("add-membre.html",username=username,nomProj=nomProj,form=D)
+
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/modif/<string:droit>/<string:nom>",methods=['GET', 'POST'])
 def modifier_membres(username,nomProj,droit,nom):
