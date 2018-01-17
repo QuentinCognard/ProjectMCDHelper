@@ -2,10 +2,13 @@ from .app import *
 from flask import *
 from flask_wtf import *
 from wtforms import *
-from wtforms.validators import DataRequired
+from wtforms.validators import *
 from flask_login import login_user, current_user, login_required, logout_user
 from .models import *
 from hashlib import sha256
+from werkzeug.utils import secure_filename
+import os
+import shutil
 
 class LoginForm(FlaskForm):
 	login = StringField('Login :')
@@ -21,18 +24,29 @@ class LoginForm(FlaskForm):
 		passwd = m.hexdigest()
 		return user if passwd == user.password else None
 
+class UserForm(FlaskForm):
+	id = HiddenField('id')
+	nom = StringField('Nom :')
+	prenom = StringField('Prénom :')
+	photo = FileField('Photo de profil :')
+
 
 class CreerCompteForm(FlaskForm):
-	login = StringField('Login :')
-	nom = StringField('Nom :')
-	prenom = StringField('Prenom :')
-	password = PasswordField('Mot de passe :')
-	confirm_password = PasswordField('Confirmer mot de passe :')
-	mail = StringField('Mail :')
+	login = StringField('Login', [validators.Length(min=4, max=25)])
+	nom = StringField('Nom', [validators.Length(min=4, max=25)])
+	prenom = StringField('Prenom', [validators.Length(min=4, max=25)])
+	password = PasswordField('Mot de passe', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm_password', message='Mot de passe doivent etre égaux')
+    ])
+	confirm_password = PasswordField('Réécrire le mot de passe')
+	mail = StringField('Mail', [validators.Length(min=6, max=35)])
+
 
 @app.route("/") #route pour la page de connexion
 def home():
-	return render_template("home.html", title= "Exerciseur MCD")
+	f = CreerCompteForm()
+	return render_template("home.html", title= "Exerciseur MCD",form=f)
 
 @app.route("/lucas/test/<id_projet>", methods=('GET', 'POST')) #route pour la page de connexion
 def lucas(id_projet):
@@ -50,15 +64,49 @@ def lucas(id_projet):
 @app.route("/login/", methods=('GET', 'POST'))
 def connexion():
 	f = LoginForm()
+	f_bis = CreerCompteForm()
 	if not f.is_submitted():
 		f.next.data = request.args.get("next")
 	elif f.validate_on_submit():
 		user = f.get_authenticated_user()
 		if user:
 			login_user(user)
-			next = f.next.data or url_for('page_projets_parcequelesfonctionsdoiventpasavoirlememenom',username=user.login)
+			next = f.next.data or url_for("page_projets_bis",username=user.login)
 			return redirect(next)
-	return render_template("connexion.html",form = f)
+	return render_template("home.html", title= "Exerciseur MCD",form=f_bis)
+
+@app.route("/profil/")
+@login_required
+def accueil_compte():
+	user = current_user
+	return render_template("profil_user.html", sujet='accueil', user = user)
+
+@app.route("/profil/editer/", methods=('GET', 'POST'))
+@login_required
+def editer_compte():
+	user = current_user
+	form = UserForm(nom = user.nom, prenom = user.prenom, photo = user.image)
+	return render_template("profil_user.html", sujet='edit', user = user, form = form)
+
+@app.route("/profil/save_edit/", methods=('GET', 'POST'))
+@login_required
+def save_compte():
+	user = current_user
+	form = UserForm()
+	if form.validate_on_submit():
+		if form.nom.data != "":
+			user.nom = form.nom.data
+		if form.prenom.data != "":
+			user.prenom = form.prenom.data
+		if form.photo.data != "":
+			f = form.photo.data
+			filename = secure_filename(f.filename)
+			user.image = filename
+			f.save(os.path.join(mkpath('static/images/User/'), filename))
+		db.session.commit()
+		return redirect(url_for('accueil_compte'))
+	return redirect(url_for('editer_compte'))
+
 
 @app.route("/logout/")
 @login_required
@@ -70,20 +118,21 @@ def deconnexion():
 @app.route("/creer_compte/",methods=('GET', 'POST'))
 def creer_compte():
 	f = CreerCompteForm()
-	if f.validate_on_submit():
+	if f.validate():
 		user = User.query.get(f.login.data)
 		if user is not None:
-			return render_template("creerComptes.html",form = f,error=True)
+			return render_template("home.html",form = f, title = "Exerciceur de MCD", error=True)
 		else:
 			m = sha256()
 			m.update(f.password.data.encode())
-			password = m.hexdigest()
-			o = User(login = f.login.data, password = password)
+			passwd = m.hexdigest()
+			o = User(prenom = f.prenom.data, nom = f.nom.data, mail = f.mail.data, login = f.login.data, password = passwd)
 			db.session.add(o)
 			db.session.commit()
 			login_user(o)
-			return redirect(url_for('page_projets_parcequelesfonctionsdoiventpasavoirlememenom',username=o.login))
-	return render_template("creerComptes.html",form = f,error=False)
+			flash('Votre compte à bien été créer')
+			return redirect(url_for('page_projets_bis',username=o.login))
+	return render_template("home.html",form = f, title = "Exerciceur de MCD", error=False)
 
 
 
@@ -109,7 +158,7 @@ def page_projets():
 	return render_template("accueil_projet.html")
 
 @app.route("/projets/<string:username>")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
-def page_projets_parcequelesfonctionsdoiventpasavoirlememenom(username):
+def page_projets_bis(username):
 	proj=get_projet_user(username)
 	projets=get_all_projets()
 	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets)
@@ -125,9 +174,12 @@ class ProjetForm(FlaskForm):#Formulaire de création de projet
 		P=Projet(nomProj=name,nomMCD="",descProj=description)
 		db.session.add(P)
 
+# class DroitProjForm(FlaskForm):
+# 	login=SelectField('Login',choices=get_all_login())
+# 	droit=SelectField('Droit',choices=get_all_droit())
 class DroitProjForm(FlaskForm):
-	login=SelectField('Login',choices=get_all_login())
-	droit=SelectField('Droit',choices=get_all_droit())
+	login=SelectField('Login',choices=[])
+	droit=SelectField('Droit',choices=[])
 
 @app.route("/projets/add/<string:username>", methods=['GET', 'POST'])# Page de création d'un projet
 def add_projets(username):

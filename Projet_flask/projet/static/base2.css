@@ -40,3 +40,30 @@ h1{
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.titre,.info{
+  color:white;
+}
+
+#body{
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+#body section{
+  flex: 1 1 48%;
+}
+
+.formentry {
+    padding: 1em;
+}
+.formentry div *{
+    margin-top: 1em;
+}
+.formentry div label{
+  display: inline-block;
+  width: 150px;
+  text-align: right;
+  margin-right: 1em;
+}

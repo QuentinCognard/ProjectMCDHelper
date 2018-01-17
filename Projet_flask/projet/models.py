@@ -8,7 +8,8 @@ class User(db.Model, UserMixin):
     login = db.Column(db.String(100),primary_key=True)
     password = db.Column(db.String(100))
     mail = db.Column(db.String(100))
-
+    image = db.Column(db.String(100))
+    
     def get_id(self):
         return self.login
 

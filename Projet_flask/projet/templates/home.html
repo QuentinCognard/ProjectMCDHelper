@@ -1,1 +1,103 @@
 {% extends "base.html" %} <!-- extends pour unifier l'ensemble de nos pages pour avoir la même stucture -->
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet"
+  href="{{ url_for ('static', filename ='base.css') }}"/> <!-- Intégration du premier ficher .css se trouvant dans
+  le dossier static -->
+
+<link rel="stylesheet"
+  href="{{ url_for ('static', filename ='base2.css') }}"/> <!-- Intégration du second ficher .css se trouvant dans
+  le dossier static -->
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+     <a class="navbar-brand" href="#"></a>
+     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+       <span class="navbar-toggler-icon"></span>
+     </button>
+     <div class="collapse navbar-collapse" id="navbarCollapse">
+       <ul class="navbar-nav mr-auto">
+         <li class="nav-item active">
+           <a class="nav-link" href="#"><span class="sr-only">(current)</span></a>
+         </li>
+         <li class="nav-item">
+           <a class="nav-link" href="#"></a>
+         </li>
+         <li class="nav-item">
+           <a class="nav-link disabled"="#"><h1 class ="titre"> {{title}} </h1></a>
+         </li>
+       </ul>
+       <form class="form-inline mt-2 mt-md-0" role="form" method="POST" action="{{ url_for('connexion') }}">
+       {{ form.hidden_tag() }}
+         <div class="form-group">
+           <label class="info"> Se connecter:</label>
+           {{form.login(size=30, class_="form-control mr-sm-2", placeholder="Login")}}<br>
+           {{form.password(size=30, class_="form-control mr-sm-2", placeholder="Mot de passe")}}<br>
+         <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Valider">
+       </form>
+     </div>
+   </nav>
+{% endblock %}
+
+
+
+{% block matas %} <!-- block metas pour définir le type d'encodage-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+  </head>
+{% endblock %}
+
+{% block main %}
+<section id="body">
+  <section>
+    <h1> Informations </h1>
+    <p>Bienvenue sur notre site, le principe est simple. En effet le but étant de pouvoir créer des Modèle Conceptuel de données(MCD) de façon automatisé.</p>
+  </section>
+
+<section>
+{% if error %}
+  <h1> Creer un compte : Login déjà utilisé !</h1>
+  <form class="formentry" role="form" method="POST" action="{{ url_for('creer_compte') }}">
+  {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.login.label}}{{form.login(size=30, class_="from-control", placeholder="Login")}}<br>
+      {{ form.nom.label}}{{form.nom(size=30, class_="from-control", placeholder="Nom")}}<br>
+      {{ form.prenom.label}}{{form.prenom(size=30, class_="from-control", placeholder="Prenom")}}<br>
+      {{ form.password.label}}{{form.password(size=30, class_="from-control", placeholder="Mot de passe")}}<br>
+      {{ form.confirm_password.label}}{{form.confirm_password(size=30, class_="from-control", placeholder="Confirmer mot de passe")}}<br>
+      {{ form.mail.label}}{{form.mail(size=30, class_="from-control", placeholder="Mail")}}<br>
+    <input class="formentrybutton" type="submit" value="Creer le compte">
+  </form>
+{% else %}
+<h1> Creer un compte </h1>
+<form class="formentry" role="form" method="POST" action="{{ url_for('creer_compte') }}">
+{{ form.hidden_tag() }}
+	<div class="form-group">
+    {{ form.login.label}}{{form.login(size=30, class_="from-control", placeholder="Login")}}<br>
+    {{ form.nom.label}}{{form.nom(size=30, class_="from-control", placeholder="Nom")}}<br>
+    {{ form.prenom.label}}{{form.prenom(size=30, class_="from-control", placeholder="Prenom")}}<br>
+    {{ form.password.label}}{{form.password(size=30, class_="from-control", placeholder="Mot de passe")}}<br>
+    {{ form.confirm_password.label}}{{form.confirm_password(size=30, class_="from-control", placeholder="Confirmer mot de passe")}}<br>
+    {{ form.mail.label}}{{form.mail(size=30, class_="from-control", placeholder="Mail")}}<br>
+	</div>
+  {% if form.errors %}
+  <ul class="liste-groupe">
+    <li class="list-group-item list-group-item-danger"> Verrifier champs :<br>
+    {% for e in form.errors %}
+      • {{ e }}<br>
+    {% endfor %}
+    </li>
+  </ul>
+  {% endif %}
+	<input class="formentrybutton" type="submit" value="Creer le compte">
+</form>
+{% endif %}
+</section>
+</section>
+{% endblock %}
+</html>
