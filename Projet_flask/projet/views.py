@@ -163,9 +163,9 @@ def creer_compte():
 @login_required
 def page_projets(username,n):
 	proj=get_projet_user(username)
-	projets=get_all_projets(n,[])
+	projets=get_all_projets(n)
 	droiteok=True
-	if get_all_projets(n+1,[])==[]:
+	if get_all_projets(n+1)==[]:
 		droiteok=False
 	search = SearchForm(request.form)
 	if request.method == 'POST':

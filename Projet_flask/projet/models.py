@@ -116,11 +116,8 @@ def get_id_droit(nomDroit):
 def get_nom_droit(id):
     return Droit.query.filter(Droit.id==id).first().nomDroit
 
-def get_all_projets(n,liste):
-    if liste==[]:
-        p=Projet.query.all()
-    else:
-        p=liste
+def get_all_projets(n):
+    p=Projet.query.all()
     res=[]
     indice=0
     if len(p)<n*5-1:
