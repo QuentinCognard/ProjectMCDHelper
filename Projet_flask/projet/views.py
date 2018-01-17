@@ -22,9 +22,30 @@ class LoginForm(FlaskForm):
 		return user if passwd == user.password else None
 
 
+class CreerCompteForm(FlaskForm):
+	login = StringField('Login :')
+	nom = StringField('Nom :')
+	prenom = StringField('Prenom :')
+	password = PasswordField('Mot de passe :')
+	confirm_password = PasswordField('Confirmer mot de passe :')
+	mail = StringField('Mail :')
+
 @app.route("/") #route pour la page de connexion
 def home():
 	return render_template("home.html", title= "Exerciseur MCD")
+
+@app.route("/lucas/test/<id_projet>", methods=('GET', 'POST')) #route pour la page de connexion
+def lucas(id_projet):
+	listeEntite = Entite.query.filter(Entite.projet_id == id_projet).all()
+	mon_dictionnaire = {}
+	for e in listeEntite:
+		mon_dictionnaire[e] = Attributs.query.filter(Attributs.projet_id == id_projet, Attributs.entite_id == e.id).all()
+	listeRelation = Relation.query.filter(Relation.projet_id == id_projet).all()
+	# listeRelationEntite = []
+	# for e in listeEntite:
+	# 	listeRelationEntite.append(RelationEntite.query.filter(entite.id == e.id).all())
+	# , liste_attribut = listeAttribut,liste_relation = listeRelation,liste_entite_relation = listeRelationEntite
+	return render_template("test.html", dic_entite_attribut = mon_dictionnaire, liste_relation = listeRelation)
 
 @app.route("/login/", methods=('GET', 'POST'))
 def connexion():
@@ -40,9 +61,27 @@ def connexion():
 	return render_template("connexion.html",form = f)
 
 @app.route("/logout/")
+@login_required
 def deconnexion():
 	logout_user()
 	return redirect(url_for('home'))
+
+
+@app.route("/creer_compte/",methods=('GET', 'POST'))
+def creer_compte():
+	f = CreerCompteForm()
+	if f.validate_on_submit():
+		user = User.query.get_user(f.login.data)
+		if user is not None:
+			return render_template("creerComptes.html",form = f,error=True)
+		else:
+			newuser(f.login.data,f.login.password)
+			user = User.query.get_user(f.login.data)
+			login_user(user)
+			return render_template("home.html")
+	return render_template("creerComptes.html",form = f,error=False)
+
+
 
 # @app.route("/traitement", methods=("POST",))
 # def traitement():
@@ -61,6 +100,7 @@ def deconnexion():
 
 
 @app.route("/projets/<string:username>")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
+@login_required
 def page_projets(username):
 	proj=get_projet_user(username)
 	projets=get_all_projets()
@@ -77,11 +117,9 @@ class ProjetForm(FlaskForm):#Formulaire de création de projet
 		db.session.add(P)
 
 class DroitProjForm(FlaskForm):
-	try:
-		login=SelectField('Login',choices=get_all_login())
-		droit=SelectField('Droit',choices=get_all_droit())
-	except ValueError:
-		print ("Oops!  That was no valid number.  Try again...")
+	login=SelectField('Login',choices=[])
+	droit=SelectField('Droit',choices=[])
+
 
 @app.route("/projets/add/<string:username>", methods=['GET', 'POST'])# Page de création d'un projet
 def add_projets(username):
@@ -97,7 +135,7 @@ def add_projets(username):
 		form=P ,username=username)
 @app.route("/projets/<string:username>/<string:nomProj>/description")
 def description(username,nomProj):
-	membres=get_gerer_byProjet(get_Projet_byName(nomProj))
+	membres=get_gerer_byProjet(get_Projet_byName(nomProj).nomProj)
 	return render_template("description-projet.html",projet=get_Projet_byName(nomProj),membres=membres)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres")
@@ -115,11 +153,14 @@ def membres(username,nomProj):
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres/add", methods=['GET', 'POST'])
 def add_membre(username,nomProj):
 	D=DroitProjForm(request.form)
+	D.login.choices=get_all_login()
+	D.droit.choices=get_all_droit()
 	if request.method=="POST":
 		db.session.add(Gerer(get_Projet_byName(nomProj).id,D.login.data,D.droit.data))
 		db.session.commit()
 		return redirect(url_for("membres",username=username,nomProj=nomProj))
 	return render_template("add-membre.html",username=username,nomProj=nomProj,form=D)
+
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/modif/<string:droit>/<string:nom>",methods=['GET', 'POST'])
 def modifier_membres(username,nomProj,droit,nom):
@@ -153,11 +194,13 @@ def supprimer_membres(username,nomProj,nom):
 	# 	return "Projet inconnu"
 	# Pour plus tard
 @app.route("/projets/0")
+@login_required
 def page_projet_perso():
 	return render_template("consult_own_project.html")
 
 # route vers la creation d'un MCD en fonction de l'ID du projet
 
 @app.route("/projets/0/new-mcd")
+@login_required
 def page_creer_mcd():
 	return render_template("create_mcd.html")

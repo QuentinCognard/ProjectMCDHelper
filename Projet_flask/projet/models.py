@@ -96,6 +96,8 @@ def get_all_droit():
     for d in droits:
         res.append((d.id,d.nomDroit))
     return res
+
+
 def get_projet_user(username):
     return Projet.query.join(Gerer).filter(Gerer.user_login==username).all()
 
