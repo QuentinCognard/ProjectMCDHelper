@@ -14,7 +14,7 @@
             <img src="{{url_for('static',filename='dossier.png')}}">
           </fieldset>
           <a href="#"><input type="submit" value="Consulter"></a>
-          <a href="#"><input type="submit" value="Parametres"></a>
+          <a href="{{url_for('parametresProj',username=current_user.login,nomProj=p.nomProj)}}"><input type="submit" value="Parametres"></a>
           <a href="#"><input type="submit" value="Quitter"></a>
 
         </div>

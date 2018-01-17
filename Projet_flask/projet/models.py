@@ -9,7 +9,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(100))
     mail = db.Column(db.String(100))
     image = db.Column(db.String(100))
-    
+
     def get_id(self):
         return self.login
 
@@ -118,3 +118,9 @@ def get_nom_droit(id):
 
 def get_all_projets():
     return Projet.query.all()
+def get_user_projet(nomProj):
+    gerer=get_gerer_byProjet(nomProj)
+    res=[]
+    for g in gerer:
+        res.append(g.user_login)
+    return res

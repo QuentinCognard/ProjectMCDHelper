@@ -171,7 +171,7 @@ class ProjetForm(FlaskForm):#Formulaire de création de projet
 		P=Projet(nomProj=name,nomMCD="",descProj=description)
 		db.session.add(P)
 
-class DroitProjForm(FlaskForm):
+class DroitProjForm(FlaskForm):#formulaire pour avoir 2 liste déroulantes avec les users et les droits
 	login=SelectField('Login',choices=[])
 	droit=SelectField('Droit',choices=[])
 
@@ -209,7 +209,15 @@ def membres(username,nomProj):
 def add_membre(username,nomProj):
 	D=DroitProjForm(request.form)
 	D.login.choices=get_all_login()
+	membresProj=get_user_projet(nomProj)
+	supp=[]
+	for c in D.login.choices:
+		if c[0] in membresProj:
+			supp.append(c)
+	for elem in supp:
+		D.login.choices.remove(elem)
 	D.droit.choices=get_all_droit()
+	D.droit.choices.remove((1,"master"))
 	if request.method=="POST":
 		db.session.add(Gerer(get_Projet_byName(nomProj).id,D.login.data,D.droit.data))
 		db.session.commit()
