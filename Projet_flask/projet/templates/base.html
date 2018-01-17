@@ -5,13 +5,27 @@
   href="{{ url_for ('static', filename ='home.css') }}"/> <!-- Intégration du ficher .css se trouvant dans
   le dossier static -->
 {% endblock %}
-{% endblock %}
-{% block metas %}
-<meta charset="utf-8"> <!-- block metas pour définir le type d'encodage-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% block navbar %}
+<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <h2> Exerciseur MCD</h2>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						{% if current_user.is_authenticated %}
+						<li><a href="{{ url_for('page_projets_parcequelesfonctionsdoiventpasavoirlememenom')}}">{{ current_user.login }}</a></li>
+						<li><a href="{{ url_for('deconnexion')}}"><span class="glyphicon glyphicon-log-out" title="Se déconnecter"></span></a></li>
+						{% else %}
+						<li><a href="{{ url_for('connexion')}}">Se connecter</a></li>
+						<li><a href="{{ url_for('connexion')}}"><span class="glyphicon glyphicon-log-in" title="Se connecter"></span></a></li>
+						{% endif %}
+          </ul>
+        </div>
+      </div>
+</nav>
 {% endblock %}
 {% block content %}
-<h1>{{ title }}</h1>
 
 {% block main %}{% endblock %}
 {% endblock %}

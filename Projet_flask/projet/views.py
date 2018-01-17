@@ -56,7 +56,7 @@ def connexion():
 		user = f.get_authenticated_user()
 		if user:
 			login_user(user)
-			next = f.next.data or url_for("home")
+			next = f.next.data or url_for('page_projets_parcequelesfonctionsdoiventpasavoirlememenom',username=user.login)
 			return redirect(next)
 	return render_template("connexion.html",form = f)
 
@@ -71,14 +71,18 @@ def deconnexion():
 def creer_compte():
 	f = CreerCompteForm()
 	if f.validate_on_submit():
-		user = User.query.get_user(f.login.data)
+		user = User.query.get(f.login.data)
 		if user is not None:
 			return render_template("creerComptes.html",form = f,error=True)
 		else:
-			newuser(f.login.data,f.login.password)
-			user = User.query.get_user(f.login.data)
-			login_user(user)
-			return render_template("home.html")
+			m = sha256()
+			m.update(f.password.data.encode())
+			password = m.hexdigest()
+			o = User(login = f.login.data, password = password)
+			db.session.add(o)
+			db.session.commit()
+			login_user(o)
+			return redirect(url_for('page_projets_parcequelesfonctionsdoiventpasavoirlememenom',username=o.login))
 	return render_template("creerComptes.html",form = f,error=False)
 
 
@@ -107,7 +111,8 @@ def page_projets():
 @app.route("/projets/<string:username>")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
 def page_projets_parcequelesfonctionsdoiventpasavoirlememenom(username):
 	proj=get_projet_user(username)
-	return render_template("accueil_projet.html",proj=proj)
+	projets=get_all_projets()
+	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets)
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField, validators
@@ -136,6 +141,10 @@ def add_projets(username):
 	return render_template(
 		"add-projet.html",
 		form=P ,username=username)
+@app.route("/projets/<string:username>/<string:nomProj>/description")
+def description(username,nomProj):
+	membres=get_gerer_byProjet(get_Projet_byName(nomProj))
+	return render_template("description-projet.html",projet=get_Projet_byName(nomProj),membres=membres)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres")
 def parametresProj(username,nomProj):
@@ -144,8 +153,10 @@ def parametresProj(username,nomProj):
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres")
 def membres(username,nomProj):
 	membresProj=get_gerer_byProjet(nomProj)
-	print(User.query.all())
-	return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj)
+	if( get_nom_droit(get_gerer_byNom(nomProj,username).droit_id) == "master"):
+		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=True)
+	else:
+		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=False)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres/add", methods=['GET', 'POST'])
 def add_membre(username,nomProj):
@@ -155,7 +166,6 @@ def add_membre(username,nomProj):
 		db.session.commit()
 		return redirect(url_for("membres",username=username,nomProj=nomProj))
 	return render_template("add-membre.html",username=username,nomProj=nomProj,form=D)
-
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/modif/<string:droit>/<string:nom>",methods=['GET', 'POST'])
 def modifier_membres(username,nomProj,droit,nom):
@@ -167,6 +177,7 @@ def modifier_membres(username,nomProj,droit,nom):
 	else:
 		flash(" impossible : "+nom+" est master")
 	return redirect(url_for("membres",username=username,nomProj=nomProj))
+
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/supprimer/<string:nom>", methods=['GET','PÔST'])
 def supprimer_membres(username,nomProj,nom):
 	if( get_nom_droit(get_gerer_byNom(nomProj,nom).droit_id) != "master"):
