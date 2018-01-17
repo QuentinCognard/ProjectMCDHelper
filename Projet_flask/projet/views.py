@@ -9,6 +9,9 @@ from hashlib import sha256
 from werkzeug.utils import secure_filename
 import os
 import shutil
+from flask_wtf import FlaskForm
+from wtforms import StringField, HiddenField, validators
+from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
 	login = StringField('Login :')
@@ -46,7 +49,8 @@ class CreerCompteForm(FlaskForm):
 @app.route("/") #route pour la page de connexion
 def home():
 	f = CreerCompteForm()
-	return render_template("home.html", title= "Exerciseur MCD",form=f)
+	f_bis = LoginForm()
+	return render_template("home.html", title= "Exerciseur MCD",form_bis=f, form=f_bis)
 
 @app.route("/lucas/test/<id_projet>", methods=('GET', 'POST')) #route pour la page de connexion
 def lucas(id_projet):
@@ -71,9 +75,9 @@ def connexion():
 		user = f.get_authenticated_user()
 		if user:
 			login_user(user)
-			next = f.next.data or url_for("page_projets_bis",username=user.login)
+			next = f.next.data or url_for("page_projets",username=user.login)
 			return redirect(next)
-	return render_template("home.html", title= "Exerciseur MCD",form=f_bis)
+	return render_template("home.html", title= "Exerciseur MCD",form_bis=f_bis, form = f)
 
 @app.route("/profil/")
 @login_required
@@ -118,10 +122,11 @@ def deconnexion():
 @app.route("/creer_compte/",methods=('GET', 'POST'))
 def creer_compte():
 	f = CreerCompteForm()
+	f_bis = LoginForm()
 	if f.validate():
 		user = User.query.get(f.login.data)
 		if user is not None:
-			return render_template("home.html",form = f, title = "Exerciceur de MCD", error=True)
+			return render_template("home.html",form_bis = f, form = f_bis, title = "Exerciceur de MCD", error=True)
 		else:
 			m = sha256()
 			m.update(f.password.data.encode())
@@ -131,8 +136,8 @@ def creer_compte():
 			db.session.commit()
 			login_user(o)
 			flash('Votre compte à bien été créer')
-			return redirect(url_for('page_projets_bis',username=o.login))
-	return render_template("home.html",form = f, title = "Exerciceur de MCD", error=False)
+			return redirect(url_for('page_projets',username=o.login))
+	return render_template("home.html",form_bis = f, form = f_bis, title = "Exerciceur de MCD", error=False)
 
 
 
@@ -152,19 +157,12 @@ def creer_compte():
 # 	return render_template("connexion.html", title= "Premier template avec Flask")
 
 
-@app.route("/projets")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
-@login_required
-def page_projets():
-	return render_template("accueil_projet.html")
-
 @app.route("/projets/<string:username>")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
-def page_projets_bis(username):
+@login_required
+def page_projets(username):
 	proj=get_projet_user(username)
-	return render_template("accueil_projet.html",proj=proj)
-
-from flask_wtf import FlaskForm
-from wtforms import StringField, HiddenField, validators
-from wtforms.validators import DataRequired
+	projets=get_all_projets()
+	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets)
 
 class ProjetForm(FlaskForm):#Formulaire de création de projet
 	name = StringField('Nom Projet',[validators.Length(min=4, max=25)])
@@ -173,12 +171,10 @@ class ProjetForm(FlaskForm):#Formulaire de création de projet
 		P=Projet(nomProj=name,nomMCD="",descProj=description)
 		db.session.add(P)
 
-# class DroitProjForm(FlaskForm):
-# 	login=SelectField('Login',choices=get_all_login())
-# 	droit=SelectField('Droit',choices=get_all_droit())
 class DroitProjForm(FlaskForm):
 	login=SelectField('Login',choices=[])
 	droit=SelectField('Droit',choices=[])
+
 
 @app.route("/projets/add/<string:username>", methods=['GET', 'POST'])# Page de création d'un projet
 def add_projets(username):
@@ -192,6 +188,10 @@ def add_projets(username):
 	return render_template(
 		"add-projet.html",
 		form=P ,username=username)
+@app.route("/projets/<string:username>/<string:nomProj>/description")
+def description(username,nomProj):
+	membres=get_gerer_byProjet(get_Projet_byName(nomProj).nomProj)
+	return render_template("description-projet.html",projet=get_Projet_byName(nomProj),membres=membres)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres")
 def parametresProj(username,nomProj):
@@ -200,12 +200,16 @@ def parametresProj(username,nomProj):
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres")
 def membres(username,nomProj):
 	membresProj=get_gerer_byProjet(nomProj)
-	print(User.query.all())
-	return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj)
+	if( get_nom_droit(get_gerer_byNom(nomProj,username).droit_id) == "master"):
+		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=True)
+	else:
+		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=False)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres/add", methods=['GET', 'POST'])
 def add_membre(username,nomProj):
 	D=DroitProjForm(request.form)
+	D.login.choices=get_all_login()
+	D.droit.choices=get_all_droit()
 	if request.method=="POST":
 		db.session.add(Gerer(get_Projet_byName(nomProj).id,D.login.data,D.droit.data))
 		db.session.commit()
@@ -223,6 +227,7 @@ def modifier_membres(username,nomProj,droit,nom):
 	else:
 		flash(" impossible : "+nom+" est master")
 	return redirect(url_for("membres",username=username,nomProj=nomProj))
+
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/supprimer/<string:nom>", methods=['GET','PÔST'])
 def supprimer_membres(username,nomProj,nom):
 	if( get_nom_droit(get_gerer_byNom(nomProj,nom).droit_id) != "master"):

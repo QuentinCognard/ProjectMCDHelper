@@ -107,8 +107,8 @@ def get_all_droit():
 
 
 def get_projet_user(username):
-    res=Gerer.query.filter(Gerer.user_login==username).all()
-    return res
+    return Projet.query.join(Gerer).filter(Gerer.user_login==username).all()
+
 def get_Projet_byName(name):
     return Projet.query.filter(Projet.nomProj==name).first()
 def get_gerer_byProjet(nomProj):
@@ -122,3 +122,6 @@ def get_id_droit(nomDroit):
 
 def get_nom_droit(id):
     return Droit.query.filter(Droit.id==id).first().nomDroit
+
+def get_all_projets():
+    return Projet.query.all()

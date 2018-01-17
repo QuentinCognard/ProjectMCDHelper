@@ -1,19 +1,38 @@
-{% extends "base.html" %}
+{% extends "base_excerciseur.html" %}
 {% block styles %}
 {{ super() }}
-  <link rel="stylesheet" href= "{{url_for('static',filename='home.css') }}"/>
+  <link rel="stylesheet" href= "{{url_for('static',filename='accueil_projet.css') }}"/>
 {% endblock %}
-  {% block main %}
+  {% block contain %}
   <fieldset>
     <legend>Mes Projets</legend>
     <section class="projets">
-        <a href="{{ url_for('add_projets', username=current_user.login) }}"><input type="submit" value="Ajouter un Projet" id="ajoutproj "></a>
-    </section>
-    </section>
+        {% for p in mesproj %}
+        <div id="mesproj">
+          <fieldset>
+            <legend>{{p.nomProj}}</legend>
+            <img src="{{url_for('static',filename='dossier.png')}}">
+          </fieldset>
+          <a href="#"><input type="submit" value="Consulter"></a>
+          <a href="#"><input type="submit" value="Parametres"></a>
+          <a href="#"><input type="submit" value="Quitter"></a>
+
+        </div>
+        {% endfor %}
+        </section>
+        <a href="{{ url_for('add_projets', username=current_user.login) }}"><input type="submit" value="Ajouter un Projet" id="ajoutproj"></a>
     </fieldset>
     <fieldset>
       <legend>Tous les projets</legend>
       <section class="projets">
+        {% for p in tousproj %}
+        <div id="tousproj">
+          <a href="{{url_for('description',username=current_user.login,nomProj=p.nomProj)}}">
+            <img src="{{url_for('static',filename='dossier.png')}}">
+            <h4>{{p.nomProj}}</h4>
+          </a>
+        </div>
+        {% endfor %}
       </section>
       </fieldset>
   {% endblock %}
