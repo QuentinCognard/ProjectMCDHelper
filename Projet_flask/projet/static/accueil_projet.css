@@ -45,3 +45,28 @@ a, a:hover{
 #ajoutproj{
   margin-left: 1em;
 }
+
+#search>form>dd>input[type=text] {
+    color:black;
+    margin-bottom: 2em;
+    width: 130px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('./images/search.png');
+    background-size: contain;
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+#search>form>dd>input[type=text]:focus {
+    width: 70%;
+}
+.fleche{
+  padding-top: 4.5em;
+}

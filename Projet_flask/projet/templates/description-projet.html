@@ -5,7 +5,7 @@
 
 {% endblock %}
   {% block contain %}
-  <a id="retour" href="{{url_for('page_projets',username=current_user.login)}}"><input type="Submit"  value="< Retour"></a>
+  <a id="retour" href="{{url_for('page_projets',username=current_user.login,n=1)}}"><input type="Submit"  value="< Retour"></a>
   <div class="div">
   <fieldset>
     <legend>{{projet.nomProj}}</legend>
