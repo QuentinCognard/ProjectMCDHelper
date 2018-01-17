@@ -248,14 +248,23 @@ def supprimer_membres(username,nomProj,nom):
 	# else:
 	# 	return "Projet inconnu"
 	# Pour plus tard
-@app.route("/projets/0")
+@app.route("/projets/<string:username>/<int:idProj>")
 @login_required
-def page_projet_perso():
-	return render_template("consult_own_project.html")
+def page_projet_perso(username, idProj):
+	proj = get_projet(username, idProj)
+	if proj != None:
+		return render_template("consult_own_project.html", projet = proj)
 
 # route vers la creation d'un MCD en fonction de l'ID du projet
 
-@app.route("/projets/0/new-mcd")
+@app.route("/projets/<string:username>/<int:idProj>/new-attributs")
 @login_required
-def page_creer_mcd():
-	return render_template("create_mcd.html")
+def page_new_attributs(username, idProj):
+	proj = get_projet(username, idProj)
+	if proj != None:
+		return render_template("new_attributs.html", projet = proj)
+
+@app.route("/projets/<string:username>/<int:idProj>/relations")
+@login_required
+def page_creer_relations(username, idProj):
+	return render_template("new_relations.html")

@@ -1,83 +1,55 @@
 {% extends "base_excerciseur.html" %}
-{% block styles %}
-{{ super() }}
-  <link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
-{% endblock %}
 {% block content %}
 {{ super() }}
+
 <form class="bd-example" action="/projets">
   <fieldset class="fieldset">
     <legend>Nouveau MCD</legend>
-
-<!-- fixe: Nom du MCD -->
-
-    <p>
-      <label for="input">Nom du MCD :</label>
-      <input type="text" id="namemcd" placeholder="Nom du MCD" required />
-    </p>
-
-<!-- Cette div devra se répéter autant de fois qu'il y a d'attributs avec la fonction javascript en dessous
-
-    <div class="attribut">
-      <p>
-        <label for="input">Nom de l'attribut :</label>
-        <input type="text" class="nameatt" placeholder="Nom de l'attribut" />
-      </p>
-
-      <p>
-        <label for="select" >Type de l'attribut :</label>
-        <select class="typeatt">
-            <option value="">Integer</option>
-            <option value="">Float</option>
-            <option value="">String</option>
-            <option value="">Char</option>
-            <option value="">Date</option>
-        </select>
-      </p>
-
-      <p>
-        <label for="input">Valeur :</label>
-        <input type="number" class="valeuratt" placeholder="0" />
-      </p>
-
-      <p>
-        <label for="input">Quantité :</label>
-        <input type="number" class="quantiteatt" placeholder="0" />
-      </p>
-
-      <p>
-        <label for="select">Genre :</label>
-        <select class="genreatt">
-          <option value="">Masculin</option>
-            <option value="">Féminin</option>
-        </select>
-      </p>
-    </div> -->
-
-    <button type="button" class="ajouteAttribut" onClick="ajouteElement()">Ajouter attribut</button>
-
-    <p>
-      <a href="/projets"><button role="button">Annuler</button></a>
-      <button type="submit">Valider</button>
-    </p>
-
   </fieldset>
+  
+  <div class="relation" id="rel1">
+    <input type="radio" name="relType" id="simple">Simple<br>
+    <input type="radio" name="relType" id="tablee">Tablée
+    <p>Tables: </p>
+    <select class="relTables">
+        <option value="">Table 1</option>
+        <option value="">Table 2</option>
+        <option value="">Table 3</option>
+        <option value="">Table 4</option>
+        <option value="">Table 5</option>
+    </select>
+    <select class="relTables">
+        <option value="">Table 1</option>
+        <option value="">Table 2</option>
+        <option value="">Table 3</option>
+        <option value="">Table 4</option>
+        <option value="">Table 5</option>
+    </select>
+  </div>
+
+
+  <button type="button" class="ajouteAttribut" onClick="ajouteElement()">Ajouter attribut</button>
+
+  <p>
+    <a href="/projets"><button role="button">Annuler</button></a>
+    <button type="submit">Valider</button>
+  </p>
 </form>
 
-<script>
-  var nbAtt = 0;
+<!-- <script>
+  var nbRel = 0;
 
   // supprime un attribut
-  function removeAttribut(id){
+  function removeRelation(id){
     var parent = document.querySelector(".fieldset");
-    var child = document.getElementById("att"+id);
+    var child = document.getElementById("rel"+id);
     parent.removeChild(child);
-    nbAtt --;
+    nbAtt -= 1;
   }
 
   // ajoute un attribut
   function ajouteElement(){
-      nbAtt += 1;
+      nbRel += 1;
       var divAttribut = document.createElement("div");
       divAttribut.className="attribut";
       divAttribut.id = "att"+nbAtt;
@@ -217,6 +189,7 @@
       p5.appendChild(selGenreAtt);
   }
 
-</script>
+</script> -->
+
 
 {% endblock %}

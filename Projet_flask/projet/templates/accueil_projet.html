@@ -8,16 +8,16 @@
     <legend>Mes Projets</legend>
     <section class="projets">
         {% for p in mesproj %}
-        <div id="mesproj">
-          <fieldset>
-            <legend>{{p.nomProj}}</legend>
-            <img src="{{url_for('static',filename='dossier.png')}}">
-          </fieldset>
-          <a href="#"><input type="submit" value="Consulter"></a>
-          <a href="#"><input type="submit" value="Parametres"></a>
-          <a href="#"><input type="submit" value="Quitter"></a>
+          <div id="mesproj">
+            <fieldset>
+              <legend>{{p.nomProj}}</legend>
+              <img src="{{url_for('static',filename='dossier.png')}}">
+            </fieldset>
+            <a href="{{ current_user.login }}/{{ p.id }}"><input type="submit" value="Consulter"></a>
+            <a href="#"><input type="submit" value="Parametres"></a>
+            <a href="#"><input type="submit" value="Quitter"></a>
 
-        </div>
+          </div>
         {% endfor %}
         </section>
         <a href="{{ url_for('add_projets', username=current_user.login) }}"><input type="submit" value="Ajouter un Projet" id="ajoutproj"></a>
