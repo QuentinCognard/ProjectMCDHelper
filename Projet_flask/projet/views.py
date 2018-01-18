@@ -350,6 +350,21 @@ def page_projet_perso():
 # >>>>>>> Arthur/master
 # route vers la creation d'un MCD en fonction de l'ID du projet
 
+class CreaMCDForm(FlaskForm):#Formulaire de création d'un MCD
+	nomEntite = StringField('Nom de l entite',[validators.Length(min=10, max=150)])
+	idEntite = StringField('id de l entite',[validators.Length(min=10, max=150)])
+	idAttribut = StringField('id de l attribut',[validators.Length(min=10, max=150)])
+	clePrimaire = StringField('cle primaire',[validators.Length(min=10, max=150)])
+
+	def addEntite(self,nomEntite,idEntite):
+		E=Entite(nomEntite=nomEntite)
+		db.session.add(E)
+
+	def moveAttribut(self,idEntite,idAttribut):
+		A=Attributs.query.filter_by(id=idAttribut)
+		A.entite_id=idEntite
+		db.session.commit()
+
 @app.route("/projets/0/new-mcd")
 @login_required
 def page_creer_mcd():
@@ -360,6 +375,21 @@ def page_creer_mcd():
 @app.route("/projets/0/new_entity")
 def page_ajouter_entite():
 	return render_template("add_entity.html")
+# def add_entity(username):
+# 	P = ProjetForm(request.form)
+# 	if request.method == 'POST': #Si le formulaire a été rempli
+# 		if P.validate_on_submit():
+# 			P.createProjet(P.name.data,P.description.data) #création nouveau projet
+# 			gerer=Gerer(get_Projet_byName(P.name.data).id, username, 1)
+# 			db.session.add(gerer)
+# 			db.session.commit()
+# 			return redirect(url_for("page_projets",username=username,n=1,i=1))
+# 		return render_template(
+# 			"add-projet.html",
+# 			form=P ,username=username)
+# 	return render_template(
+# 		"add-projet.html",
+# 		form=P ,username=username)
 
 # route vers le résumé des relations d'un MCD
 

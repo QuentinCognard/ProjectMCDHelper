@@ -3,8 +3,9 @@
 {{ super() }}
 <link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
 {% endblock %}
+
 {% block contain %}
-<form class="bd-example">
+<form role="form" method="POST">
   <fieldset class="lesentites">
 
 
@@ -17,8 +18,12 @@
         <input type="text" id="nameent" placeholder="Nom de l'entité" />
       </p>
 
+      <input id="hiddenEnt" type="hidden" name="nbEnt" value="0">
+
+
     <div class="lesattributs">
     <div class="attEntite">
+      <input id="hiddenAtt" type="hidden" name="nbAtt" value="0">
       <p>
         <label for="select">Nom attribut :</label>
         <select id="typeatt">
@@ -92,12 +97,15 @@
       divEntite.className="bordmcd";
       divEntite.id = "ent"+nbEnt;
 
+      var hidEnt=document.getElementById("hiddenEnt");
+      hidEnt.value=nbEnt;
 
       var divActuel = document.querySelector(".bordmcd");
       document.querySelector(".lesentites").insertBefore(divEntite,divActuel.nextSibling);
 
       ajouteSuppButtonEnt(divEntite);
       ajouteNom(divEntite);
+      ajouteHidden(divEntite);
       ajouteDivAtt(divEntite);
       ajouteAttribut(nbEnt);
       ajouteAttributBouton(divEntite);
@@ -137,6 +145,8 @@
       p1.appendChild(inputNomEnt);
   }
 
+  //ajoute le champ invisible contenant l'id d'Entite
+
   function ajouteAttributBouton(divEntite){
     var p2 = document.createElement("p");
     divEntite.appendChild(p2);
@@ -167,6 +177,8 @@
       divAttribut.className="attEntite";
       divAttribut.id = "att"+nbAtt;
 
+      var hidAtt=document.getElementById("hiddenAtt");
+      hidAtt.value=nbAtt;
 
       ajouteSuppButtonAtt(divAttribut,parent);
       ajouteNomAtt(divAttribut);
