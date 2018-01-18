@@ -136,11 +136,11 @@ def get_all_projets(n):
     if len(p)<n*5-1:
         indice=len(p)
     else:
-        indice=n*5-1
+        indice=n*5-n
     if n==1:
         start=(n-1)*5
     else:
-        start=(n-1)*5-1
+        start=(n-1)*5-(n-1)
     for i in range(start,indice):
         res.append(p[i])
     return res
