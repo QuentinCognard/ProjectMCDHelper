@@ -2,6 +2,30 @@
   margin: 1em;
   display: flex;
 }
+#disablingDiv
+{
+    /* Do not display it on entry */
+    display: none;
+
+    /* Display it on the layer with index 1001.
+       Make sure this is the highest z-index value
+       used by layers on that page */
+    z-index:1001;
+
+    /* make it cover the whole screen */
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+
+    /* make it white but fully transparent */
+    background-color: grey;
+    opacity:.50;
+}
+#sectionNotVisible{
+  background-color: white;
+}
 
 body>fieldset>legend{
   margin-top: 1em;
@@ -32,7 +56,7 @@ a, a:hover{
   display: flex;
   flex-wrap: nowrap;
 }
-#gestionMembres> a{
+#gestionMembres> a, #modifProj> a{
   margin-right: 1em;
 }
 #mesproj,#tousproj{
@@ -44,4 +68,37 @@ a, a:hover{
 }
 #ajoutproj{
   margin-left: 1em;
+}
+
+
+#search>form>dd>input[type=text] {
+    color:black;
+    margin-bottom: 2em;
+    width: 130px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('./images/search.png');
+    background-size: contain;
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+#search>form>dd>input[type=text]:focus {
+    width: 70%;
+}
+.fleche{
+  padding-top: 4.5em;
+}
+#sectionParam{
+  display: block;
+}
+#modifProj{
+  display: flex;
+  flex-wrap: nowrap;
 }

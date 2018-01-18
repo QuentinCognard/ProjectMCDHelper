@@ -1,0 +1,31 @@
+.div{
+  border-style:solid;
+  border-width:0.1em;
+  border-color: lightgrey;
+  margin: 2em;
+  padding:1em;
+}
+#membres>fieldset{
+  display: flex;
+  flex-wrap: wrap;
+}
+#membre{
+  flex:1 1 20%;
+}
+#retour{
+  color:white;
+  background-color: black;
+  border-radius: 10px;
+  padding: 0.5em;
+  margin-left: 1em;
+}
+#retour>input{
+  background-color: black;
+  border-style: none;
+}
+#demande{
+  position: absolute; /* postulat de départ */
+  left: 50%; /* à 50%/50% du parent référent */
+  transform: translate(-50%, -50%); /* décalage de 50% de sa propre taille */
+  padding: 0.5em;
+}
