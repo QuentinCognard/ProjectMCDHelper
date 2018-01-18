@@ -76,6 +76,6 @@ def loadattributs(filename):
     db.create_all()
     attributs = yaml.load(open(filename))
     for a in attributs:
-        o = Attributs(id=a["id"],projet_id=a["projet_id"],entite_id=a["entite_id"],nomAttribut=a["nomAttribut"],genreAttribut=a["genreAttribut"],typeAttribut=a["typeAttribut"],valeurAttribut=a["valeurAttribut"])
+        o = Attributs(id=a["id"],projet_id=a["projet_id"],entite_id=a["entite_id"],nomAttribut=a["nomAttribut"],genreAttribut=a["genreAttribut"],typeAttribut=a["typeAttribut"])
         db.session.add(o)
     db.session.commit()

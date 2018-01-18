@@ -282,8 +282,8 @@ def search_results(search,username):
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj")
 def modifProj(username,nomProj):
 	P = ProjetForm(name=nomProj,descritpion=get_Projet_byName(nomProj).descProj)
-
 	return render_template('modifProj.html',form=P,username=username,nomProj=nomProj)
+
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj/save",methods=['GET', 'POST'])
 def save_modifProj(username,nomProj):
 	P = ProjetForm()
@@ -315,6 +315,7 @@ def page_projet_perso(username, idProj):
 	proj = get_projet(username, idProj)
 	if proj != None:
 		return render_template("consult_own_project.html", projet = proj,username=username,id=idProj)
+	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
 # route vers la creation d'un MCD en fonction de l'ID du projet
 
@@ -324,6 +325,18 @@ def page_new_attributs(username, idProj):
 	proj = get_projet(username, idProj)
 	if proj != None:
 		return render_template("new_attributs.html", projet = proj,username=username,id=idProj)
+	return redirect(url_for('page_projets', username=username, n=1, i=1))
+
+@app.route("/projets/<string:username>/<int:idProj>/new-attributs/save/", methods=['POST',])
+def save_new_attributs(username, idProj):
+	nbAtt = request.form.get("nbAtt")
+	proj = get_projet(username, idProj)
+	proj.nomMCD = request.form.get("nomMCD")
+	for i in range(1, int(nbAtt)+1):
+		att = Attributs(id=i, projet_id=idProj, entite_id=None, nomAttribut=request.form.get("nom"+str(i)), genreAttribut=request.form.get("genre"+str(i)), typeAttribut=request.form.get("type"+str(i)), actifAttribut=None)
+		db.session.add(att)
+	db.session.commit()
+	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
 @app.route("/projets/<string:username>/<int:idProj>/relations")
 @login_required
