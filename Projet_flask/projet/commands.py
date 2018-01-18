@@ -42,15 +42,6 @@ def loadgerer(filename):
         db.session.add(o)
     db.session.commit()
 
-@manager.command
-def loadrelationentites(filename):
-    db.create_all()
-    rel = yaml.load(open(filename))
-    for r in rel:
-        o = Relationentite(id=r["id"],entite1_id=r["entite1_id"],entite2_id=r["entite2_id"],cardinalite1=r["cardinalite1"],cardinalite2=r["cardinalite2"])
-        db.session.add(o)
-    db.session.commit()
-
 
 @manager.command
 def loadentite(filename):
@@ -66,7 +57,7 @@ def loadrelation(filename):
     db.create_all()
     relation = yaml.load(open(filename))
     for r in relation:
-        o = Relation(id=r["id"],id_relationEntite = r["id_relationEntite"],projet_id=r["projet_id"],nomRelation=r["nomrelation"])
+        o = Relation(id=r["id"],id_relationEntite = r["id_relationEntite"],projet_id=r["projet_id"],nomRelation=r["nomrelation"],entite1_id=r["entite1_id"],entite2_id=r["entite2_id"],cardinalite1=r["cardinalite1"],cardinalite2=r["cardinalite2"])
         db.session.add(o)
     db.session.commit()
 

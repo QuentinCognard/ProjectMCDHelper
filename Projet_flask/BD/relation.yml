@@ -2,3 +2,7 @@
   projet_id: 1
   nomrelation: Possède
   id_relationEntite: 1
+  entite1_id: 1
+  entite2_id: 2
+  cardinalite1: 0-n
+  cardinalite2: 1-1
