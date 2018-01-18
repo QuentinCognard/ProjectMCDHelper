@@ -78,6 +78,8 @@
     for (var i = start; i < end; i++){
       var attribut = document.getElementById("att"+i);
       attribut.id = "att"+(i-1);
+      var bouton = document.getElementById(""+i);
+      bouton.id = ""+(i-1);
     }
     nbAtt -= 1;
   }
