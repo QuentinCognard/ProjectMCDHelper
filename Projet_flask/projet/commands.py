@@ -57,9 +57,19 @@ def loadrelation(filename):
     db.create_all()
     relation = yaml.load(open(filename))
     for r in relation:
-        o = Relation(id=r["id"],id_relationEntite = r["id_relationEntite"],projet_id=r["projet_id"],nomRelation=r["nomrelation"],entite1_id=r["entite1_id"],entite2_id=r["entite2_id"],cardinalite1=r["cardinalite1"],cardinalite2=r["cardinalite2"])
+        o = Relation(id=r["id"],projet_id = r["projet_id"],nomRelation=r["nomrelation"])
         db.session.add(o)
     db.session.commit()
+
+@manager.command
+def loadrelationentite(filename):
+    db.create_all()
+    relation = yaml.load(open(filename))
+    for a in relation:
+        o = Relationentite(id=a["id"],relation_id=a["relation_id"],entite_id=a["entite_id"],cardinaliteE=a["cardinaliteE"],cardinaliteR=a["cardinaliteR"])
+        db.session.add(o)
+    db.session.commit()
+
 
 @manager.command
 def loadattributs(filename):

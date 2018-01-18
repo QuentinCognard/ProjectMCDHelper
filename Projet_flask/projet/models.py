@@ -64,20 +64,23 @@ class Relation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key=True)
     nomRelation = db.Column(db.String(100))
-    positionRelation = db.Column(db.String(100))
-    id_relationEntite = db.Column(db.Integer, db.ForeignKey("relationentite.id"))
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetRelationn", lazy="dynamic"))
-    relationEntite = db.relationship("Relationentite", foreign_keys=[id_relationEntite], backref=db.backref("RelationEntite", lazy="dynamic"))
 
 class Relationentite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    cardinalite1 = db.Column(db.String(100))
-    cardinalite2 = db.Column(db.String(100))
-    entite1_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
-    entite2_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
-    entite1 = db.relationship("Entite", foreign_keys=[entite1_id], backref=db.backref("Entite1", lazy="dynamic"))
-    entite2 = db.relationship("Entite", foreign_keys=[entite2_id], backref=db.backref("Entite2", lazy="dynamic"))
+    relation_id = db.Column(db.Integer, db.ForeignKey("relation.id"), primary_key=True)
+    relation = db.relationship("Relation", foreign_keys=[relation_id], backref=db.backref("relationid", lazy="dynamic"))
+    entite_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
+    cardinaliteE = db.Column(db.String(100))
+    cardinaliteR = db.Column(db.String(100))
+    entite = db.relationship("Entite", foreign_keys=[entite_id], backref=db.backref("Entite", lazy="dynamic"))
 
+class Relationattributs(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    relation_id = db.Column(db.Integer, db.ForeignKey("relation.id"), primary_key=True)
+    relation = db.relationship("Relation", foreign_keys=[relation_id], backref=db.backref("relationattid", lazy="dynamic"))
+    attribut_id = db.Column(db.Integer, db.ForeignKey("attributs.id"), primary_key=True)
+    attributs = db.relationship("Attributs", foreign_keys=[attribut_id], backref=db.backref("attributid", lazy="dynamic"))
 
 def get_user(login):
     User = User.query.filter(User.login==login).all()

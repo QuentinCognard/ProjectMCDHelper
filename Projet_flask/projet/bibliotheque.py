@@ -1,6 +1,7 @@
 import os
 import os.path
 
+
 def mkpath(p):
     return os.path.normpath(
         os.path.join(
@@ -85,3 +86,10 @@ def importer_donnees(filename):
     # print("Dictionnaire relation : ", dictionnaire_relation)
 
 importer_donnees("test.txt")
+
+
+def ecrire_Entite(filename):
+    fichier = open(os.path.join(mkpath('static/MCD/Lucas/'), filename), "w")
+    fichier.close()
+
+ecrire_Entite("test2.txt")
