@@ -1,11 +1,22 @@
 {% extends "base_excerciseur.html" %}
-{% block content %}
+{% block contain %}
 {{ super() }}
 <!-- Bouton ajouter MCD -->
   <div class="jumbotron">
     <div class="container">
-      <h1 class="display-3">Nom du projet</h1>
-      <p><a class="btn btn-primary btn-lg" href="0/new-mcd" role="button">AjouterMCD &raquo;</a></p>
+      <h1 class="display-3">{{ projet.nomProj }}</h1>
+      {% if projet.nomMCD == "" %}
+        <p><a class="btn btn-primary btn-lg" href="{{url_for('page_new_attributs',username=username,idProj=id)}}" role="button">Ajouter un MCD &raquo;</a></p>
+      {% else  %}
+        <div id="mesproj">
+          <fieldset>
+            <legend>{{ projet.nomMCD }}</legend>
+            <img src="{{url_for('static',filename='mcd.png')}}">
+          </fieldset>
+          <a href="{{ current_user.login }}/{{ p.id }}"><input type="submit" value="Consulter"></a>
+          <a href="#"><input type="submit" value="Supprimer"></a>
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

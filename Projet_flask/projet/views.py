@@ -11,8 +11,7 @@ from werkzeug.utils import secure_filename
 import os
 import shutil
 from flask_wtf import FlaskForm
-from wtforms import StringField, HiddenField, validators
-from wtforms.validators import DataRequired
+
 
 class LoginForm(FlaskForm):
 	login = StringField('Login :')
@@ -46,6 +45,8 @@ class CreerCompteForm(FlaskForm):
 	confirm_password = PasswordField('Réécrire le mot de passe')
 	mail = StringField('Mail', [validators.Length(min=6, max=35)])
 
+class SearchForm(Form):
+    search = StringField('')
 
 @app.route("/") #route pour la page de connexion
 def home():
@@ -76,7 +77,7 @@ def connexion():
 		user = f.get_authenticated_user()
 		if user:
 			login_user(user)
-			next = f.next.data or url_for("page_projets",username=user.login)
+			next = f.next.data or url_for("page_projets",username=user.login,n=1,i=1)
 			return redirect(next)
 	return render_template("home.html", title= "Exerciseur MCD",form_bis=f_bis, form = f)
 
@@ -137,8 +138,9 @@ def creer_compte():
 			db.session.commit()
 			login_user(o)
 			flash('Votre compte à bien été créer')
-			return redirect(url_for('page_projets',username=o.login))
+			return redirect(url_for('page_projets',username=o.login,n=1,i=1))
 	return render_template("home.html",form_bis = f, form = f_bis, title = "Exerciceur de MCD", error=False)
+
 
 
 
@@ -158,12 +160,21 @@ def creer_compte():
 # 	return render_template("connexion.html", title= "Premier template avec Flask")
 
 
-@app.route("/projets/<string:username>")#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
+@app.route("/projets/<string:username>/<int:n>/<int:i>",  methods=['GET', 'POST'])#accueil avec listes des projets de l'utilsateur et la liste de tous les projets de l'application
 @login_required
-def page_projets(username):
-	proj=get_projet_user(username)
-	projets=get_all_projets()
-	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets)
+def page_projets(username,n,i):
+	proj=get_projet_user(username,i)
+	projets=get_all_projets(n)
+	droiteok=True
+	if get_all_projets(n+1)==[]:
+		droiteok=False
+	droite2ok=True
+	if get_projet_user(username,i+1)==[]:
+		droite2ok=False
+	search = SearchForm(request.form)
+	if request.method == 'POST':
+		return search_results(search,username)
+	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=search,n=n,i=i,droite=droiteok,droite2=droite2ok,search=False)
 
 class ProjetForm(FlaskForm):#Formulaire de création de projet
 	name = StringField('Nom Projet',[validators.Length(min=4, max=25)])
@@ -172,7 +183,7 @@ class ProjetForm(FlaskForm):#Formulaire de création de projet
 		P=Projet(nomProj=name,nomMCD="",descProj=description)
 		db.session.add(P)
 
-class DroitProjForm(FlaskForm):
+class DroitProjForm(FlaskForm):#formulaire pour avoir 2 liste déroulantes avec les users et les droits
 	login=SelectField('Login',choices=[])
 	droit=SelectField('Droit',choices=[])
 
@@ -181,11 +192,15 @@ class DroitProjForm(FlaskForm):
 def add_projets(username):
 	P = ProjetForm(request.form)
 	if request.method == 'POST': #Si le formulaire a été rempli
-		P.createProjet(P.name.data,P.description.data) #création nouveau projet
-		gerer=Gerer(get_Projet_byName(P.name.data).id, username, 1)
-		db.session.add(gerer)
-		db.session.commit()
-		return redirect(url_for("page_projets",username=username))
+		if P.validate_on_submit():
+			P.createProjet(P.name.data,P.description.data) #création nouveau projet
+			gerer=Gerer(get_Projet_byName(P.name.data).id, username, 1)
+			db.session.add(gerer)
+			db.session.commit()
+			return redirect(url_for("page_projets",username=username,n=1,i=1))
+		return render_template(
+			"add-projet.html",
+			form=P ,username=username)
 	return render_template(
 		"add-projet.html",
 		form=P ,username=username)
@@ -210,7 +225,15 @@ def membres(username,nomProj):
 def add_membre(username,nomProj):
 	D=DroitProjForm(request.form)
 	D.login.choices=get_all_login()
+	membresProj=get_user_projet(nomProj)
+	supp=[]
+	for c in D.login.choices:
+		if c[0] in membresProj:
+			supp.append(c)
+	for elem in supp:
+		D.login.choices.remove(elem)
 	D.droit.choices=get_all_droit()
+	D.droit.choices.remove((1,"master"))
 	if request.method=="POST":
 		db.session.add(Gerer(get_Projet_byName(nomProj).id,D.login.data,D.droit.data))
 		db.session.commit()
@@ -241,6 +264,44 @@ def supprimer_membres(username,nomProj,nom):
 	return redirect(url_for("membres",username=username,nomProj=nomProj))
 
 
+@app.route('/projets/<string:username>/results')
+def search_results(search,username):
+	results = []
+	search_string = search.data['search']
+	proj=get_projet_user(username,1)
+	projets=[]
+	if search.data['search']== '' or search.data['search']==" ":
+		return redirect('/projets/'+username+'/1/1')
+	else:
+		projets=Projet.query.filter(Projet.nomProj.like("%{}%".format(search_string))).all()
+	if not projets:
+		flash('Pas de résultats')
+		return redirect('/projets/'+username)
+	else:
+		return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=SearchForm(request.form),n=1,i=1,droite=False,droite2=True,search=True)
+
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj")
+def modifProj(username,nomProj):
+	P = ProjetForm(name=nomProj,descritpion=get_Projet_byName(nomProj).descProj)
+
+	return render_template('modifProj.html',form=P,username=username,nomProj=nomProj)
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj/save",methods=['GET', 'POST'])
+def save_modifProj(username,nomProj):
+	P = ProjetForm()
+	projetCourant=get_Projet_byName(nomProj)
+	print(projetCourant.nomProj)
+	print(projetCourant.descProj)
+	if P.validate_on_submit():
+		if P.name.data != "":
+			projetCourant.nomProj = P.name.data
+		if P.description.data != "":
+			projetCourant.descProj = P.description.data
+		db.session.commit()
+		return redirect(url_for('parametresProj',username=username,nomProj=P.name.data))
+		flash("Le projet à bien été modifié")
+	flash("Impossible de modifié le projet, le nom ou la description est trop court(e) ou trop long")
+	return redirect(url_for('modifProj',username=username,nomProj=nomProj))
+
 # @app.route("/projets/<idProj>/")
 # def page_projet_perso(idProj):
 	# proj = get_proj(idProj)
@@ -249,14 +310,23 @@ def supprimer_membres(username,nomProj,nom):
 	# else:
 	# 	return "Projet inconnu"
 	# Pour plus tard
-@app.route("/projets/0")
+@app.route("/projets/<string:username>/<int:idProj>")
 @login_required
-def page_projet_perso():
-	return render_template("consult_own_project.html")
+def page_projet_perso(username, idProj):
+	proj = get_projet(username, idProj)
+	if proj != None:
+		return render_template("consult_own_project.html", projet = proj,username=username,id=idProj)
 
 # route vers la creation d'un MCD en fonction de l'ID du projet
 
-@app.route("/projets/0/new-mcd")
+@app.route("/projets/<string:username>/<int:idProj>/new-attributs")
 @login_required
-def page_creer_mcd():
-	return render_template("create_mcd.html")
+def page_new_attributs(username, idProj):
+	proj = get_projet(username, idProj)
+	if proj != None:
+		return render_template("new_attributs.html", projet = proj,username=username,id=idProj)
+
+@app.route("/projets/<string:username>/<int:idProj>/relations")
+@login_required
+def page_creer_relations(username, idProj):
+	return render_template("new_relations.html",username=username,id=idProj)

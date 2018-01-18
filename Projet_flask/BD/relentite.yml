@@ -1,5 +1,5 @@
 - id: 1
-  entite1_id: 1
-  entite2_id: 2
-  cardinalite1: 0-n
-  cardinalite2: 1-1
+  relation_id: 1
+  entite_id: 2
+  cardinaliteE: 0-n
+  cardinaliteR: 1-1
