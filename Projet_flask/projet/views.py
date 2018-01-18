@@ -302,12 +302,12 @@ def search_results(search,username):
 		flash('Pas de résultats')
 		return redirect('/projets/'+username)
 	else:
-		return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=SearchForm(request.form),n=1,i=1,droite=False,droite2=True,search=True)
+		return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=SearchForm(request.form),n=1,i=1,droite=False,droite2=True,search=True,username=username)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj")
 @login_required
 def modifProj(username,nomProj):
-	P = ProjetForm(name=nomProj,descritpion=get_Projet_byName(nomProj).descProj)
+	P = ProjetForm(name=nomProj,description=get_Projet_byName(nomProj).descProj)
 	return render_template('modifProj.html',form=P,username=username,nomProj=nomProj)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj/save",methods=['GET', 'POST'])

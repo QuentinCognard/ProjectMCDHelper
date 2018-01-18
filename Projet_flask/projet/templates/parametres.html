@@ -38,8 +38,8 @@
       <div id="disablingDiv" >
         <section id="sectionNotVisible">
             <p> Etes vous sur de quitter le projet ? </p>
-            <a id='quit' href="{{ url_for('suppProj',username=username,nomProj=nomProj)}}"><input type="Submit" value="Oui"></a>
-            <input type="Submit" value="Non" onclick="desactive()">
+            <a id='quit' href="{{ url_for('suppProj',username=username,nomProj=nomProj)}}"><input class="btn btn-success" type="Submit" value="Oui"></a>
+            <input class="btn btn-danger" type="Submit" value="Non" onclick="desactive()">
          </section>
        </div></br>
       <div id='suppProjet'>
@@ -53,7 +53,9 @@
       {% if messages %}
         <ul class=flashes>
         {% for message in messages %}
+        {% if message!= "Please log in to access this page." %}
           <li>{{ message }}</li>
+          {% endif %}
         {% endfor %}
         </ul>
       {% endif %}
