@@ -58,11 +58,11 @@ a, a:hover{
   display: block;
   margin-top: 1em;
 }
-#gestionMembres{
+#gestionMembres,#suppProjet{
   display: flex;
   flex-wrap: nowrap;
 }
-#gestionMembres> a, #modifProj> a{
+#gestionMembres> a, #modifProj> a,#suppProjet> input{
   margin-right: 1em;
 }
 #mesproj,#tousproj{
