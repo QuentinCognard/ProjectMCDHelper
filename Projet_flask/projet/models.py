@@ -105,9 +105,21 @@ def get_all_droit():
         res.append((d.id,d.nomDroit))
     return res
 
-
-def get_projet_user(username):
-    return Projet.query.join(Gerer).filter(Gerer.user_login==username).all()
+def get_projet_user(username,n):
+    p= Projet.query.join(Gerer).filter(Gerer.user_login==username).all()
+    res=[]
+    indice=0
+    if len(p)<n*5-1:
+        indice=len(p)
+    else:
+        indice=n*5-1
+    if n==1:
+        start=(n-1)*5
+    else:
+        start=(n-1)*5-1
+    for i in range(start,indice):
+        res.append(p[i])
+    return res
 
 def get_Projet_byName(name):
     return Projet.query.filter(Projet.nomProj==name).first()
@@ -123,5 +135,25 @@ def get_id_droit(nomDroit):
 def get_nom_droit(id):
     return Droit.query.filter(Droit.id==id).first().nomDroit
 
-def get_all_projets():
-    return Projet.query.all()
+def get_all_projets(n):
+    p=Projet.query.all()
+    res=[]
+    indice=0
+    if len(p)<n*5-1:
+        indice=len(p)
+    else:
+        indice=n*5-n
+    if n==1:
+        start=(n-1)*5
+    else:
+        start=(n-1)*5-(n-1)
+    for i in range(start,indice):
+        res.append(p[i])
+    return res
+
+def get_user_projet(nomProj):
+    gerer=get_gerer_byProjet(nomProj)
+    res=[]
+    for g in gerer:
+        res.append(g.user_login)
+    return res

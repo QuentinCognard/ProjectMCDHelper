@@ -2,6 +2,8 @@
 {% block styles %}
 {{ super() }}
   <link rel="stylesheet" href= "{{url_for('static',filename='accueil_projet.css') }}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 {% endblock %}
   {% block contain %}
   <fieldset>
@@ -62,7 +64,38 @@
       {{ render_field(form.search) }}
       <input type=submit value=Search>
       </form>
-      <section class="projets">
+      <script>
+$(document).ready(function(){
+    $(".btn-success").click(function(){
+        $(".collapse").collapse('show');
+        document.getElementById("pro").style.flexWrap="wrap";
+    });
+    $(".btn-warning").click(function(){
+        $(".collapse").collapse('hide');
+        document.getElementById("pro").style.flexWrap="nowrap";
+    });
+});
+</script>
+      <section class="projets " id="pro">
+        {% if search %}
+        {% for i in range(tousproj|length) %}
+        {% if i<(4) %}
+        <div id="tousproj">
+          <a href="{{url_for('description',username=current_user.login,nomProj=tousproj[i].nomProj)}}">
+            <img src="{{url_for('static',filename='dossier.png')}}">
+            <h4>{{tousproj[i].nomProj}}</h4>
+          </a>
+        </div>
+        {% else %}
+        <div id="tousproj" class="collapse" >
+          <a href="{{url_for('description',username=current_user.login,nomProj=tousproj[i].nomProj)}}">
+            <img src="{{url_for('static',filename='dossier.png')}}">
+            <h4>{{tousproj[i].nomProj}}</h4>
+          </a>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% else %}
         {% if n!=1 %}
         <a class="fleche" href="{{url_for('page_projets',username=current_user.login,n=n-1,i=i)}}">
           <span class="glyphicon glyphicon-chevron-left"></span>
@@ -81,6 +114,12 @@
           <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
         {% endif %}
+        {% endif %}
       </section>
+
       </fieldset>
+      {% if search %}
+      <button type="button" class="btn btn-success">Voir Plus</button>
+      <button type="button" class="btn btn-warning">Moins</button> 
+      {% endif %}
   {% endblock %}

@@ -173,7 +173,7 @@ def page_projets(username,n,i):
 	search = SearchForm(request.form)
 	if request.method == 'POST':
 		return search_results(search,username)
-	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=search,n=n,i=i,droite=droiteok,droite2=droite2ok)
+	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=search,n=n,i=i,droite=droiteok,droite2=droite2ok,search=False)
 
 class ProjetForm(FlaskForm):#Formulaire de création de projet
 	name = StringField('Nom Projet',[validators.Length(min=4, max=25)])
@@ -270,14 +270,14 @@ def search_results(search,username):
 	proj=get_projet_user(username,1)
 	projets=[]
 	if search.data['search']== '' or search.data['search']==" ":
-		return redirect('/projets/'+username+'/1')
+		return redirect('/projets/'+username+'/1/1')
 	else:
 		projets=Projet.query.filter(Projet.nomProj.like("%{}%".format(search_string))).all()
 	if not projets:
 		flash('Pas de résultats')
 		return redirect('/projets/'+username)
 	else:
-		return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=SearchForm(request.form),n=1,i=1,droite=False,droite2=True)
+		return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=SearchForm(request.form),n=1,i=1,droite=False,droite2=True,search=True)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj")
 def modifProj(username,nomProj):
