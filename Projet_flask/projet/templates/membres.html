@@ -6,6 +6,9 @@
 
 {% endblock %}
 {% block contain %}
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
 <a id="retour" href="{{url_for('parametresProj',username=current_user.login,nomProj=nomProj)}}"><input type="Submit"  value="< Retour"></a>
 <h1>Modifier projet :</h1><div id="membres">
   <h4> Membres du projet : </h4></br>
@@ -59,5 +62,5 @@
     {% endif %}
   {% endwith %}
   {% endif %}
-
+{% endif %}
 {% endblock %}

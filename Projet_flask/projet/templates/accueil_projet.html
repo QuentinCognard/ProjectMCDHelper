@@ -6,6 +6,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 {% endblock %}
   {% block contain %}
+  {% if current_user.login != username %}
+    <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+  {% else %}
   <fieldset>
     <legend>Mes Projets</legend>
     <section class="projets">
@@ -23,7 +26,6 @@
           <a href="{{ url_for('page_projet_perso',username = current_user.login,idProj=p.id) }}"><input type="submit" value="Consulter"></a>
           <a href="{{url_for('parametresProj',username=current_user.login,nomProj=p.nomProj)}}"><input type="submit" value="Parametres"></a>
           <a href="/projets/{{current_user.login}}/{{p.nomProj}}/quitter"><input type="submit" value="Quitter"></a>
-
           </div>
         {% endfor %}
         {% if droite2 %}
@@ -108,5 +110,6 @@ $(document).ready(function(){
       {% if search %}
       <button type="button" class="btn btn-success">Voir Plus</button>
       <button type="button" class="btn btn-warning">Moins</button>
+      {% endif %}
       {% endif %}
   {% endblock %}

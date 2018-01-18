@@ -6,6 +6,9 @@
 
 {% endblock %}
 {% block contain %}
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
 <a id="retour" href="{{url_for('membres',username=current_user.login,nomProj=nomProj)}}"><input type="Submit"  value="< Retour"></a>
 <form role="form" method="POST">
 <div class=
@@ -28,4 +31,5 @@
 </div>
 <input class="btn btn-default" type="submit" value="Ajouter"></input>
 </form>
+{% endif %}
 {% endblock %}

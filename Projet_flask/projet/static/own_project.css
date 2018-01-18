@@ -1,0 +1,33 @@
+#MCD{
+  border-style:solid;
+  border-width:0.1em;
+  border-color: lightgrey;
+  text-align: center;
+  padding: 1em;
+}
+#MCD>img{
+  display:block;
+  margin-left: 20%;
+  margin-bottom: 1em;
+}
+#explication{
+  background-color: lightgrey;
+  padding: 2em;
+}
+#explication>ul{
+  list-style: square;
+}
+.projets{
+  margin: 1em;
+  display: flex;
+}
+img{
+  width:8em;
+}
+a, a:hover{
+  color:black;
+  text-decoration:none;
+}
+#body,#explication{
+  font-size: 1.5em;
+}

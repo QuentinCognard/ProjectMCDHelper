@@ -173,7 +173,7 @@ def page_projets(username,n,i):
 	search = SearchForm(request.form)
 	if request.method == 'POST':
 		return search_results(search,username)
-	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=search,n=n,i=i,droite=droiteok,droite2=droite2ok,search=False)
+	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=search,n=n,i=i,droite=droiteok,droite2=droite2ok,search=False,username=username)
 
 class ProjetForm(FlaskForm):#Formulaire de création de projet
 	name = StringField('Nom Projet',[validators.Length(min=4, max=25)])

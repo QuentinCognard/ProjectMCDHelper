@@ -6,6 +6,9 @@
 
 {% endblock %}
   {% block contain %}
+  {% if current_user.login != username %}
+    <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+  {% else %}
   <a id="retour" href="{{url_for('page_projets',username=current_user.login,n=1,i=1)}}"><input type="Submit"  value="< Retour"></a></br>
 
   <fieldset>
@@ -30,5 +33,5 @@
       {% endif %}
     {% endwith %}
     </fieldset>
-
+  {% endif %}
   {% endblock %}

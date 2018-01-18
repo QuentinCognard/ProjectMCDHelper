@@ -1,22 +1,40 @@
 {% extends "base_excerciseur.html" %}
-{% block contain %}
+{% block styles %}
 {{ super() }}
+  <link rel="stylesheet" href= "{{url_for('static',filename='own_project.css') }}"/>
+{% endblock %}
+{% block contain %}
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
 <!-- Bouton ajouter MCD -->
-  <div class="jumbotron">
-    <div class="container">
-      <h1 class="display-3">{{ projet.nomProj }}</h1>
-      {% if projet.nomMCD == "" %}
-        <p><a class="btn btn-primary btn-lg" href="{{url_for('page_new_attributs',username=username,idProj=id)}}" role="button">Ajouter un MCD &raquo;</a></p>
+<div id="body">
+<fieldset>
+  <legend>{{projet.nomProj}}</legend>
+  <section class="projets">
+      {% if projet.nomMCD != "" %}
+      <div id="MCD">
+        <fieldset>
+          <legend>{{ projet.nomMCD }}</legend>
+        </fieldset>
+        <img src="{{url_for('static',filename='mcd.png')}}">
+        <a href=""><input type="submit" value="Consulter"></a>
+        <a href="#"><input type="submit" value="Supprimer"></a>
+      </div>
       {% else  %}
-        <div id="mesproj">
-          <fieldset>
-            <legend>{{ projet.nomMCD }}</legend>
-            <img src="{{url_for('static',filename='mcd.png')}}">
-          </fieldset>
-          <a href="{{ current_user.login }}/{{ p.id }}"><input type="submit" value="Consulter"></a>
-          <a href="#"><input type="submit" value="Supprimer"></a>
-        </div>
+        <a  href="{{url_for('page_new_attributs',username=username,idProj=id)}}" role="button"><input type="submit" value="Ajouter un MCD"></a>
       {% endif %}
+      </fieldset>
     </div>
   </div>
+  {% endif %}
+  <div id="explication">
+    <p>La création de MCD se passe en plusieurs temps:</p>
+    <ul>
+    <li>Création de tous les attributs du MCD</li>
+    <li>Création des entités à l'aide des attributs entrés précédemment</li>
+    <li>Création des relations entre les entités</li>
+    </ul>
+  </div>
+</div>
 {% endblock %}
