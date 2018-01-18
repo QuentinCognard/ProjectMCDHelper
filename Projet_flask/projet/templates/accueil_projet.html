@@ -6,6 +6,19 @@
   {% block contain %}
   <fieldset>
     <legend>Mes Projets</legend>
+    <script>
+    function test(){
+      document.getElementById('disablingDiv').style.display='block';
+
+
+    }
+      </script>
+    <div id="disablingDiv" >
+      <section id="sectionNotVisible">
+          <p> Etes vous sur de quitter le projet ? </p>
+       </section>
+     </div>
+    <input type="Submit" onclick="test()" value='testPopUp'>
     <section class="projets">
       {% if i!=1 %}
       <a class="fleche" href="{{url_for('page_projets',username=current_user.login,n=n,i=i-1)}}">
