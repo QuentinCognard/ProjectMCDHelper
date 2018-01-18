@@ -1,0 +1,11 @@
+<nom_mcd>Test Projet</nom_mcd>
+
+<entite>
+Personne<attribut>nom(M,str,VARCHAR,_,_);prenom(M,str,VARCHAR,_,_);age(M,int,INTEGER,_,_);mail(M,str,VARCHAR,_,_)</attribut>
+Chien<attribut>nom(M,str,VARCHAR,_,_)</attribut>
+Jouet<attribut>nom(M,str,VARCHAR,_,_)</attribut>
+</entite>
+<relation>
+Est propriétaire<concerne>Personne(0-n);Chien(1-1)</concerne>
+Possède<concerne>Chien(0-n);Jouet(1-1)</concerne>
+</relation>

@@ -29,7 +29,7 @@ def loadprojet(filename):
     db.create_all()
     projets = yaml.load(open(filename))
     for p in projets:
-        o = Projet(nomProj=p["nomProjet"],nomMCD=p["nomMcd"],descProj=p["DescProjet"])
+        o = Projet(nomProj=p["nomProjet"],mcd_textuel = p["mcd_textuel"],nomMCD=p["nomMcd"],descProj=p["DescProjet"])
         db.session.add(o)
     db.session.commit()
 
@@ -41,6 +41,7 @@ def loadgerer(filename):
         o = Gerer(projet_id=g["idProjet"],user_login=g["idUser"],droit_id=g["idDroit"])
         db.session.add(o)
     db.session.commit()
+
 
 @manager.command
 def loadentite(filename):
@@ -56,7 +57,7 @@ def loadrelation(filename):
     db.create_all()
     relation = yaml.load(open(filename))
     for r in relation:
-        o = Relation(id=r["id"],projet_id=r["projet_id"],nomRelation=r["nomrelation"])
+        o = Relation(id=r["id"],id_relationEntite = r["id_relationEntite"],projet_id=r["projet_id"],nomRelation=r["nomrelation"],entite1_id=r["entite1_id"],entite2_id=r["entite2_id"],cardinalite1=r["cardinalite1"],cardinalite2=r["cardinalite2"])
         db.session.add(o)
     db.session.commit()
 
@@ -66,14 +67,5 @@ def loadattributs(filename):
     attributs = yaml.load(open(filename))
     for a in attributs:
         o = Attributs(id=a["id"],projet_id=a["projet_id"],entite_id=a["entite_id"],nomAttribut=a["nomAttribut"],genreAttribut=a["genreAttribut"],typeAttribut=a["typeAttribut"],valeurAttribut=a["valeurAttribut"])
-        db.session.add(o)
-    db.session.commit()
-
-@manager.command
-def loadrelationentites(filename):
-    db.create_all()
-    rel = yaml.load(open(filename))
-    for r in rel:
-        o = RelationEntite(id=r["id"],entite_id=r["entite_id"],cardinaliteRelation=r["cardinalite"])
         db.session.add(o)
     db.session.commit()

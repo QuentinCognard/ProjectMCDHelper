@@ -9,7 +9,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(100))
     mail = db.Column(db.String(100))
     image = db.Column(db.String(100))
-    
+
     def get_id(self):
         return self.login
 
@@ -18,6 +18,7 @@ class Projet(db.Model):
     nomProj = db.Column(db.String(100))
     nomMCD = db.Column(db.String(100))
     descProj = db.Column(db.String(500))
+    mcd_textuel = db.Column(db.String(500))
 
 class Droit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -64,13 +65,19 @@ class Relation(db.Model):
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key=True)
     nomRelation = db.Column(db.String(100))
     positionRelation = db.Column(db.String(100))
+    id_relationEntite = db.Column(db.Integer, db.ForeignKey("relationentite.id"))
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetRelationn", lazy="dynamic"))
+    relationEntite = db.relationship("Relationentite", foreign_keys=[id_relationEntite], backref=db.backref("RelationEntite", lazy="dynamic"))
 
-class RelationEntite(db.Model):
+class Relationentite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    entite_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
-    entite = db.relationship("Entite", foreign_keys=[entite_id], backref=db.backref("relationEntite", lazy="dynamic"))
-    cardinaliteRelation = db.Column(db.String(100))
+    cardinalite1 = db.Column(db.String(100))
+    cardinalite2 = db.Column(db.String(100))
+    entite1_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
+    entite2_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
+    entite1 = db.relationship("Entite", foreign_keys=[entite1_id], backref=db.backref("Entite1", lazy="dynamic"))
+    entite2 = db.relationship("Entite", foreign_keys=[entite2_id], backref=db.backref("Entite2", lazy="dynamic"))
+
 
 def get_user(login):
     User = User.query.filter(User.login==login).all()
@@ -98,9 +105,21 @@ def get_all_droit():
         res.append((d.id,d.nomDroit))
     return res
 
-
-def get_projet_user(username):
-    return Projet.query.join(Gerer).filter(Gerer.user_login==username).all()
+def get_projet_user(username,n):
+    p= Projet.query.join(Gerer).filter(Gerer.user_login==username).all()
+    res=[]
+    indice=0
+    if len(p)<n*5-1:
+        indice=len(p)
+    else:
+        indice=n*5-1
+    if n==1:
+        start=(n-1)*5
+    else:
+        start=(n-1)*5-1
+    for i in range(start,indice):
+        res.append(p[i])
+    return res
 
 def get_Projet_byName(name):
     return Projet.query.filter(Projet.nomProj==name).first()
@@ -116,5 +135,25 @@ def get_id_droit(nomDroit):
 def get_nom_droit(id):
     return Droit.query.filter(Droit.id==id).first().nomDroit
 
-def get_all_projets():
-    return Projet.query.all()
+def get_all_projets(n):
+    p=Projet.query.all()
+    res=[]
+    indice=0
+    if len(p)<n*5-1:
+        indice=len(p)
+    else:
+        indice=n*5-n
+    if n==1:
+        start=(n-1)*5
+    else:
+        start=(n-1)*5-(n-1)
+    for i in range(start,indice):
+        res.append(p[i])
+    return res
+
+def get_user_projet(nomProj):
+    gerer=get_gerer_byProjet(nomProj)
+    res=[]
+    for g in gerer:
+        res.append(g.user_login)
+    return res

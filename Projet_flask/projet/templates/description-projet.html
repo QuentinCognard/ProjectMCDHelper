@@ -1,8 +1,29 @@
 {% extends "base_excerciseur.html" %}
 {% block styles %}
 {{ super() }}
-  <link rel="stylesheet" href= "{{url_for('static',filename='accueil_projet.css') }}"/>
+  <link rel="stylesheet" href= "{{url_for('static',filename='description.css') }}"/>
 
 {% endblock %}
   {% block contain %}
+  <a id="retour" href="{{url_for('page_projets',username=current_user.login,n=1,i=1)}}"><input type="Submit"  value="< Retour"></a>
+  <div class="div">
+  <fieldset>
+    <legend>{{projet.nomProj}}</legend>
+  <div class="div" id="membres">
+  <fieldset>
+    <legend>Membres</legend>
+  {% for m in membres %}
+    <div class="div" id="membre">{{m.user_login}}: {{m.droit.nomDroit}}</div>
+  {% endfor %}
+  </fieldset>
+</div>
+  <div class="div">
+    <fieldset>
+      <legend>Description</legend>
+    {{projet.descProj}}
+  </div>
+</fieldset>
+  </fieldset>
+</div>
+  <input class="btn btn-primary" type="Submit" id="demande" value="Demander à participer">
   {% endblock %}
