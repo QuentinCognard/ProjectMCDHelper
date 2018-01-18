@@ -10,6 +10,8 @@ from werkzeug.utils import secure_filename
 import os
 import shutil
 from flask_wtf import FlaskForm
+from functools import wraps
+from flask import g, request, redirect, url_for
 
 
 class LoginForm(FlaskForm):
@@ -65,6 +67,7 @@ def lucas(id_projet):
 	# 	listeRelationEntite.append(RelationEntite.query.filter(entite.id == e.id).all())
 	# , liste_attribut = listeAttribut,liste_relation = listeRelation,liste_entite_relation = listeRelationEntite
 	return render_template("test.html", dic_entite_attribut = mon_dictionnaire, liste_relation = listeRelation)
+
 
 @app.route("/login/", methods=('GET', 'POST'))
 def connexion():
@@ -188,6 +191,7 @@ class DroitProjForm(FlaskForm):#formulaire pour avoir 2 liste déroulantes avec 
 
 
 @app.route("/projets/add/<string:username>", methods=['GET', 'POST'])# Page de création d'un projet
+@login_required
 def add_projets(username):
 	P = ProjetForm(request.form)
 	if request.method == 'POST': #Si le formulaire a été rempli
@@ -204,15 +208,18 @@ def add_projets(username):
 		"add-projet.html",
 		form=P ,username=username)
 @app.route("/projets/<string:username>/<string:nomProj>/description")
+@login_required
 def description(username,nomProj):
 	membres=get_gerer_byProjet(get_Projet_byName(nomProj).nomProj)
 	return render_template("description-projet.html",projet=get_Projet_byName(nomProj),membres=membres)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres")
+@login_required
 def parametresProj(username,nomProj):
 	return render_template("parametres.html",username=username,nomProj=nomProj)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres")
+@login_required
 def membres(username,nomProj):
 	membresProj=get_gerer_byProjet(nomProj)
 	if( get_nom_droit(get_gerer_byNom(nomProj,username).droit_id) == "master"):
@@ -221,6 +228,7 @@ def membres(username,nomProj):
 		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=False)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres/add", methods=['GET', 'POST'])
+@login_required
 def add_membre(username,nomProj):
 	D=DroitProjForm(request.form)
 	D.login.choices=get_all_login()
@@ -241,6 +249,7 @@ def add_membre(username,nomProj):
 
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/modif/<string:droit>/<string:nom>",methods=['GET', 'POST'])
+@login_required
 def modifier_membres(username,nomProj,droit,nom):
 	if( get_nom_droit(get_gerer_byNom(nomProj,nom).droit_id) != "master"):
 		idProj=get_Projet_byName(nomProj).id
@@ -251,7 +260,8 @@ def modifier_membres(username,nomProj,droit,nom):
 		flash(" impossible : "+nom+" est master")
 	return redirect(url_for("membres",username=username,nomProj=nomProj))
 
-@app.route("/projets/<string:username>/<string:nomProj>es membres/parametres/membres/supprimer/<string:nom>", methods=['GET','PÔST'])
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/supprimer/<string:nom>", methods=['GET','POST'])
+@login_required
 def supprimer_membres(username,nomProj,nom):
 	if( get_nom_droit(get_gerer_byNom(nomProj,nom).droit_id) != "master"):
 		idProj=get_Projet_byName(nomProj).id
@@ -264,6 +274,7 @@ def supprimer_membres(username,nomProj,nom):
 
 
 @app.route('/projets/<string:username>/results')
+@login_required
 def search_results(search,username):
 	results = []
 	search_string = search.data['search']
@@ -280,11 +291,13 @@ def search_results(search,username):
 		return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=SearchForm(request.form),n=1,i=1,droite=False,droite2=True,search=True)
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj")
+@login_required
 def modifProj(username,nomProj):
 	P = ProjetForm(name=nomProj,descritpion=get_Projet_byName(nomProj).descProj)
-
 	return render_template('modifProj.html',form=P,username=username,nomProj=nomProj)
+
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj/save",methods=['GET', 'POST'])
+@login_required
 def save_modifProj(username,nomProj):
 	P = ProjetForm()
 	projetCourant=get_Projet_byName(nomProj)
@@ -300,17 +313,19 @@ def save_modifProj(username,nomProj):
 		flash("Le projet à bien été modifié")
 	flash("Impossible de modifié le projet, le nom ou la description est trop court(e) ou trop long")
 	return redirect(url_for('modifProj',username=username,nomProj=nomProj))
+
 @app.route("/projets/<string:username>/<string:nomProj>/quitter")
+@login_required
 def quitter(username,nomProj):
-		proj=get_projet_user(username,1)
-		projets=get_all_projets(1)
-		if( get_nom_droit(get_gerer_byNom(nomProj,username).droit_id) != "master"):
-			idProj=get_Projet_byName(nomProj).id
-			db.session.delete(get_gerer_byNom(nomProj,username))
-			db.session.commit()
-			flash(""+nomProj+" a été supprimé de la liste de vos projets")
-		else:
-			flash("impossible de quitter le projet, vous êtes master")
+	proj=get_projet_user(username,1)
+	projets=get_all_projets(1)
+	if( get_nom_droit(get_gerer_byNom(nomProj,username).droit_id) != "master"):
+		idProj=get_Projet_byName(nomProj).id
+		db.session.delete(get_gerer_byNom(nomProj,username))
+		db.session.commit()
+		flash(""+nomProj+" a été supprimé de la liste de vos projets")
+	else:
+		flash("impossible de quitter le projet, vous êtes master")
 		return redirect('/projets/'+username+'/1/1')
 # @app.route("/projets/<idProj>/")
 # def page_projet_perso(idProj):

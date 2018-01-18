@@ -42,7 +42,9 @@
       {% if messages %}
       <ul class=flashes>
       {% for message in messages %}
-        <li>{{ message }}</li>
+        {% if message!= "Please log in to access this page." %}
+          <li>{{ message }}</li>
+        {% endif %}
         {% endfor %}
       </ul>
       {% endif %}
