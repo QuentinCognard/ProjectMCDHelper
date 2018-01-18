@@ -124,10 +124,19 @@ def get_projet_user(username,n):
         res.append(p[i])
     return res
 
+def get_projet(username, idProj):
+    projets = get_projet_user(username)
+    for p in projets:
+        if p.id == idProj:
+            return p
+    return None
+
 def get_Projet_byName(name):
     return Projet.query.filter(Projet.nomProj==name).first()
+
 def get_gerer_byProjet(nomProj):
     return Gerer.query.join(Projet).filter(Projet.nomProj==nomProj).all()
+
 def get_gerer_byNom(nomProj,nom):
     # print(Gerer.query.join(Projet).filter(Projet.nomProj==nomProj,Gerer.user_login==nom).all())
     return Gerer.query.join(Projet).filter(Projet.nomProj==nomProj,Gerer.user_login==nom).first()

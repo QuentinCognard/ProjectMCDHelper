@@ -33,11 +33,11 @@
             <legend>{{p.nomProj}}</legend>
             <img src="{{url_for('static',filename='dossier.png')}}">
           </fieldset>
-          <a href="#"><input type="submit" value="Consulter"></a>
+          <a href="{{ current_user.login }}/{{ p.id }}"><input type="submit" value="Consulter"></a>
           <a href="{{url_for('parametresProj',username=current_user.login,nomProj=p.nomProj)}}"><input type="submit" value="Parametres"></a>
           <a href="#"><input type="submit" value="Quitter"></a>
 
-        </div>
+          </div>
         {% endfor %}
         {% if droite2 %}
         <a class="fleche" href="{{url_for('page_projets',username=current_user.login,n=n,i=i+1)}}">
@@ -120,6 +120,6 @@ $(document).ready(function(){
       </fieldset>
       {% if search %}
       <button type="button" class="btn btn-success">Voir Plus</button>
-      <button type="button" class="btn btn-warning">Moins</button> 
+      <button type="button" class="btn btn-warning">Moins</button>
       {% endif %}
   {% endblock %}
