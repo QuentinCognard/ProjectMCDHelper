@@ -210,7 +210,21 @@ def description(username,nomProj):
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres")
 def parametresProj(username,nomProj):
-	return render_template("parametres.html",username=username,nomProj=nomProj)
+	gerer=get_gerer_byNom(nomProj,username)
+	return render_template("parametres.html",username=username,nomProj=nomProj,gerer=gerer)
+
+@app.route("/projets/<string:username>/<string:nomProj>/parametres/suppProj")
+def suppProj(username,nomProj):
+	if( get_nom_droit(get_gerer_byNom(nomProj,username).droit_id) == "master"):
+		gere=get_gerer_byProjet(nomProj)
+		if gere !=[] :
+			for g in gere:
+				db.session.delete(g)
+		if get_Projet_byName(nomProj)!=[] :
+			db.session.delete(get_Projet_byName(nomProj))
+		db.session.commit()
+		flash("Le projet "+nomProj+" a bien été supprimé")
+	return redirect("/projets/"+username+"/1/1")
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres")
 def membres(username,nomProj):

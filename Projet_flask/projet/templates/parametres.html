@@ -18,6 +18,32 @@
       <div id='modifProj'>
         <a href="{{ url_for('modifProj',username=username,nomProj=nomProj)}}"><input type="Submit" value="Modification du projet"></a> <p> Modifiez le nom et la description du projet. </p>
       </div>
+      <script>
+      function active(){
+        console.log( {{ gerer.droit_id }} )
+        if( {{ gerer.droit_id }} == 1){
+          document.getElementById('disablingDiv').style.display='block'
+        }
+        else{
+          document.getElementById('nonMaster').innerHTML="Impossible, vous n'êtes pas master !"
+        }
+      }
+      function desactive(){
+        document.getElementById('disablingDiv').style.display='none'
+      }
+        </script>
+      <div id="disablingDiv" >
+        <section id="sectionNotVisible">
+            <p> Etes vous sur de quitter le projet ? </p>
+            <a id='quit' href="{{ url_for('suppProj',username=username,nomProj=nomProj)}}"><input type="Submit" value="Oui"></a>
+            <input type="Submit" value="Non" onclick="desactive()">
+         </section>
+       </div></br>
+      <div id='suppProjet'>
+        <input type="Submit" onclick=active() value="Supprimer le Projet"> <p> Supprime le projet <u> définitivement </u>  </p>
+      </div>
+    </br>
+    <p id='nonMaster'> </p>
     </section>
     </section>
     {% with messages = get_flashed_messages() %}
