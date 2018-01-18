@@ -1,0 +1,53 @@
+div>h2{
+  text-align: center;
+  font-size: 3em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+div>p{
+  font-size: 1.5em;
+  text-align: center;
+}
+
+img{
+display:block;
+width:75%;
+height: 30%;
+margin-left: auto;
+margin-right: auto;
+}
+
+
+.edit{
+  text-align: center;
+}
+
+h2{
+  text-align: center;
+}
+
+#test{
+  border: solid;
+  padding-top: 1%;
+  width: 35%;
+  margin-left: 35%;
+  text-align: center;
+}
+
+#test_bis{
+  position:relative;
+	display:block;
+	overflow:auto;
+}
+
+#photo{
+  margin-right: auto;
+  margin-left: auto;
+}
+form>div>input[type=text]{
+  width:20%;
+}
+form>div>input[type=text]:focus{
+  width: 80%;
+}
