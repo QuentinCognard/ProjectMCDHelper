@@ -252,13 +252,13 @@ def modifier_membres(username,nomProj,droit,nom):
 		flash(" impossible : "+nom+" est master")
 	return redirect(url_for("membres",username=username,nomProj=nomProj))
 
-@app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/supprimer/<string:nom>", methods=['GET','PÔST'])
+@app.route("/projets/<string:username>/<string:nomProj>es membres/parametres/membres/supprimer/<string:nom>", methods=['GET','PÔST'])
 def supprimer_membres(username,nomProj,nom):
 	if( get_nom_droit(get_gerer_byNom(nomProj,nom).droit_id) != "master"):
 		idProj=get_Projet_byName(nomProj).id
 		db.session.delete(get_gerer_byNom(nomProj,nom))
 		db.session.commit()
-		flash(""+nom+" à été supprimer de la liste des membres")
+		flash(""+nom+" a été supprimé de la liste des membres")
 	else:
 		flash("impossible : "+nom+" est master")
 	return redirect(url_for("membres",username=username,nomProj=nomProj))
@@ -301,7 +301,18 @@ def save_modifProj(username,nomProj):
 		flash("Le projet à bien été modifié")
 	flash("Impossible de modifié le projet, le nom ou la description est trop court(e) ou trop long")
 	return redirect(url_for('modifProj',username=username,nomProj=nomProj))
-
+@app.route("/projets/<string:username>/<string:nomProj>/quitter")
+def quitter(username,nomProj):
+		proj=get_projet_user(username,1)
+		projets=get_all_projets(1)
+		if( get_nom_droit(get_gerer_byNom(nomProj,username).droit_id) != "master"):
+			idProj=get_Projet_byName(nomProj).id
+			db.session.delete(get_gerer_byNom(nomProj,username))
+			db.session.commit()
+			flash(""+nomProj+" a été supprimé de la liste de vos projets")
+		else:
+			flash("impossible de quitter le projet, vous êtes master")
+		return redirect('/projets/'+username+'/1/1')
 # @app.route("/projets/<idProj>/")
 # def page_projet_perso(idProj):
 	# proj = get_proj(idProj)

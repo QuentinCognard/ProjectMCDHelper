@@ -23,6 +23,9 @@
     background-color: grey;
     opacity:.50;
 }
+.flashes{
+  list-style: none;
+}
 #sectionNotVisible{
   background-color: white;
 }
