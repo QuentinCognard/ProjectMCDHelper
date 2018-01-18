@@ -38,7 +38,7 @@
   </div>
 
     <p>
-      <button class ="btn btn-info" type="button" onClick="ajouteAttribut(0)">Ajouter Attribut</button>
+      <button class ="btn btn-info" type="button" onClick="ajouteAttribut('0')">Ajouter Attribut</button>
     </p>
 
     </div>
@@ -61,19 +61,26 @@
   var nbAtt = 0;
   var nbEnt = 0;
 
+  firstdiv = document.querySelector(".bordmcd");
+  firstdiv.id="ent"+nbEnt;
+
   // supprime une entite
   function removeEntite(id){
-    var parent = document.querySelector(".bordmcd");
+    var parent = document.querySelector(".lesentites");
     var child = document.getElementById(id);
+    // document.write(parent.id);
+    // document.write(child.id);
     parent.removeChild(child);
     nbEnt --;
   }
 
   // supprime un attribut d'une entite
-  function removeAttribut(id){
-    var parent = document.querySelector(".attEntite");
-    var child = document.getElementById(id);
-    parent.removeChild(child);
+  function removeAttribut(attid,entid){
+    var child = document.getElementById(attid);
+    var parent = document.getElementById(entid);
+    var divattParent = parent.querySelector(".lesattributs");
+    // document.write(parent);
+    divattParent.removeChild(child);
     nbAtt --;
   }
 
@@ -84,17 +91,21 @@
       divEntite.className="bordmcd";
       divEntite.id = "ent"+nbEnt;
 
+
+      var divActuel = document.querySelector(".bordmcd");
+      document.querySelector(".lesentites").insertBefore(divEntite,divActuel.nextSibling);
+
       ajouteSuppButtonEnt(divEntite);
       ajouteNom(divEntite);
       ajouteDivAtt(divEntite);
-      ajouteAttribut();
+      ajouteAttribut(nbEnt);
       ajouteAttributBouton(divEntite);
       // ajouteValeur(divAttribut);
       // ajouteQuantite(divAttribut);
       // ajouteGenre(divAttribut);
+      // document.write(divEntite.querySelector(".lesattributs"));
 
-      var divActuel = document.querySelector(".bordmcd");
-      document.querySelector(".lesentites").insertBefore(divEntite,divActuel.nextSibling);
+
   }
 
   // ajoute le bouton de supression d'une entité
@@ -106,7 +117,7 @@
     bouton.className = "btn btn-danger";
     bouton.type = "button";
     bouton.id = divEntite.id;
-    bouton.onclick = function(){removeEntite(this.id)};
+    bouton.onclick = function(){removeEntite(divEntite.id)};
   }
 
   // ajoute le champde saisie du nom d'une entite
@@ -133,8 +144,9 @@
     bouton.appendChild(textBouton);
     bouton.className = "btn btn-info";
     bouton.type = "button";
+    var nbEntStati = nbEnt;
     bouton.id = nbEnt;
-    bouton.onclick = function(){ajouteAttribut(bouton.id)};
+    bouton.onclick = function(){ajouteAttribut(nbEntStati)};
     p2.appendChild(bouton);
   }
 
@@ -146,38 +158,44 @@
   }
 
   // ajoute un attribut
-  function ajouteAttribut(id){
+  function ajouteAttribut(nbEntS){
       nbAtt += 1;
-      var duvEntiteCourante = document.getElementById("ent"+id);
-      var divEntite = document.querySelector(".lesattributs");
+      var parent = document.getElementById("ent"+nbEntS);
+
       var divAttribut = document.createElement("div");
       divAttribut.className="attEntite";
       divAttribut.id = "att"+nbAtt;
 
 
-      ajouteSuppButtonAtt(divAttribut);
+      ajouteSuppButtonAtt(divAttribut,parent);
       ajouteNomAtt(divAttribut);
       ajouteCle(divAttribut);
       // ajouteValeur(divAttribut);
       // ajouteQuantite(divAttribut);
       // ajouteGenre(divAttribut);
+      // var divActuel = document.querySelector(".attEntite");
+      // divEntite.querySelector(".lesattributs").insertBefore(divAttribut, divActuel.nextSibling);
+      var lesatt=parent.querySelector(".lesattributs");
+      lesatt.appendChild(divAttribut);
 
-      var divActuel = document.querySelector(".attEntite");
-      document.querySelector(".lesattributs").insertBefore(divAttribut, divActuel);
-      divEntite.appendChild(divAttribut);
+      // document.write(divEntiteCourante.id);
+      // document.write(divEntiteCourante.id);
+      // document.write(divAttribut.id);
+      // document.write(divActuel.id);
+
       // divEntite.appendChild(divAttribut);
   }
 
   // ajoute le bouton de supression d'une entité
-  function ajouteSuppButtonAtt(divAttribut){
+  function ajouteSuppButtonAtt(divAttribut,parent){
     var bouton = document.createElement("button");
     divAttribut.appendChild(bouton);
     var textBouton = document.createTextNode("-");
     bouton.appendChild(textBouton);
     bouton.className = "btn btn-danger";
     bouton.type = "button";
-    bouton.id = nbAtt;
-    bouton.onclick = function(){removeAttribut(this.id)};
+    bouton.id = divAttribut.id;
+    bouton.onclick = function(){removeAttribut(divAttribut.id,parent.id)};
   }
 
   // ajoute le champde saisie du nom de

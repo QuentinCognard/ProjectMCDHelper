@@ -6,28 +6,10 @@
   {% block contain %}
   <fieldset>
     <legend>Mes Projets</legend>
-<<<<<<< HEAD
     <section class="border border-dark">
         <a href="{{url_for('add_projets') }}"><input type="submit" value="Ajouter un Projet" id="ajoutproj "></a>
     </section>
     </section>
-=======
-    <section class="projets">
-        {% for p in mesproj %}
-        <div id="mesproj">
-          <fieldset>
-            <legend>{{p.nomProj}}</legend>
-            <img src="{{url_for('static',filename='dossier.png')}}">
-          </fieldset>
-          <a href="#"><input type="submit" value="Consulter"></a>
-          <a href="#"><input type="submit" value="Parametres"></a>
-          <a href="#"><input type="submit" value="Quitter"></a>
-
-        </div>
-        {% endfor %}
-        </section>
-        <a href="{{ url_for('add_projets', username=current_user.login) }}"><input type="submit" value="Ajouter un Projet" id="ajoutproj"></a>
->>>>>>> Arthur/master
     </fieldset>
     <fieldset>
       <legend>Tous les projets</legend>

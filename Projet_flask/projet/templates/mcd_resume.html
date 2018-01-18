@@ -1,30 +1,33 @@
 {% extends "base_excerciseur.html" %}
 {% block content %}
 {{ super() }}
+<link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
+
 <form class="bd-example">
   <fieldset>
-    <legend>Le MCD</legend>
 
     <!-- Vu d'ensemble du dictionnaire (valeurs d'exemple) -->
 
-    <div class="border border-dark">
+    <div class="bordmcd">
+      <legend>Le MCD</legend>
+
       <!-- for entité in dictionnaire -->
       <p>ENTITE1: attributs: bla1/bla2/bla3</p>
 
       <!-- for relation in bdd -->
       <label>Relation :</label> <p> ENTITE1 <-> ENTITE2 </p>
 
-      <a href="/projets/0/create_mcd" class="btn btn-default" role="button">Modifier le dictionnaire</a>
+      <a href="/projets/0/create_mcd" class="btn btn-info" role="button">Modifier le dictionnaire</a>
 
     </div>
 
     <div class="border border-dark">
-       <img src="./static/exMCD.jpg" class="img-thumbnail" alt="Cinque Terre" height="1000" width="500">
+       <img src="/static/images/Aoe2_sheep.png" class="img-thumbnail" alt="Cinque Terre" height="1000" width="500">
     </div>
 
     <div>
-      <a href="/projets" class="btn btn-default" role="button">Sauvegarder</a>
-      <a href="/projets" class="btn btn-default" role="button">Annuler</a>
+      <a href="/projets" class="btn btn-success" role="button">Sauvegarder</a>
+      <a href="/projets" class="btn btn-danger" role="button">Annuler</a>
     </div>
 
 
