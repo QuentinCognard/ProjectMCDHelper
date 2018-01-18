@@ -3,7 +3,7 @@
 {{ super() }}
   <link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
 {% endblock %}
-{% block content %}
+{% block contain %}
 {{ super() }}
 <form class="bd-example" action="new-attributs/save">
   <fieldset class="fieldset">
@@ -57,7 +57,7 @@
     <button type="button" class="ajouteAttribut" onClick="ajouteElement()">Ajouter attribut</button>
 
     <p>
-      <a href="/projets"><button role="button">Annuler</button></a>
+      <a href="{{url_for('page_projet_perso',username=username,idProj=id)}}"><button role="button">Annuler</button></a>
       <button onClick="Enregister" type="button">Valider</button>
     </p>
 

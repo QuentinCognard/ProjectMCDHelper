@@ -314,7 +314,7 @@ def save_modifProj(username,nomProj):
 def page_projet_perso(username, idProj):
 	proj = get_projet(username, idProj)
 	if proj != None:
-		return render_template("consult_own_project.html", projet = proj)
+		return render_template("consult_own_project.html", projet = proj,username=username,id=idProj)
 
 # route vers la creation d'un MCD en fonction de l'ID du projet
 
@@ -323,9 +323,9 @@ def page_projet_perso(username, idProj):
 def page_new_attributs(username, idProj):
 	proj = get_projet(username, idProj)
 	if proj != None:
-		return render_template("new_attributs.html", projet = proj)
+		return render_template("new_attributs.html", projet = proj,username=username,id=idProj)
 
 @app.route("/projets/<string:username>/<int:idProj>/relations")
 @login_required
 def page_creer_relations(username, idProj):
-	return render_template("new_relations.html")
+	return render_template("new_relations.html",username=username,id=idProj)

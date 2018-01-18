@@ -33,7 +33,7 @@
             <legend>{{p.nomProj}}</legend>
             <img src="{{url_for('static',filename='dossier.png')}}">
           </fieldset>
-          <a href="{{ current_user.login }}/{{ p.id }}"><input type="submit" value="Consulter"></a>
+          <a href="{{ url_for('page_projet_perso',username = current_user.login,idProj=p.id) }}"><input type="submit" value="Consulter"></a>
           <a href="{{url_for('parametresProj',username=current_user.login,nomProj=p.nomProj)}}"><input type="submit" value="Parametres"></a>
           <a href="#"><input type="submit" value="Quitter"></a>
 

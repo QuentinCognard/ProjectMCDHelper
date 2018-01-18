@@ -125,7 +125,7 @@ def get_projet_user(username,n):
     return res
 
 def get_projet(username, idProj):
-    projets = get_projet_user(username)
+    projets = Projet.query.join(Gerer).filter(Gerer.user_login==username).all()
     for p in projets:
         if p.id == idProj:
             return p
