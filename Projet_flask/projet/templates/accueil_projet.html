@@ -8,19 +8,6 @@
   {% block contain %}
   <fieldset>
     <legend>Mes Projets</legend>
-    <script>
-    function test(){
-      document.getElementById('disablingDiv').style.display='block';
-
-
-    }
-      </script>
-    <div id="disablingDiv" >
-      <section id="sectionNotVisible">
-          <p> Etes vous sur de quitter le projet ? </p>
-       </section>
-     </div>
-    <input type="Submit" onclick="test()" value='testPopUp'>
     <section class="projets">
       {% if i!=1 %}
       <a class="fleche" href="{{url_for('page_projets',username=current_user.login,n=n,i=i-1)}}">
@@ -35,7 +22,7 @@
           </fieldset>
           <a href="{{ url_for('page_projet_perso',username = current_user.login,idProj=p.id) }}"><input type="submit" value="Consulter"></a>
           <a href="{{url_for('parametresProj',username=current_user.login,nomProj=p.nomProj)}}"><input type="submit" value="Parametres"></a>
-          <a href="#"><input type="submit" value="Quitter"></a>
+          <a href="/projets/{{current_user.login}}/{{p.nomProj}}/quitter"><input type="submit" value="Quitter"></a>
 
           </div>
         {% endfor %}
