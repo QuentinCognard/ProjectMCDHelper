@@ -6,6 +6,10 @@
 
 {% endblock %}
 {% block contain %}
+  <body onmouseover=notif()>
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
 <a id="retour" href="{{url_for('parametresProj',username=current_user.login,nomProj=nomProj)}}"><input type="Submit"  value="< Retour"></a>
 <h1>Modifier projet :</h1>
   <form role="form" method="POST" action="{{ url_for('save_modifProj',username=username,nomProj=nomProj) }}">
@@ -49,12 +53,14 @@
   {% if messages %}
     <ul class=flashes>
     {% for message in messages %}
+    {% if message!= "Please log in to access this page." %}
       <li>{{ message }}</li>
+      {% endif %}
     {% endfor %}
     </ul>
   {% endif %}
 
 {% endwith %}
 
-
+  {% endif %}
 {% endblock %}

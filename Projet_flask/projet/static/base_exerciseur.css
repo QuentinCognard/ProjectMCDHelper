@@ -1,0 +1,23 @@
+#notif{
+  margin-top: 0.7em;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+font-size: 14px;
+line-height: 1.42857143;
+color: #9D9D9D;
+background-color: #222222;
+border-style: none;
+}
+#notif:hover{
+  color:white;
+}
+#reponse{
+  display: flex;
+  justify-content: center;
+}
+#reponse>input{
+  margin-left: 0.3em;
+}
+#info{
+  margin-top: 0.3em;
+  font-size: 12px;
+}

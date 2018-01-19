@@ -1,3 +1,6 @@
+h1{
+  margin-left: 1em;
+}
 .projets{
   margin: 1em;
   display: flex;
@@ -22,6 +25,9 @@
     /* make it white but fully transparent */
     background-color: grey;
     opacity:.50;
+}
+.flashes{
+  list-style: none;
 }
 #sectionNotVisible{
   background-color: white;
@@ -52,11 +58,11 @@ a, a:hover{
   display: block;
   margin-top: 1em;
 }
-#gestionMembres{
+#gestionMembres,#suppProjet{
   display: flex;
   flex-wrap: nowrap;
 }
-#gestionMembres> a, #modifProj> a{
+#gestionMembres> a, #modifProj> a,#suppProjet> input{
   margin-right: 1em;
 }
 #mesproj,#tousproj{
@@ -111,4 +117,16 @@ a, a:hover{
 }
 button{
   margin-left: 1em;
+}
+form{
+  margin-left:1em;
+}
+#addretour{
+  margin-bottom: 2em;
+}
+#moins{
+  display: none;
+}
+#voirplus{
+  display: block;
 }

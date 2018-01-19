@@ -2,9 +2,15 @@
 {% block styles %}
 {{ super() }}
   <link rel="stylesheet" href= "{{url_for('static',filename='accueil_projet.css') }}"/>
+    <link rel="stylesheet" href= "{{url_for('static',filename='description.css') }}"/>
 
 {% endblock %}
 {% block contain %}
+  <body onmouseover=notif()>
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
+<a id="retour" href="{{url_for('membres',username=current_user.login,nomProj=nomProj)}}"><input id="addretour" type="Submit"  value="< Retour"></a>
 <form role="form" method="POST">
 <div class=
       {% if form.login.errors %}
@@ -24,6 +30,7 @@
       >
       {{ form.droit.label }} {{ form.droit() }}<!--Affichage formulaire -->
 </div>
-<input class="btn btn-default" type="submit" value="Ajouter"></input>
+<input class="btn btn-success" type="submit" value="Ajouter"></input>
 </form>
+{% endif %}
 {% endblock %}
