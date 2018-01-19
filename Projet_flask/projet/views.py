@@ -394,22 +394,22 @@ def save_entity(username,idProj):
 			 att.entite_id = request.form.()
 			 get("nbEnt")
 			 db.session.commit()
-	return render_template("relation_resume.html")
+	return render_template("relation_resume.html",username=username,idProj=idProj)
 
 # route vers le résumé des relations d'un MCD
 
 @app.route("/projets/<string:username>/<int:idProj>/relation_resume")
-def page_resume_relation():
-	return render_template("relation_resume.html")
+def page_resume_relation(username,idProj):
+	return render_template("relation_resume.html",username=username,idProj=idProj)
 
 # route vers la Premier etape de la creation d'une relation
 
 @app.route("/projets/<string:username>/<int:idProj>/new_relation1")
-def page_ajouter_relation1():
-	return render_template("new_relation1.html")
+def page_ajouter_relation1(username,idProj):
+	return render_template("new_relation1.html",username=username,idProj=idProj)
 
 # route vers le resumer d'un MCD
 
 @app.route("/projets/<string:username>/<int:idProj>/mcd_resume")
-def page_resume_mcd():
-	return render_template("mcd_resume.html")
+def page_resume_mcd(username,idProj):
+	return render_template("mcd_resume.html",username=username,idProj=idProj)

@@ -17,15 +17,15 @@
       <legend>Nouveau MCD</legend>
 
       <p>Relation simple entre Entité1/Entité2
-        <a href="/projets/0/new_relation1" class="btn btn-warning" role="button">Modifier</a>
+        <a href="{{ url_for('page_ajouter_relation1',username=username,idProj=idProj) }}" class="btn btn-warning" role="button">Modifier</a>
         <button type="submit" class="btn btn-danger">Supprimer</button>
       </p>
     </div>
 
     <div>
-      <a href="/projets/0/new_relation1" class="btn btn-primary" role="button">Ajouter une relation</a>
+      <a href="{{ url_for('page_ajouter_relation1',username=username,idProj=idProj) }}" class="btn btn-primary" role="button">Ajouter une relation</a>
 
-      <a href="/projets/0/mcd_resume" class="btn btn-success" role="button">Valider</a>
+      <a href="{{ url_for('page_resume_mcd',username=username,idProj=idProj) }}" class="btn btn-success" role="button">Valider</a>
     </div>
 
 
