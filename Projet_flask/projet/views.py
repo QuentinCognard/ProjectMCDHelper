@@ -18,6 +18,7 @@ class LoginForm(FlaskForm):
 	password = PasswordField('Mot de passe :')
 	next = HiddenField()
 
+
 	def get_authenticated_user(self):
 		user = User.query.get(self.login.data)
 		if user is None:
@@ -39,14 +40,14 @@ class CreerCompteForm(FlaskForm):
 	nom = StringField('Nom', [validators.Length(min=4, max=25)])
 	prenom = StringField('Prenom', [validators.Length(min=4, max=25)])
 	password = PasswordField('Mot de passe', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm_password', message='Mot de passe doivent etre égaux')
-    ])
+		validators.DataRequired(),
+		validators.EqualTo('confirm_password', message='Mot de passe doivent etre égaux')
+	])
 	confirm_password = PasswordField('Réécrire le mot de passe')
 	mail = StringField('Mail', [validators.Length(min=6, max=35)])
 
 class SearchForm(Form):
-    search = StringField('')
+	search = StringField('')
 
 @app.route("/") #route pour la page de connexion
 def home():
@@ -318,7 +319,29 @@ def page_projet_perso(username, idProj):
 		return render_template("consult_own_project.html", projet = proj,username=username,id=idProj)
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
+# <<<<<<< HEAD
+# @app.route("/projets")
+# def page_projets():
+# 	return render_template("accueil_projet.html")
+
+# route vers un projet perso en fonction de l'ID
+
+# @app.route("/projets/<idProj>/")
+# def page_projet_perso(idProj):
+	# proj = get_proj(idProj)
+	# if proj:
+	# 	return render_template("consult_own_project.html", projet = proj)
+	# else:
+	# 	return "Projet inconnu"
+	# Pour plus tard
+# @app.route("/projets/0")
+# def page_projet_perso():
+# 	return render_template("consult_own_project.html")
+
+# =======
+# >>>>>>> Arthur/master
 # route vers la creation d'un MCD en fonction de l'ID du projet
+
 
 @app.route("/projets/<string:username>/<int:idProj>/new-attributs")
 @login_required
@@ -362,3 +385,67 @@ def page_modif_attributs(username, idProj):
 @login_required
 def page_creer_relations(username, idProj):
 	return render_template("new_relations.html",username=username,id=idProj)
+
+class CreaMCDForm(FlaskForm):#Formulaire de création d'un MCD
+	listeAttribut=SelectField('Attributs',choices=[])
+
+	def addEntite(self,nomEntite,idEntite):
+		E=Entite(nomEntite=nomEntite)
+		db.session.add(E)
+
+	def moveAttribut(self,idEntite,idAttribut):
+		A=Attributs.query.filter_by(id=idAttribut)
+		A.entite_id=idEntite
+		db.session.commit()
+
+@app.route("/projets/0/new-mcd")
+@login_required
+def page_creer_mcd():
+	return render_template("create_mcd.html")
+
+# route vers l'ajout d'une entité
+
+@app.route("/projets/<string:username>/<int:idProj>/new_entity")
+def page_ajouter_entite(username,idProj):
+	M=CreaMCDForm(request.form)
+	M.listeAttribut.choices = get_attributs_projet(idProj)
+	proj = get_proj(idProj)
+	if proj != None:
+		return render_template("add_entity.html", projet = proj,username=username,id=idProj,attributs=M.listeAttribut.choices, form=M)
+	return redirect(url_for('page_projets', username=username, n=1, i=1))
+
+# @app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
+# def save_entity(username,idProj):
+# 	nbAtt = request.form.get("nbAtt")
+# 	nbEnt = request.form.get("nbEnt")
+# 	proj = get_proj(idProj)
+# 	for i in range(1, int(nbEnt)+1):
+# 		if request.method=="POST":
+# 			ent = Entite(id=i, projet_id=idProj, nomEntite=request.form.get("nom"+str(i-1)), positionEntite=i)
+# 			db.session.add(ent)
+# 			db.session.commit()
+# 	for y in range(1, int(nbAtt)+1):
+# 		if request.method=="POST":
+# 			 att = Attributs.query.get(request.form.get("idAtt"))
+# 			 att.entite_id = request.form.()
+# 			 get("nbEnt")
+# 			 db.session.commit()
+# 	return render_template("relation_resume.html")
+
+# route vers le résumé des relations d'un MCD
+
+@app.route("/projets/<string:username>/<int:idProj>/relation_resume")
+def page_resume_relation():
+	return render_template("relation_resume.html")
+
+# route vers la Premier etape de la creation d'une relation
+
+@app.route("/projets/<string:username>/<int:idProj>/new_relation1")
+def page_ajouter_relation1():
+	return render_template("new_relation1.html")
+
+# route vers le resumer d'un MCD
+
+@app.route("/projets/<string:username>/<int:idProj>/mcd_resume")
+def page_resume_mcd():
+	return render_template("mcd_resume.html")

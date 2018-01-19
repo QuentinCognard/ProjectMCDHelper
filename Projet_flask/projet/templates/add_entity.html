@@ -1,0 +1,251 @@
+{% extends "base_excerciseur.html" %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
+{% endblock %}
+{% block contain %}
+<form role="form" method="POST" class="bd-example" action="{{ url_for('save_entity', username=username, idProj=id) }}">
+  <fieldset class="lesentites">
+
+
+<!-- Cette div devra se répéter autant de fois qu'il y a d'entité -->
+
+    <div class="bordmcd">
+      <legend>Nouveau MCD</legend>
+      <p>
+        <label for="input">Nom Entité :</label>
+        <input type="text" id="nameent" nom= "nom0" placeholder="Nom de l'entité" />
+      </p>
+
+      <input id="hiddenEnt" type="hidden" name="nbEnt" value="0">
+
+    <div class="lesattributs">
+    <div class="attEntite">
+      <p>
+        <label for="select">Nom attribut :</label>
+        <input id="hiddenAtt" type="hidden" name="nbAtt" value="0">
+        <select id="lesatt0" name="lesatt0">
+          {% for attribut in form.listeAttribut.choices %}
+            <option value=attribut>{{ attribut.nomAttribut }}</option>
+          {% endfor %}
+
+        </select>
+      </p>
+
+      <p>
+        <label for="input"> Clé primaire </label>
+          <input id="checkprimary" type="checkbox">
+      </p>
+    </div>
+  </div>
+
+    <p>
+      <button class ="btn btn-info" type="button" onClick="ajouteAttribut('0')">Ajouter Attribut</button>
+    </p>
+
+    </div>
+
+    <div>
+      <p>
+        <button class ="btn btn-primary" type="button" onClick="ajouteEntite()">Ajouter Entité</button>
+      </p>
+      <a href="/projets" class="btn btn-danger" role="button">Annuler</a>
+
+
+      <input class="btn btn-success" type="submit" value="Ajouter les Entités"></input>
+    </div>
+
+  </fieldset>
+</form>
+
+<script>
+
+  var nbAtt = 0;
+  var nbEnt = 0;
+
+  firstdiv = document.querySelector(".bordmcd");
+  firstdiv.id="ent"+nbEnt;
+
+  // supprime une entite
+  function removeEntite(id){
+    var parent = document.querySelector(".lesentites");
+    var child = document.getElementById(id);
+    // document.write(parent.id);
+    // document.write(child.id);
+    parent.removeChild(child);
+    nbEnt --;
+  }
+
+  // supprime un attribut d'une entite
+    function removeAttribut(attid,entid){
+      var child = document.getElementById(attid);
+      var parent = document.getElementById(entid);
+      var divattParent = parent.querySelector(".lesattributs");
+      // document.write(parent);
+    divattParent.removeChild(child);
+    nbAtt --;
+  }
+
+  // ajoute une entite
+  function ajouteEntite(){
+      nbEnt += 1;
+      var divEntite = document.createElement("div");
+      divEntite.className="bordmcd";
+      divEntite.id = "ent"+nbEnt;
+
+      var hidEnt=document.getElementById("hiddenEnt");
+      hidEnt.value=nbEnt;
+
+
+      var divActuel = document.querySelector(".bordmcd");
+      document.querySelector(".lesentites").insertBefore(divEntite,divActuel.nextSibling);
+
+      ajouteSuppButtonEnt(divEntite);
+      ajouteNom(divEntite);
+      ajouteDivAtt(divEntite);
+      ajouteAttribut(nbEnt);
+      ajouteAttributBouton(divEntite);
+      // ajouteValeur(divAttribut);
+      // ajouteQuantite(divAttribut);
+      // ajouteGenre(divAttribut);
+      // document.write(divEntite.querySelector(".lesattributs"));
+
+
+  }
+
+  // ajoute le bouton de supression d'une entité
+  function ajouteSuppButtonEnt(divEntite){
+    var bouton = document.createElement("button");
+    divEntite.appendChild(bouton);
+    var textBouton = document.createTextNode("-");
+    bouton.appendChild(textBouton);
+    bouton.className = "btn btn-danger";
+    bouton.type = "button";
+    bouton.id = divEntite.id;
+    bouton.onclick = function(){removeEntite(divEntite.id)};
+  }
+
+  // ajoute le champde saisie du nom d'une entite
+  function ajouteNom(divEntite){
+      var p1 = document.createElement("p");
+      divEntite.appendChild(p1)
+      var labNomEnt = document.createElement("label");
+      labNomEnt.for="input";
+      var textNom = document.createTextNode("Nom Entité :");
+      labNomEnt.appendChild(textNom);
+      var inputNomEnt = document.createElement("input");
+      inputNomEnt.id = "nom"+nbEnt;
+      inputNomEnt.name = "nom"+nbEnt;
+      inputNomEnt.type="text";
+      inputNomEnt.placeholder="Nom de l'entité";
+      inputNomEnt.required="required";
+      p1.appendChild(labNomEnt);
+      p1.appendChild(inputNomEnt);
+  }
+
+  function ajouteAttributBouton(divEntite){
+    var p2 = document.createElement("p");
+    divEntite.appendChild(p2);
+    var bouton = document.createElement("button");
+    var textBouton = document.createTextNode("Ajouter Attribut");
+    bouton.appendChild(textBouton);
+    bouton.className = "btn btn-info";
+    bouton.type = "button";
+    var nbEntStati = nbEnt;
+    bouton.id = nbEnt;
+    bouton.onclick = function(){ajouteAttribut(nbEntStati)};
+    p2.appendChild(bouton);
+  }
+
+  // ajoute la division des attributs
+  function ajouteDivAtt(divEntite){
+    var divatt=document.createElement("div");
+    divatt.className="lesattributs";
+    divEntite.appendChild(divatt);
+  }
+
+  // ajoute un attribut
+  function ajouteAttribut(nbEntS){
+      nbAtt += 1;
+      var parent = document.getElementById("ent"+nbEntS);
+
+      var divAttribut = document.createElement("div");
+      divAttribut.className="attEntite";
+      divAttribut.id = "att"+nbAtt;
+
+
+      ajouteSuppButtonAtt(divAttribut,parent);
+      ajouteNomAtt(divAttribut);
+      ajouteCle(divAttribut);
+      // ajouteValeur(divAttribut);
+      // ajouteQuantite(divAttribut);
+      // ajouteGenre(divAttribut);
+      // var divActuel = document.querySelector(".attEntite");
+      // divEntite.querySelector(".lesattributs").insertBefore(divAttribut, divActuel.nextSibling);
+      var lesatt=parent.querySelector(".lesattributs");
+      lesatt.appendChild(divAttribut);
+
+      // document.write(divEntiteCourante.id);
+      // document.write(divEntiteCourante.id);
+      // document.write(divAttribut.id);
+      // document.write(divActuel.id);
+
+      // divEntite.appendChild(divAttribut);
+  }
+
+  // ajoute le bouton de supression d'une entité
+  function ajouteSuppButtonAtt(divAttribut,parent){
+    var bouton = document.createElement("button");
+    divAttribut.appendChild(bouton);
+    var textBouton = document.createTextNode("-");
+    bouton.appendChild(textBouton);
+    bouton.className = "btn btn-danger";
+    bouton.type = "button";
+    bouton.id = divAttribut.id;
+    bouton.onclick = function(){removeAttribut(divAttribut.id,parent.id)};
+  }
+
+  // ajoute le champ de choix des attributs
+  function ajouteNomAtt(divAttribut){
+    var p2 = document.createElement("p");
+    divAttribut.appendChild(p2);
+    var labTypeAtt = document.createElement("label");
+    labTypeAtt.for = "select";
+    var textType = document.createTextNode("Choisir un attribut :");
+    labTypeAtt.appendChild(textType);
+    var hidAtt=document.getElementById("hiddenAtt");
+    hidAtt.value=nbAtt;
+    var selTypeAtt = document.createElement("select");
+    selTypeAtt.id = "lesatt"+nbAtt;
+    selTypeAtt.name = "lesatt"+nbAtt;
+    p2.appendChild(labTypeAtt);
+    p2.appendChild(selTypeAtt);
+    {% for attribut in form.listeAttribut.choices %}
+      // var hidAtt = document.getElementById("hiddenAtt");
+      // hidAtt.value=attribut.id;
+      var optatt = document.createElement("option");
+      optatt.value = "{{ attribut.nomAttribut }}";
+      var textOptatt = document.createTextNode("{{ attribut.nomAttribut }}");
+      optatt.appendChild(textOptatt);
+      selTypeAtt.appendChild(optatt);
+    {% endfor %}
+  }
+
+  function ajouteCle(divAttribut){
+    var p1 = document.createElement("p");
+    divAttribut.appendChild(p1)
+    var labCle = document.createElement("label");
+    labCle.for="input";
+    var textCle = document.createTextNode(" Clé primaire ");
+    labCle.appendChild(textCle);
+    var inputCle = document.createElement("input");
+    inputCle.id="checkprimary";
+    inputCle.type="checkbox";
+    p1.appendChild(labCle);
+    p1.appendChild(inputCle);
+  }
+
+
+
+</script>
+{% endblock %}

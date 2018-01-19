@@ -90,11 +90,7 @@ def importer_donnees(filename):
     # print("Dictionnaire entite : ", dictionnaire_entite_attribut)
     # print("Dictionnaire relation : ", dictionnaire_relation)
 
-importer_donnees("test.txt")
-
 
 def ecrire_Entite(filename):
     fichier = open(os.path.join(mkpath('static/MCD/Lucas/'), filename), "w")
     fichier.close()
-
-ecrire_Entite("test2.txt")
