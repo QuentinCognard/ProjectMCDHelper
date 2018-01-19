@@ -5,6 +5,7 @@ from wtforms import *
 from wtforms.validators import *
 from flask_login import login_user, current_user, login_required, logout_user
 from .models import *
+from .bibliotheque import *
 from hashlib import sha256
 from werkzeug.utils import secure_filename
 import os

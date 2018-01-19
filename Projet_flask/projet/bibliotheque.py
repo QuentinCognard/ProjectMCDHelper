@@ -1,5 +1,7 @@
 import os
 import os.path
+from .app import *
+from .models import *
 
 
 def mkpath(p):
@@ -80,8 +82,11 @@ def importer_donnees(filename):
     mcd_textuel = fichier.read()
     dictionnaire_entite_attribut = recup_entite_attribut_textuel(mcd_textuel)
     dictionnaire_relation = recup_relation_textuel(mcd_textuel)
+    print("############################    Entites    ############################")
     ajouter_entite(dictionnaire_entite_attribut)
+    print("\n############################    Relations    ############################")
     ajouter_relation(dictionnaire_relation)
+    print(get_all_login())
     # print("Dictionnaire entite : ", dictionnaire_entite_attribut)
     # print("Dictionnaire relation : ", dictionnaire_relation)
 
