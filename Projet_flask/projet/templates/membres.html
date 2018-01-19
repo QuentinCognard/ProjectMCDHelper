@@ -22,7 +22,7 @@
       <h3> Vous n'avez pas l'autorisation de supprimer, de modifier ou d'ajouter des membres. Demandez aux membres master d'effectuer les actions nécessaires.</h3>
     </div>
   {% else %}
-    <a href="{{ url_for('add_membre',username=username,nomProj=nomProj)}}"><input type="Submit" value="Ajouter Membre"></a>
+    <a href="{{ url_for('add_membre',username=username,nomProj=nomProj)}}"><input class="btn btn-success" type="Submit" value="Ajouter Membre"></a>
   </div>
     <div id="modif">
     <select id="select">
@@ -49,8 +49,8 @@
       }
       </script>
       <div id="input">
-        <input type="Submit" value="Modifier" onclick="modifier()">
-        <input type="Submit" value="Supprimer" onclick="supprimer()">
+        <input type="Submit" class="btn btn-warning" value="Modifier" onclick="modifier()">
+        <input type="Submit" class="btn btn-danger" value="Supprimer" onclick="supprimer()">
       </div>
   </div>
   {% with messages = get_flashed_messages() %}

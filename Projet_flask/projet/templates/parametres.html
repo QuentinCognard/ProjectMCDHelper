@@ -17,10 +17,10 @@
     <legend> Paramètres du projet : {{ nomProj }}</legend>
     <section class="projets" id='sectionParam'>
       <div id='gestionMembres'>
-        <a  href="{{url_for('membres',username= username ,nomProj=nomProj )}}"><input type="Submit" value="Gestion des membres"></a> <p> Ajoutez, supprimez ou modifiez des membres ! </p>
+        <a  href="{{url_for('membres',username= username ,nomProj=nomProj )}}"><input class="btn btn-default" type="Submit" value="Gestion des membres"></a> <p> Ajoutez, supprimez ou modifiez des membres ! </p>
       </div> </br>
       <div id='modifProj'>
-        <a href="{{ url_for('modifProj',username=username,nomProj=nomProj)}}"><input type="Submit" value="Modification du projet"></a> <p> Modifiez le nom et la description du projet. </p>
+        <a href="{{ url_for('modifProj',username=username,nomProj=nomProj)}}"><input class="btn btn-default" type="Submit" value="Modification du projet"></a> <p> Modifiez le nom et la description du projet. </p>
       </div>
       <script>
       function active(){
@@ -44,7 +44,7 @@
          </section>
        </div></br>
       <div id='suppProjet'>
-        <input type="Submit" onclick=active() value="Supprimer le Projet"> <p> Supprime le projet <u> définitivement </u>  </p>
+        <input type="Submit" onclick=active() class="btn btn-danger" value="Supprimer le Projet"> <p> Supprime le projet <u> définitivement </u>  </p>
       </div>
     </br>
     <p id='nonMaster'> </p>

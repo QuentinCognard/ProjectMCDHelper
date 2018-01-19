@@ -2,9 +2,11 @@
 {% block styles %}
 {{super()}}
 <link rel="stylesheet" href="{{url_for('static', filename='addProjet.css')}}">
+<link rel="stylesheet" href= "{{url_for('static',filename='description.css') }}"/>
 {% endblock %}
 {% block contain %}
 <body onmouseover="notif()">
+  <a id="retour" href="{{url_for('page_projets',username=current_user.login,n=1,i=1)}}"><input type="Submit"  value="< Retour"></a></br>
 {% if current_user.login==username %}
 <h1>Ajouter un projet :</h1>
 <form role="form" method="POST"><!--Formulaire de création de projet-->
@@ -41,7 +43,7 @@
     {% endfor %}
   </ul>
   {% endif %}
-  <input class="btn btn-default" type="submit" value="Enregistrez">
+  <input class="btn btn-success" type="submit" value="Enregistrez">
 </form>
 {% else %}
   <h1>Vous n'avez pas le droit d'accéder à cette page</h1>

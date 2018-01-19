@@ -124,3 +124,9 @@ form{
 #addretour{
   margin-bottom: 2em;
 }
+#moins{
+  display: none;
+}
+#voirplus{
+  display: block;
+}
