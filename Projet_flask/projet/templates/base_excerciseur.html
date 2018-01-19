@@ -1,6 +1,9 @@
 <title>Exerciseur MCD</title>
 {% block styles %}
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="{{url_for('static',filename='base_exerciseur.css')}}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 {% endblock %}
 {% block scripts %}
 <script>
@@ -13,6 +16,13 @@ function notif(){
     document.getElementById('nb').style.padding = "0.2em";
 
   }
+  $('[data-toggle="popover"]').popover();
+
+
+}
+
+function sendreponse(reponse,id,username,user){
+  document.location.href="/projets/"+username+"/"+user+"/"+id+"/"+reponse
 }
 </script>
 {% endblock %}
@@ -24,7 +34,22 @@ function notif(){
    </div>
 
    <ul class="nav navbar-nav navbar-right">
-     <li><a id="notif" href="#"><span class="glyphicon glyphicon-bell"></span>Notifications</a></li>
+     <li><button  class="btn btn-default " data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" id="notif"><span class="glyphicon glyphicon-bell"></span>Notifications></button>
+       <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+         {% for i in range(nbnotif) %}
+          <li><a data-toggle="popover" data-trigger="hover"  data-placement="left" data-container="body" title="{{notifs[i].nom}}" data-content="{{notifs[i].texte}}" id="titre{{i}}"
+            >{{notifs[i].nom}} <span class="glyphicon glyphicon-info-sign"></span>
+            <div id="reponse">
+            <input class="btn btn-success" type="Submit" onclick="sendreponse('y',{{notifs[i].idProj}},'{{notifs[i].expediteur}}','{{current_user.login}}')" value="Oui">
+            <input class="btn btn-danger" type="Submit" onclick="sendreponse('n',{{notifs[i].idProj}},'{{notifs[i].expediteur}}','{{current_user.login}}')" value="Non"></div>
+          <p id="info">La réponse vous ramènera à l'accueil</p></a></li>
+          {% if i !=nbnotif-1 %}
+            <li role="separator" class="divider"></li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+
+     </li>
      <li><a href="{{url_for('accueil_compte')}}"><span class="glyphicon glyphicon-user"></span> {{current_user.login}}</a></li>
       <li><a href="{{url_for('deconnexion')}}"><span class="glyphicon glyphicon-log-in"></span> Déconnexion</a></li>
    </ul>

@@ -176,7 +176,7 @@ def page_projets(username,n,i):
 	search = SearchForm(request.form)
 	if request.method == 'POST':
 		return search_results(search,username)
-	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=search,n=n,i=i,droite=droiteok,droite2=droite2ok,search=False,username=username,nbnotif=get_nb_notifications(username))
+	return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=search,n=n,i=i,droite=droiteok,droite2=droite2ok,search=False,username=username,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 class ProjetForm(FlaskForm):#Formulaire de création de projet
 	name = StringField('Nom Projet',[validators.Length(min=4, max=25)])
@@ -203,33 +203,46 @@ def add_projets(username):
 			return redirect(url_for("page_projets",username=username,n=1,i=1))
 		return render_template(
 			"add-projet.html",
-			form=P ,username=username,nbnotif=get_nb_notifications(username))
+			form=P ,username=username,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	return render_template(
 		"add-projet.html",
-		form=P ,username=username,nbnotif=get_nb_notifications(username))
+		form=P ,username=username,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 @app.route("/projets/<string:username>/<string:nomProj>/description")
 @login_required
 def description(username,nomProj):
 	membres=get_gerer_byProjet(get_Projet_byName(nomProj).nomProj)
-	return render_template("description-projet.html",projet=get_Projet_byName(nomProj),membres=membres,nbnotif=get_nb_notifications(username),master=get_master_proj(nomProj))
+	return render_template("description-projet.html",projet=get_Projet_byName(nomProj),membres=membres,nbnotif=get_nb_notifications(username),master=get_master_proj(nomProj),notifs=get_notifications(username))
 
 @app.route("/projets/<string:username>/<string:nomProj>/description/<string:master>/notif")
 @login_required
 def demande(username,nomProj,master):
-	N=Notification(nom="Demande de "+username,
-	expediteur=username,destinataire=master,
-	texte="Demande de participation à votre projet "+nomProj+" de "+username,
-	vu=False)
-	db.session.add(N)
-	db.session.commit()
-	flash("Demande envoyée")
+	if get_notif_byexp_dest_nom("Demande de "+username,username,master,get_Projet_byName(nomProj).id)!=[]:
+		flash("Demande déjà envoyé")
+	else:
+		N=Notification(nom="Demande de "+username,
+		expediteur=username,destinataire=master,idProj=get_Projet_byName(nomProj).id,
+		texte="Demande de participation à votre projet "+nomProj+" de "+username+". Il sera ajouté en visiteur.",
+		vu=False)
+		db.session.add(N)
+		db.session.commit()
+		flash("Demande envoyée")
 	return redirect("projets/"+username+"/1/1")
+@app.route("/projets/<string:username>/<string:user>/<int:id>/<string:reponse>")
+def reponsedemande(username,id,reponse,user):
+	if reponse=="y":
+		db.session.add(Gerer(id,username,3))
+		db.session.commit()
+		flash(username+" a bien été ajouté au projet")
+	db.session.delete(get_notif_byexp_dest_id(username,user,id))
+	db.session.commit()
+	return redirect("/projets/"+user+"/1/1")
+
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres")
 @login_required
 def parametresProj(username,nomProj):
 	gerer=get_gerer_byNom(nomProj,username)
-	return render_template("parametres.html",username=username,nomProj=nomProj,gerer=gerer,nbnotif=get_nb_notifications(username))
+	return render_template("parametres.html",username=username,nomProj=nomProj,gerer=gerer,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/suppProj")
 def suppProj(username,nomProj):
@@ -249,9 +262,9 @@ def suppProj(username,nomProj):
 def membres(username,nomProj):
 	membresProj=get_gerer_byProjet(nomProj)
 	if( get_nom_droit(get_gerer_byNom(nomProj,username).droit_id) == "master"):
-		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=True,nbnotif=get_nb_notifications(username))
+		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=True,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	else:
-		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=False,nbnotif=get_nb_notifications(username))
+		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=False,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres/add", methods=['GET', 'POST'])
 @login_required
@@ -271,7 +284,7 @@ def add_membre(username,nomProj):
 		db.session.add(Gerer(get_Projet_byName(nomProj).id,D.login.data,D.droit.data))
 		db.session.commit()
 		return redirect(url_for("membres",username=username,nomProj=nomProj))
-	return render_template("add-membre.html",username=username,nomProj=nomProj,form=D,nbnotif=get_nb_notifications(username))
+	return render_template("add-membre.html",username=username,nomProj=nomProj,form=D,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/modif/<string:droit>/<string:nom>",methods=['GET', 'POST'])
@@ -314,13 +327,13 @@ def search_results(search,username):
 		flash('Pas de résultats')
 		return redirect('/projets/'+username+'/1/1')
 	else:
-		return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=SearchForm(request.form),n=1,i=1,droite=False,droite2=False,search=True,username=username,nbnotif=get_nb_notifications(username))
+		return render_template("accueil_projet.html",mesproj=proj,tousproj=projets,form=SearchForm(request.form),n=1,i=1,droite=False,droite2=True,search=True,username=username,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj")
 @login_required
 def modifProj(username,nomProj):
 	P = ProjetForm(name=nomProj,description=get_Projet_byName(nomProj).descProj)
-	return render_template('modifProj.html',form=P,username=username,nomProj=nomProj,nbnotif=get_nb_notifications(username))
+	return render_template('modifProj.html',form=P,username=username,nomProj=nomProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj/save",methods=['GET', 'POST'])
 @login_required
@@ -366,7 +379,7 @@ def quitter(username,nomProj):
 def page_projet_perso(username, idProj):
 	proj = get_projet(username, idProj)
 	if proj != None:
-		return render_template("consult_own_project.html", projet = proj,username=username,id=idProj,nbnotif=get_nb_notifications(username))
+		return render_template("consult_own_project.html", projet = proj,username=username,id=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 # route vers la creation d'un MCD en fonction de l'ID du projet
 

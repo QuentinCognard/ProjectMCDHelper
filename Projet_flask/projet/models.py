@@ -87,6 +87,7 @@ class Notification(db.Model):
     nom= db.Column(db.Integer, primary_key=True)
     expediteur=db.Column(db.String(100),db.ForeignKey("user.login"),primary_key=True)
     destinataire=db.Column(db.String(100),db.ForeignKey("user.login"),primary_key=True)
+    idProj=db.Column(db.Integer,db.ForeignKey("projet.id"), primary_key=True)
     texte=db.Column(db.String(300))
     vu=db.Column(db.Boolean,default=False)
     date=db.Column(db.DateTime, nullable=False,default=datetime.utcnow)
@@ -96,7 +97,7 @@ def get_nb_notifications(nom):
     return len(Notification.query.filter(Notification.destinataire==nom,Notification.vu==False).all())
 
 def get_notifications(nom):
-    return Notification.query.filter(Notification.destinataire==nom).all()
+    return Notification.query.filter(Notification.destinataire==nom).order_by(Notification.date).all()
 
 def get_user(login):
     User = User.query.filter(User.login==login).all()
@@ -192,3 +193,9 @@ def get_master_proj(nomProj):
         if p.droit_id==1:
             return p.user_login
     return None
+
+def get_notif_byexp_dest_id(exp,dest,id):
+    return Notification.query.filter(Notification.expediteur==exp,Notification.destinataire==dest,Notification.idProj==id).first()
+
+def get_notif_byexp_dest_nom(nom,exp,dest,id):
+    return Notification.query.filter(Notification.nom==nom,Notification.expediteur==exp,Notification.destinataire==dest,Notification.idProj==id).all()
