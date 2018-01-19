@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block contain %}
-<form role="form" method="POST">
+<form role="form" method="POST" action="{{ url_for('save_modifProj',username=username,nomProj=nomProj) }}">
   <fieldset class="lesentites">
 
 

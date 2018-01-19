@@ -375,21 +375,21 @@ def page_creer_mcd():
 @app.route("/projets/0/new_entity")
 def page_ajouter_entite():
 	return render_template("add_entity.html")
-# def add_entity(username):
-# 	P = ProjetForm(request.form)
-# 	if request.method == 'POST': #Si le formulaire a été rempli
-# 		if P.validate_on_submit():
-# 			P.createProjet(P.name.data,P.description.data) #création nouveau projet
-# 			gerer=Gerer(get_Projet_byName(P.name.data).id, username, 1)
-# 			db.session.add(gerer)
-# 			db.session.commit()
-# 			return redirect(url_for("page_projets",username=username,n=1,i=1))
-# 		return render_template(
-# 			"add-projet.html",
-# 			form=P ,username=username)
-# 	return render_template(
-# 		"add-projet.html",
-# 		form=P ,username=username)
+def add_entity(username):
+	P = CreaMCDForm()
+	if request.method == 'POST': #Si le formulaire a été rempli
+		if P.validate_on_submit():
+			P.createProjet(P.name.data,P.description.data) #création nouveau projet
+			gerer=Gerer(get_Projet_byName(P.name.data).id, username, 1)
+			db.session.add(gerer)
+			db.session.commit()
+			return redirect(url_for("page_projets",username=username,n=1,i=1))
+		return render_template(
+			"add-projet.html",
+			form=P ,username=username)
+	return render_template(
+		"add-projet.html",
+		form=P ,username=username)
 
 # route vers le résumé des relations d'un MCD
 
