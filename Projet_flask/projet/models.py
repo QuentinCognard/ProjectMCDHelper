@@ -192,3 +192,7 @@ def get_master_proj(nomProj):
         if p.droit_id==1:
             return p.user_login
     return None
+
+
+def test(test):
+     return db.session.query(Projet).filter(Projet.nomProj.like("%" + test + "%")).all()
