@@ -50,11 +50,10 @@ class Entite(db.Model):
 class Attributs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key=True)
-    entite_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
+    entite_id = db.Column(db.Integer, db.ForeignKey("entite.id"))
     nomAttribut = db.Column(db.String(100))
     genreAttribut = db.Column(db.String(100))
     typeAttribut = db.Column(db.String(100))
-    valeurAttribut = db.Column(db.String(100))
     actifAttribut = db.Column(db.String(100))
     entite = db.relationship("Entite", foreign_keys=[entite_id], backref=db.backref("projetEntite", lazy="dynamic"))
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetAttribut", lazy="dynamic"))
@@ -169,3 +168,6 @@ def get_user_projet(nomProj):
     for g in gerer:
         res.append(g.user_login)
     return res
+
+def get_attributs_proj(idProj):
+    return Attributs.query.filter(Attributs.projet_id == idProj).all()

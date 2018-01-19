@@ -13,8 +13,11 @@
             <legend>{{ projet.nomMCD }}</legend>
             <img src="{{url_for('static',filename='mcd.png')}}">
           </fieldset>
-          <a href="{{ current_user.login }}/{{ p.id }}"><input type="submit" value="Consulter"></a>
-          <a href="#"><input type="submit" value="Supprimer"></a>
+          <div class="pt-md-3 pb-md-4">
+            <a role="button" class="btn btn-primary btn-lg" href="#">Consulter</a>
+            <a role="button" class="btn btn-primary btn-lg" href="{{ url_for('page_modif_attributs', username=username, idProj=id) }}" >Modifier</a>
+            <a role="button" class="btn btn-primary btn-lg" href="#" >Supprimer</a>
+          </div>
         </div>
       {% endif %}
     </div>
