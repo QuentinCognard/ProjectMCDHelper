@@ -182,8 +182,8 @@ class ProjetForm(FlaskForm):#Formulaire de création de projet
 	name = StringField('Nom Projet',[validators.Length(min=4, max=25)])
 	description =StringField('Description',[validators.Length(min=10, max=150)])
 	def createProjet(self,name,description):
-		P=Projet(nomProj=name,nomMCD="",descProj=description)
-		db.session.add(P)
+			P=Projet(nomProj=name,nomMCD="",descProj=description)
+			db.session.add(P)
 
 class DroitProjForm(FlaskForm):#formulaire pour avoir 2 liste déroulantes avec les users et les droits
 	login=SelectField('Login',choices=[])
@@ -196,10 +196,25 @@ def add_projets(username):
 	P = ProjetForm(request.form)
 	if request.method == 'POST': #Si le formulaire a été rempli
 		if P.validate_on_submit():
-			P.createProjet(P.name.data,P.description.data) #création nouveau projet
-			gerer=Gerer(get_Projet_byName(P.name.data).id, username, 1)
-			db.session.add(gerer)
-			db.session.commit()
+			if get_Projet_byName(P.name.data)==None:
+				P.createProjet(P.name.data,P.description.data) #création nouveau projet
+				gerer=Gerer(get_Projet_byName(P.name.data).id, username, 1)
+				db.session.add(gerer)
+				db.session.commit()
+			else:
+				max_sup = 1
+				for projet in test("TestProjet"):
+					if len(projet.nomProj.split("(")) > 1:
+						if max_sup <= int(projet.nomProj.split("(")[1].split(")")[0]):
+							max_sup = int(projet.nomProj.split("(")[1].split(")")[0]) + 1
+				if max_sup == 1:
+					P.createProjet(P.name.data + "(1)",P.description.data) #création nouveau projet
+					gerer=Gerer(get_Projet_byName(P.name.data+"(1)").id, username, 1)
+				else:
+					P.createProjet(P.name.data + "(" + str(max_sup) + ")",P.description.data) #création nouveau projet
+					gerer=Gerer(get_Projet_byName(P.name.data + "(" + str(max_sup) + ")").id, username, 1)
+				db.session.add(gerer)
+				db.session.commit()
 			return redirect(url_for("page_projets",username=username,n=1,i=1))
 		return render_template(
 			"add-projet.html",
@@ -339,18 +354,35 @@ def modifProj(username,nomProj):
 @login_required
 def save_modifProj(username,nomProj):
 	P = ProjetForm()
+	affiche=P.name.data
 	projetCourant=get_Projet_byName(nomProj)
-	print(projetCourant.nomProj)
-	print(projetCourant.descProj)
-	if P.validate_on_submit():
-		if P.name.data != "":
-			projetCourant.nomProj = P.name.data
-		if P.description.data != "":
-			projetCourant.descProj = P.description.data
-		db.session.commit()
-		return redirect(url_for('parametresProj',username=username,nomProj=P.name.data))
-		flash("Le projet à bien été modifié")
-	flash("Impossible de modifié le projet, le nom ou la description est trop court(e) ou trop long")
+	if projetCourant.nomProj==P.name.data:
+		flash("le nom n'a pas changé")
+	else:
+		if P.validate_on_submit():
+				if P.name.data != "":
+					if get_Projet_byName(P.name.data)==None:
+						projetCourant.nomProj = P.name.data
+					else:
+							max_sup = 1
+							for projet in test("TestProjet"):
+								if len(projet.nomProj.split("(")) > 1:
+									if max_sup <= int(projet.nomProj.split("(")[1].split(")")[0]):
+										max_sup = int(projet.nomProj.split("(")[1].split(")")[0]) + 1
+							if max_sup == 1:
+								projetCourant.nomProj=P.name.data + "(1)"
+								affiche=P.name.data + "(1)"
+							else:
+								projetCourant.nomProj=P.name.data + "(" + str(max_sup) + ")"
+								affiche=P.name.data + "(" + str(max_sup) + ")"
+				if P.description.data != "":
+					projetCourant.descProj = P.description.data
+				db.session.commit()
+				return redirect(url_for('parametresProj',username=username,nomProj=affiche))
+				flash("Le projet à bien été modifié")
+
+
+		flash("Impossible de modifié le projet, le nom ou la description est trop court(e) ou trop long")
 	return redirect(url_for('modifProj',username=username,nomProj=nomProj))
 
 @app.route("/projets/<string:username>/<string:nomProj>/quitter")

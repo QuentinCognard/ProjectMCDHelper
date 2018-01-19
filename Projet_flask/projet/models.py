@@ -194,8 +194,13 @@ def get_master_proj(nomProj):
             return p.user_login
     return None
 
+
 def get_notif_byexp_dest_id(exp,dest,id):
     return Notification.query.filter(Notification.expediteur==exp,Notification.destinataire==dest,Notification.idProj==id).first()
 
 def get_notif_byexp_dest_nom(nom,exp,dest,id):
     return Notification.query.filter(Notification.nom==nom,Notification.expediteur==exp,Notification.destinataire==dest,Notification.idProj==id).all()
+
+
+def test(test):
+     return db.session.query(Projet).filter(Projet.nomProj.like("%" + test + "%")).all()
