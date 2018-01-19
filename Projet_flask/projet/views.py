@@ -372,39 +372,41 @@ def page_creer_mcd():
 
 # route vers l'ajout d'une entité
 
-@app.route("/projets/0/new_entity")
-def page_ajouter_entite():
-	return render_template("add_entity.html")
-def add_entity(username):
-	P = CreaMCDForm()
-	if request.method == 'POST': #Si le formulaire a été rempli
-		if P.validate_on_submit():
-			P.createProjet(P.name.data,P.description.data) #création nouveau projet
-			gerer=Gerer(get_Projet_byName(P.name.data).id, username, 1)
-			db.session.add(gerer)
-			db.session.commit()
-			return redirect(url_for("page_projets",username=username,n=1,i=1))
-		return render_template(
-			"add-projet.html",
-			form=P ,username=username)
-	return render_template(
-		"add-projet.html",
-		form=P ,username=username)
+@app.route("/projets/<string:username>/<int:idProj>/new_entity")
+def page_ajouter_entite(username,idProj):
+	proj = get_projet(username, idProj)
+	attributs= get_attributs_projet(idProj)
+
+	if proj != None:
+		return render_template("add_entity.html", projet = proj,username=username,id=idProj,attributs=attributs)
+	return redirect(url_for('page_projets', username=username, n=1, i=1))
+
+def save_entity(username,idProj):
+	nbAtt = request.form.get("nbAtt")
+	nbEnt = request.form.get("nbAtt")
+	proj = get_projet(username, idProj)
+	for i in range(1, int(nbEnt)+1):
+		ent = Entite(id=i, projet_id=idProj, nomEntite=request.form.get("nom"+str(i-1)), positionEntite=i)
+		db.session.add(ent)
+	for y in range(1, int(nbAtt)+1):
+		 att = Attributs.query.get()
+	db.session.commit()
+
 
 # route vers le résumé des relations d'un MCD
 
-@app.route("/projets/0/relation_resume")
+@app.route("/projets/<string:username>/<int:idProj>/relation_resume")
 def page_resume_relation():
 	return render_template("relation_resume.html")
 
 # route vers la Premier etape de la creation d'une relation
 
-@app.route("/projets/0/new_relation1")
+@app.route("/projets/<string:username>/<int:idProj>/new_relation1")
 def page_ajouter_relation1():
 	return render_template("new_relation1.html")
 
 # route vers le resumer d'un MCD
 
-@app.route("/projets/0/mcd_resume")
+@app.route("/projets/<string:username>/<int:idProj>/mcd_resume")
 def page_resume_mcd():
 	return render_template("mcd_resume.html")

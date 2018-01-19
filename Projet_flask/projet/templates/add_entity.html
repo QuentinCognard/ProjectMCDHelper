@@ -3,9 +3,8 @@
 {{ super() }}
 <link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
 {% endblock %}
-
 {% block contain %}
-<form role="form" method="POST" action="{{ url_for('save_modifProj',username=username,nomProj=nomProj) }}">
+<form method='post' class="bd-example" action="{{ url_for('save_entity', username=username, idProj=id ) }}">
   <fieldset class="lesentites">
 
 
@@ -15,24 +14,17 @@
       <legend>Nouveau MCD</legend>
       <p>
         <label for="input">Nom Entité :</label>
-        <input type="text" id="nameent" placeholder="Nom de l'entité" />
+        <input type="text" id="nameent" nom= "nom0" placeholder="Nom de l'entité" />
       </p>
-
-      <input id="hiddenEnt" type="hidden" name="nbEnt" value="0">
-
 
     <div class="lesattributs">
     <div class="attEntite">
-      <input id="hiddenAtt" type="hidden" name="nbAtt" value="0">
       <p>
         <label for="select">Nom attribut :</label>
-        <select id="typeatt">
-          <option value="">Choisir...</option>
-            <option value="">Integer</option>
-            <option value="">Float</option>
-            <option value="">String</option>
-            <option value="">Char</option>
-            <option value="">Date</option>
+        <select id="lesatt0" name="lesatt0">
+          {% for attribut in attributs %}
+            <option value=attribut>{{ attribut }}</option>
+          {% endfor %}
         </select>
       </p>
 
@@ -97,15 +89,12 @@
       divEntite.className="bordmcd";
       divEntite.id = "ent"+nbEnt;
 
-      var hidEnt=document.getElementById("hiddenEnt");
-      hidEnt.value=nbEnt;
 
       var divActuel = document.querySelector(".bordmcd");
       document.querySelector(".lesentites").insertBefore(divEntite,divActuel.nextSibling);
 
       ajouteSuppButtonEnt(divEntite);
       ajouteNom(divEntite);
-      ajouteHidden(divEntite);
       ajouteDivAtt(divEntite);
       ajouteAttribut(nbEnt);
       ajouteAttributBouton(divEntite);
@@ -138,14 +127,14 @@
       var textNom = document.createTextNode("Nom Entité :");
       labNomEnt.appendChild(textNom);
       var inputNomEnt = document.createElement("input");
+      inputNomAtt.id = "nom"+nbEnt;
+      inputNomAtt.name = "nom"+nbEnt;
       inputNomEnt.type="text";
       inputNomEnt.placeholder="Nom de l'entité";
       inputNomEnt.required="required";
       p1.appendChild(labNomEnt);
       p1.appendChild(inputNomEnt);
   }
-
-  //ajoute le champ invisible contenant l'id d'Entite
 
   function ajouteAttributBouton(divEntite){
     var p2 = document.createElement("p");
@@ -177,8 +166,6 @@
       divAttribut.className="attEntite";
       divAttribut.id = "att"+nbAtt;
 
-      var hidAtt=document.getElementById("hiddenAtt");
-      hidAtt.value=nbAtt;
 
       ajouteSuppButtonAtt(divAttribut,parent);
       ajouteNomAtt(divAttribut);
@@ -211,17 +198,20 @@
     bouton.onclick = function(){removeAttribut(divAttribut.id,parent.id)};
   }
 
-  // ajoute le champde saisie du nom de
+  // ajoute le champ de choix des attributs
   function ajouteNomAtt(divAttribut){
     var p2 = document.createElement("p");
     divAttribut.appendChild(p2);
     var labTypeAtt = document.createElement("label");
     labTypeAtt.for = "select";
-    var textType = document.createTextNode("Nom attribut :");
+    var textType = document.createTextNode("Choisir un attribut :");
     labTypeAtt.appendChild(textType);
     var selTypeAtt = document.createElement("select");
+    selTypeAtt.id = "lesatt"+nbAtt;
+    selTypeAtt.name = "lesatt"+nbAtt;
     p2.appendChild(labTypeAtt);
     p2.appendChild(selTypeAtt);
+    {% for attribut in attributs %}
     var opt1 = document.createElement("option");
     var opt2 = document.createElement("option");
     var opt3 = document.createElement("option");
