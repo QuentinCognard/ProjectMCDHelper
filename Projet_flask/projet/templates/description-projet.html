@@ -34,5 +34,7 @@ function sendDemande(){
 </fieldset>
   </fieldset>
 </div>
+{% if m==None %}
   <input onclick="sendDemande()" class="btn btn-primary" type="Submit" id="demande" value="Demander à participer">
+{% endif %}
   {% endblock %}

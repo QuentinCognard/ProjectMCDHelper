@@ -226,7 +226,7 @@ def add_projets(username):
 @login_required
 def description(username,nomProj):
 	membres=get_gerer_byProjet(get_Projet_byName(nomProj).nomProj)
-	return render_template("description-projet.html",projet=get_Projet_byName(nomProj),membres=membres,nbnotif=get_nb_notifications(username),master=get_master_proj(nomProj),notifs=get_notifications(username))
+	return render_template("description-projet.html",projet=get_Projet_byName(nomProj),membres=membres,nbnotif=get_nb_notifications(username),master=get_master_proj(nomProj),notifs=get_notifications(username),m=get_gerer_byNom(nomProj,username))
 
 @app.route("/projets/<string:username>/<string:nomProj>/description/<string:master>/notif")
 @login_required
