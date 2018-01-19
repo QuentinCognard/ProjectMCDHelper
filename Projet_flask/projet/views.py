@@ -51,14 +51,14 @@ class CreerCompteForm(FlaskForm):
 	nom = StringField('Nom', [validators.Length(min=4, max=25)])
 	prenom = StringField('Prenom', [validators.Length(min=4, max=25)])
 	password = PasswordField('Mot de passe', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm_password', message='Mot de passe doivent etre égaux')
-    ])
+		validators.DataRequired(),
+		validators.EqualTo('confirm_password', message='Mot de passe doivent etre égaux')
+	])
 	confirm_password = PasswordField('Réécrire le mot de passe')
 	mail = StringField('Mail', [validators.Length(min=6, max=35)])
 
 class SearchForm(Form):
-    search = StringField('')
+	search = StringField('')
 
 @app.route("/") #route pour la page de connexion
 def home():
@@ -351,10 +351,7 @@ def page_projet_perso():
 # route vers la creation d'un MCD en fonction de l'ID du projet
 
 class CreaMCDForm(FlaskForm):#Formulaire de création d'un MCD
-	nomEntite = StringField('Nom de l entite',[validators.Length(min=10, max=150)])
-	idEntite = StringField('id de l entite',[validators.Length(min=10, max=150)])
-	idAttribut = StringField('id de l attribut',[validators.Length(min=10, max=150)])
-	clePrimaire = StringField('cle primaire',[validators.Length(min=10, max=150)])
+	listeAttribut=SelectField('Attributs',choices=[])
 
 	def addEntite(self,nomEntite,idEntite):
 		E=Entite(nomEntite=nomEntite)
@@ -374,24 +371,30 @@ def page_creer_mcd():
 
 @app.route("/projets/<string:username>/<int:idProj>/new_entity")
 def page_ajouter_entite(username,idProj):
-	proj = get_projet(username, idProj)
-	attributs= get_attributs_projet(idProj)
-
+	M=CreaMCDForm(request.form)
+	M.listeAttribut.choices = get_attributs_projet(idProj)
+	proj = get_proj(idProj)
 	if proj != None:
-		return render_template("add_entity.html", projet = proj,username=username,id=idProj,attributs=attributs)
+		return render_template("add_entity.html", projet = proj,username=username,id=idProj,attributs=M.listeAttribut.choices, form=M)
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
+@app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
 def save_entity(username,idProj):
 	nbAtt = request.form.get("nbAtt")
-	nbEnt = request.form.get("nbAtt")
-	proj = get_projet(username, idProj)
+	nbEnt = request.form.get("nbEnt")
+	proj = get_proj(idProj)
 	for i in range(1, int(nbEnt)+1):
-		ent = Entite(id=i, projet_id=idProj, nomEntite=request.form.get("nom"+str(i-1)), positionEntite=i)
-		db.session.add(ent)
+		if request.method=="POST":
+			ent = Entite(id=i, projet_id=idProj, nomEntite=request.form.get("nom"+str(i-1)), positionEntite=i)
+			db.session.add(ent)
+			db.session.commit()
 	for y in range(1, int(nbAtt)+1):
-		 att = Attributs.query.get()
-	db.session.commit()
-
+		if request.method=="POST":
+			 att = Attributs.query.get(request.form.get("idAtt"))
+			 att.entite_id = request.form.()
+			 get("nbEnt")
+			 db.session.commit()
+	return render_template("relation_resume.html")
 
 # route vers le résumé des relations d'un MCD
 

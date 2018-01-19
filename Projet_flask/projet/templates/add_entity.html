@@ -4,7 +4,7 @@
 <link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
 {% endblock %}
 {% block contain %}
-<form method='post' class="bd-example" action="{{ url_for('save_entity', username=username, idProj=id ) }}">
+<form role="form" method="POST" class="bd-example" action="{{ url_for('save_entity', username=username, idProj=id) }}">
   <fieldset class="lesentites">
 
 
@@ -17,14 +17,18 @@
         <input type="text" id="nameent" nom= "nom0" placeholder="Nom de l'entité" />
       </p>
 
+      <input id="hiddenEnt" type="hidden" name="nbEnt" value="0">
+
     <div class="lesattributs">
     <div class="attEntite">
       <p>
         <label for="select">Nom attribut :</label>
+        <input id="hiddenAtt" type="hidden" name="nbAtt" value="0">
         <select id="lesatt0" name="lesatt0">
-          {% for attribut in attributs %}
-            <option value=attribut>{{ attribut }}</option>
+          {% for attribut in form.listeAttribut.choices %}
+            <option value=attribut>{{ attribut.nomAttribut }}</option>
           {% endfor %}
+
         </select>
       </p>
 
@@ -48,7 +52,7 @@
       <a href="/projets" class="btn btn-danger" role="button">Annuler</a>
 
 
-      <a href="/projets/0/relation_resume" class="btn btn-success" role="button">Ajouter les entités</a>
+      <input class="btn btn-success" type="submit" value="Ajouter les Entités"></input>
     </div>
 
   </fieldset>
@@ -73,11 +77,11 @@
   }
 
   // supprime un attribut d'une entite
-  function removeAttribut(attid,entid){
-    var child = document.getElementById(attid);
-    var parent = document.getElementById(entid);
-    var divattParent = parent.querySelector(".lesattributs");
-    // document.write(parent);
+    function removeAttribut(attid,entid){
+      var child = document.getElementById(attid);
+      var parent = document.getElementById(entid);
+      var divattParent = parent.querySelector(".lesattributs");
+      // document.write(parent);
     divattParent.removeChild(child);
     nbAtt --;
   }
@@ -88,6 +92,9 @@
       var divEntite = document.createElement("div");
       divEntite.className="bordmcd";
       divEntite.id = "ent"+nbEnt;
+
+      var hidEnt=document.getElementById("hiddenEnt");
+      hidEnt.value=nbEnt;
 
 
       var divActuel = document.querySelector(".bordmcd");
@@ -127,8 +134,8 @@
       var textNom = document.createTextNode("Nom Entité :");
       labNomEnt.appendChild(textNom);
       var inputNomEnt = document.createElement("input");
-      inputNomAtt.id = "nom"+nbEnt;
-      inputNomAtt.name = "nom"+nbEnt;
+      inputNomEnt.id = "nom"+nbEnt;
+      inputNomEnt.name = "nom"+nbEnt;
       inputNomEnt.type="text";
       inputNomEnt.placeholder="Nom de l'entité";
       inputNomEnt.required="required";
@@ -206,37 +213,22 @@
     labTypeAtt.for = "select";
     var textType = document.createTextNode("Choisir un attribut :");
     labTypeAtt.appendChild(textType);
+    var hidAtt=document.getElementById("hiddenAtt");
+    hidAtt.value=nbAtt;
     var selTypeAtt = document.createElement("select");
     selTypeAtt.id = "lesatt"+nbAtt;
     selTypeAtt.name = "lesatt"+nbAtt;
     p2.appendChild(labTypeAtt);
     p2.appendChild(selTypeAtt);
-    {% for attribut in attributs %}
-    var opt1 = document.createElement("option");
-    var opt2 = document.createElement("option");
-    var opt3 = document.createElement("option");
-    var opt4 = document.createElement("option");
-    var opt5 = document.createElement("option");
-    opt1.value = "integer";
-    opt2.value = "float";
-    opt3.value = "string";
-    opt4.value = "char";
-    opt5.value = "date";
-    var textOpt1 = document.createTextNode("Integer");
-    var textOpt2 = document.createTextNode("Float");
-    var textOpt3 = document.createTextNode("String");
-    var textOpt4 = document.createTextNode("Char");
-    var textOpt5 = document.createTextNode("Date");
-    opt1.appendChild(textOpt1);
-    opt2.appendChild(textOpt2);
-    opt3.appendChild(textOpt3);
-    opt4.appendChild(textOpt4);
-    opt5.appendChild(textOpt5);
-    selTypeAtt.appendChild(opt1);
-    selTypeAtt.appendChild(opt2);
-    selTypeAtt.appendChild(opt3);
-    selTypeAtt.appendChild(opt4);
-    selTypeAtt.appendChild(opt5);
+    {% for attribut in form.listeAttribut.choices %}
+      // var hidAtt = document.getElementById("hiddenAtt");
+      // hidAtt.value=attribut.id;
+      var optatt = document.createElement("option");
+      optatt.value = "{{ attribut.nomAttribut }}";
+      var textOptatt = document.createTextNode("{{ attribut.nomAttribut }}");
+      optatt.appendChild(textOptatt);
+      selTypeAtt.appendChild(optatt);
+    {% endfor %}
   }
 
   function ajouteCle(divAttribut){
