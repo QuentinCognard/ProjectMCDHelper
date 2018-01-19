@@ -6,6 +6,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 {% endblock %}
   {% block contain %}
+  <body onmouseover="notif()">
   {% if current_user.login != username %}
     <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
   {% else %}
@@ -114,4 +115,5 @@ $(document).ready(function(){
       <button type="button" class="btn btn-warning">Moins</button>
       {% endif %}
       {% endif %}
+    </body>
   {% endblock %}

@@ -4,10 +4,16 @@
   <link rel="stylesheet" href= "{{url_for('static',filename='description.css') }}"/>
 
 {% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>
+function sendDemande(){
+  document.location.href="/projets/{{current_user.login}}/{{projet.nomProj}}/description/{{master}}/notif"
+}
+</script>
+{% endblock %}
   {% block contain %}
-  {% if current_user.login != username %}
-    <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
-  {% else %}
+  <body onmouseover="notif()">
   <a id="retour" href="{{url_for('page_projets',username=current_user.login,n=1,i=1)}}"><input type="Submit"  value="< Retour"></a>
   <div class="div">
   <fieldset>
@@ -28,6 +34,6 @@
 </fieldset>
   </fieldset>
 </div>
-  <input class="btn btn-primary" type="Submit" id="demande" value="Demander à participer">
-  {% endif %}
+  <input onclick="sendDemande()" class="btn btn-primary" type="Submit" id="demande" value="Demander à participer">
+</body>
   {% endblock %}

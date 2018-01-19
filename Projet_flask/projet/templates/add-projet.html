@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{{url_for('static', filename='addProjet.css')}}">
 {% endblock %}
 {% block contain %}
+<body onmouseover="notif()">
 {% if current_user.login==username %}
 <h1>Ajouter un projet :</h1>
 <form role="form" method="POST"><!--Formulaire de création de projet-->
@@ -45,4 +46,5 @@
 {% else %}
   <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
 {% endif %}
+</body>
 {% endblock %}

@@ -1,6 +1,7 @@
 from .app import *
 from flask_login import UserMixin
 from sqlalchemy import func
+from datetime import datetime
 
 class User(db.Model, UserMixin):
     prenom = db.Column(db.String(100))
@@ -81,6 +82,21 @@ class Relationattributs(db.Model):
     relation = db.relationship("Relation", foreign_keys=[relation_id], backref=db.backref("relationattid", lazy="dynamic"))
     attribut_id = db.Column(db.Integer, db.ForeignKey("attributs.id"), primary_key=True)
     attributs = db.relationship("Attributs", foreign_keys=[attribut_id], backref=db.backref("attributid", lazy="dynamic"))
+
+class Notification(db.Model):
+    nom= db.Column(db.Integer, primary_key=True)
+    expediteur=db.Column(db.String(100),db.ForeignKey("user.login"),primary_key=True)
+    destinataire=db.Column(db.String(100),db.ForeignKey("user.login"),primary_key=True)
+    texte=db.Column(db.String(300))
+    vu=db.Column(db.Boolean,default=False)
+    date=db.Column(db.DateTime, nullable=False,default=datetime.utcnow)
+
+
+def get_nb_notifications(nom):
+    return len(Notification.query.filter(Notification.destinataire==nom,Notification.vu==False).all())
+
+def get_notifications(nom):
+    return Notification.query.filter(Notification.destinataire==nom).all()
 
 def get_user(login):
     User = User.query.filter(User.login==login).all()
@@ -169,3 +185,10 @@ def get_user_projet(nomProj):
     for g in gerer:
         res.append(g.user_login)
     return res
+
+def get_master_proj(nomProj):
+    projet=get_gerer_byProjet(nomProj)
+    for p in projet:
+        if p.droit_id==1:
+            return p.user_login
+    return None
