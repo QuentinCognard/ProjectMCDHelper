@@ -443,8 +443,9 @@ def page_projet_perso(username, idProj):
 @login_required
 def page_new_attributs(username, idProj):
 	proj = get_projet(username, idProj)
+	print(proj)
 	if proj != None:
-		return render_template("new_attributs.html", projet = proj,username=username,id=idProj)
+		return render_template("new_attributs.html", projet = proj,username=username,id=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
 @app.route("/projets/<string:username>/<int:idProj>/new-attributs/save/", methods=['POST',])
@@ -474,13 +475,13 @@ def page_modif_attributs(username, idProj):
 		idProj=idProj,
 		attributs=atts,
 		nbAtts=len(atts),
-		projet=get_projet(username, idProj))
+		projet=get_projet(username, idProj),nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 
 @app.route("/projets/<string:username>/<int:idProj>/relations")
 @login_required
 def page_creer_relations(username, idProj):
-	return render_template("new_relations.html",username=username,id=idProj)
+	return render_template("new_relations.html",username=username,id=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 class CreaMCDForm(FlaskForm):#Formulaire de création d'un MCD
 	listeAttribut=SelectField('Attributs',choices=[])
@@ -507,7 +508,7 @@ def page_ajouter_entite(username,idProj):
 	M.listeAttribut.choices = get_attributs_projet(idProj)
 	proj = get_proj(idProj)
 	if proj != None:
-		return render_template("add_entity.html", projet = proj,username=username,id=idProj,attributs=M.listeAttribut.choices, form=M)
+		return render_template("add_entity.html", projet = proj,username=username,id=idProj,attributs=M.listeAttribut.choices, form=M,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
 # @app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])

@@ -4,7 +4,7 @@
   <link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
 {% endblock %}
 {% block contain %}
-{{ super() }}
+  <body onmouseover=notif()>
 <form method='post' class="bd-example" action="{{ url_for('save_new_attributs', username=username, idProj=idProj ) }}">
   <fieldset class="fieldset">
     <legend>Nouveau MCD</legend>
