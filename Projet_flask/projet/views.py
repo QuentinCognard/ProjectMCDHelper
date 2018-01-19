@@ -329,18 +329,33 @@ def page_new_attributs(username, idProj):
 
 @app.route("/projets/<string:username>/<int:idProj>/new-attributs/save/", methods=['POST',])
 def save_new_attributs(username, idProj):
+	oldAtts = get_attributs_proj(idProj)
+	for a in oldAtts:
+		db.session.delete(a)
 	nbAtt = request.form.get("nbAtt")
 	proj = get_projet(username, idProj)
 	proj.nomMCD = request.form.get("nomMCD")
 	for i in range(1, int(nbAtt)+1):
-		att = Attributs(id=i, projet_id=idProj, entite_id=None, nomAttribut=request.form.get("nom"+str(i)), genreAttribut=request.form.get("genre"+str(i)), typeAttribut=request.form.get("type"+str(i)), actifAttribut=None)
+		att = Attributs(id=i, projet_id=idProj, nomAttribut=request.form.get("nom"+str(i)), genreAttribut=request.form.get("genre"+str(i)), typeAttribut=request.form.get("type"+str(i)))
 		db.session.add(att)
 	db.session.commit()
 	##############
     # A MODIFIER #
 	##############
     # DOIT PASSER A LA PAGE DE CREATION D'ENTITES
-	return redirect(url_for('page_projets', username=username, n=1, i=1))
+	return redirect(url_for('page_projet_perso', username=username, idProj=idProj))
+
+@app.route("/projets/<string:username>/<int:idProj>/attributs")
+def page_modif_attributs(username, idProj):
+	atts = get_attributs_proj(idProj)
+	return render_template(
+		"modif_attributs.html",
+		username=username,
+		idProj=idProj,
+		attributs=atts,
+		nbAtts=len(atts),
+		projet=get_projet(username, idProj))
+
 
 @app.route("/projets/<string:username>/<int:idProj>/relations")
 @login_required

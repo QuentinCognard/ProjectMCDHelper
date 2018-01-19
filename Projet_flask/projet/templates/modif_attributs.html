@@ -5,7 +5,7 @@
 {% endblock %}
 {% block contain %}
 {{ super() }}
-<form method='post' class="bd-example" action="{{ url_for('save_new_attributs', username=username, idProj=id ) }}">
+<form method='post' class="bd-example" action="{{ url_for('save_new_attributs', username=username, idProj=idProj ) }}">
   <fieldset class="fieldset">
     <legend>Nouveau MCD</legend>
 
@@ -13,53 +13,77 @@
 
     <p>
       <label for="input">Nom du MCD :</label>
-      <input type="text" name="nomMCD" placeholder="Nom du MCD" required />
+      <input type="text" name="nomMCD" placeholder="Nom du MCD" required value="{{ projet.nomMCD }}" />
     </p>
 
-<!-- Cette div devra se répéter autant de fois qu'il y a d'attributs avec la fonction javascript en dessous
-
-    <div class="attribut">
+    {% for i in range(1, nbAtts+1) %}
+    <div class="attribut" id="att{{ i }}">
+      <button class="suppBout" type="button" id="{{ i }}" onClick="removeAttribut(this.id)">X</button>
       <p>
-        <label for="input">Nom de l'attribut :</label>
-        <input type="text" class="nameatt" placeholder="Nom de l'attribut" />
+        <label>Nom de l'attribut :</label>
+        <input id="nom{{ i }}" name="nom{{ i }}" type="text" placeholder="Nom de l'attribut" required value="{{ attributs[i-1].nomAttribut }}" />
       </p>
-
       <p>
-        <label for="select" >Type de l'attribut :</label>
-        <select class="typeatt">
-            <option value="">Integer</option>
-            <option value="">Float</option>
-            <option value="">String</option>
-            <option value="">Char</option>
-            <option value="">Date</option>
+        <label>Type de l'attribut :</label>
+        <select id="type{{ i }}" name="type{{ i }}">
+          {% if attributs[i-1].typeAttribut=="integer" %}
+            <option value="integer" selected>Integer</option>
+          {% else %}
+            <option value="integer">Integer</option>
+          {% endif %}
+
+          {% if attributs[i-1].typeAttribut=="float" %}
+            <option value="float" selected>Float</option>
+          {% else %}
+            <option value="float">Float</option>
+          {% endif %}
+
+          {% if attributs[i-1].typeAttribut=="string" %}
+            <option value="string" selected>String</option>
+          {% else %}
+            <option value="string">String</option>
+          {% endif %}
+
+          {% if attributs[i-1].typeAttribut=="char" %}
+            <option value="char" selected>Char</option>
+          {% else %}
+            <option value="char">Char</option>
+          {% endif %}
+
+          {% if attributs[i-1].typeAttribut=="date" %}
+            <option value="date" selected>Date</option>
+          {% else %}
+            <option value="date">Date</option>
+          {% endif %}
         </select>
       </p>
-
       <p>
-        <label for="input">Valeur :</label>
-        <input type="number" class="valeuratt" placeholder="0" />
-      </p>
+        <label>Genre :</label>
+        <select id="genre{{ i }}" name="genre{{ i }}">
+          {% if attributs[i-1].genreAttribut=="masculin" %}
+            <option value="masculin" selected>Masculin</option>
+          {% else %}
+            <option value="masculin">Masculin</option>
+          {% endif %}
 
-      <p>
-        <label for="input">Quantité :</label>
-        <input type="number" class="quantiteatt" placeholder="0" />
-      </p>
-
-      <p>
-        <label for="select">Genre :</label>
-        <select class="genreatt">
-          <option value="">Masculin</option>
-            <option value="">Féminin</option>
+          {% if attributs[i-1].genreAttribut=="feminin" %}
+            <option value="feminin" selected>Feminin</option>
+          {% else %}
+            <option value="feminin">Feminin</option>
+          {% endif %}
         </select>
       </p>
-    </div> -->
+    </div>
+    {% endfor %}
 
-    <input id="hidden" type='hidden' name='nbAtt' value='0'>
+<!-- Cette div devra se répéter autant de fois qu'il y a d'attributs avec la fonction javascript en dessous -->
+
+    <input id="hidden" type='hidden' name='nbAtt' value="{{ nbAtts }}">
 
     <button type="button" class="ajouteAttribut" onClick="ajouteElement()">Ajouter attribut</button>
 
     <p>
-      <a href="{{url_for('page_projet_perso',username=username,idProj=id)}}"><button type="button">Annuler</button></a>
+      <a href="{{url_for('page_projet_perso',username=username,idProj=idProj)}}"><button type="button">Annuler</button></a>
       <button type="submit" >Valider</button>
     </p>
 
@@ -67,8 +91,7 @@
 </form>
 
 <script>
-  var nbAtt = 0;
-  var listAtt = [];
+  var nbAtt = parseInt({{ nbAtts }});
 
   // supprime un attribut
   function removeAttribut(id){
@@ -134,8 +157,7 @@
       var p1 = document.createElement("p");
       divAttribut.appendChild(p1)
       var labNomAtt = document.createElement("label");
-      labNomAtt.for="input";
-      var textNom = document.createTextNode("Nom de l'attribut :");
+      var textNom = document.createTextNode("Nom de l'attribut : ");
       labNomAtt.appendChild(textNom);
       var inputNomAtt = document.createElement("input");
       inputNomAtt.id = "nom"+nbAtt;
@@ -152,8 +174,7 @@
       var p2 = document.createElement("p");
       divAttribut.appendChild(p2);
       var labTypeAtt = document.createElement("label");
-      labTypeAtt.for = "select";
-      var textType = document.createTextNode("Type de l'attribut :");
+      var textType = document.createTextNode("Type de l'attribut : ");
       labTypeAtt.appendChild(textType);
       var selTypeAtt = document.createElement("select");
       selTypeAtt.id = "type"+nbAtt;
@@ -226,8 +247,7 @@
       var p5 = document.createElement("p");
       divAttribut.appendChild(p5);
       var labGenreAtt = document.createElement("label");
-      labGenreAtt.for="select";
-      var textGenreAtt = document.createTextNode("Genre :");
+      var textGenreAtt = document.createTextNode("Genre : ");
       labGenreAtt.appendChild(textGenreAtt);
       var selGenreAtt = document.createElement("select");
       selGenreAtt.id = "genre"+nbAtt;

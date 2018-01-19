@@ -14,8 +14,9 @@
             <img src="{{url_for('static',filename='mcd.png')}}">
           </fieldset>
           <div class="pt-md-3 pb-md-4">
-            <button href="#" class="btn btn-lg btn-bd-primary">Consulter</button>
-            <button class="btn btn-lg btn-bd-primary" href="#" >Supprimer</button>
+            <a role="button" class="btn btn-primary btn-lg" href="#">Consulter</a>
+            <a role="button" class="btn btn-primary btn-lg" href="{{ url_for('page_modif_attributs', username=username, idProj=id) }}" >Modifier</a>
+            <a role="button" class="btn btn-primary btn-lg" href="#" >Supprimer</a>
           </div>
         </div>
       {% endif %}

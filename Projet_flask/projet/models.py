@@ -169,5 +169,5 @@ def get_user_projet(nomProj):
         res.append(g.user_login)
     return res
 
-def get_all_attributs(idProj):
-    return Attributs.query.get
+def get_attributs_proj(idProj):
+    return Attributs.query.filter(Attributs.projet_id == idProj).all()
