@@ -81,6 +81,17 @@ class Relationattributs(db.Model):
     attribut_id = db.Column(db.Integer, db.ForeignKey("attributs.id"), primary_key=True)
     attributs = db.relationship("Attributs", foreign_keys=[attribut_id], backref=db.backref("attributid", lazy="dynamic"))
 
+
+def get_tout_du_projet(idprojet):
+    liste = []
+    liste.append(Entite.query.filter(Entite.projet_id==idprojet).all())
+    liste.append(Attributs.query.filter(Attributs.projet_id==idprojet).all())
+    liste.append(Relation.query.filter(Relation.projet_id==idprojet).all())
+    for r in liste[2]:
+        liste.append(Relationentite.query.filter(Relationentite.relation==r).all())
+        liste.append(Relationattributs.query.filter(Relationattributs.relation==r).all())
+    return liste
+
 def get_user(login):
     User = User.query.filter(User.login==login).all()
     return User

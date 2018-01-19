@@ -57,16 +57,15 @@ def home():
 
 @app.route("/lucas/test/<id_projet>", methods=('GET', 'POST')) #route pour la page de connexion
 def lucas(id_projet):
-	listeEntite = Entite.query.filter(Entite.projet_id == id_projet).all()
-	mon_dictionnaire = {}
-	for e in listeEntite:
-		mon_dictionnaire[e] = Attributs.query.filter(Attributs.projet_id == id_projet, Attributs.entite_id == e.id).all()
-	listeRelation = Relation.query.filter(Relation.projet_id == id_projet).all()
-	# listeRelationEntite = []
-	# for e in listeEntite:
-	# 	listeRelationEntite.append(RelationEntite.query.filter(entite.id == e.id).all())
-	# , liste_attribut = listeAttribut,liste_relation = listeRelation,liste_entite_relation = listeRelationEntite
-	return render_template("test.html", dic_entite_attribut = mon_dictionnaire, liste_relation = listeRelation)
+	ecrire_Entite("test2.txt", id_projet)
+	return render_template("test.html", sujet = "test")
+
+
+@app.route("/projets/<string:username>/<int:idProj>/relations")
+def test_lucas():
+	ecrire_Entite("test2.txt")
+	return render_template("new_relations.html",username=username,id=idProj)
+
 
 @app.route("/login/", methods=('GET', 'POST'))
 def connexion():
