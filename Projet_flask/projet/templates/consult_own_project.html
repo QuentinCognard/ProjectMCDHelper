@@ -19,11 +19,11 @@
           <legend>{{ projet.nomMCD }}</legend>
         </fieldset>
         <img src="{{url_for('static',filename='mcd.png')}}">
-        <a href=""><input type="submit" value="Consulter"></a>
-        <a href="#"><input type="submit" value="Supprimer"></a>
+        <a href=""><input class="btn btn-default" type="submit" value="Consulter"></a>
+        <a href="#"><input class="btn btn-warning" type="submit" value="Supprimer"></a>
       </div>
       {% else  %}
-        <a  href="{{url_for('page_new_attributs',username=username,idProj=id)}}" role="button"><input type="submit" value="Ajouter un MCD"></a>
+        <a  href="{{url_for('page_new_attributs',username=username,idProj=id)}}" role="button"><input class="btn btn-default" type="submit" value="Ajouter un MCD"></a>
       {% endif %}
       </fieldset>
     </div>

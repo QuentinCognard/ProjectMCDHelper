@@ -23,9 +23,9 @@
             <legend>{{p.nomProj}}</legend>
             <img src="{{url_for('static',filename='dossier.png')}}">
           </fieldset>
-          <a href="{{ url_for('page_projet_perso',username = current_user.login,idProj=p.id) }}"><input type="submit" value="Consulter"></a>
-          <a href="{{url_for('parametresProj',username=current_user.login,nomProj=p.nomProj)}}"><input type="submit" value="Parametres"></a>
-          <a href="/projets/{{current_user.login}}/{{p.nomProj}}/quitter"><input type="submit" value="Quitter"></a>
+          <a href="{{ url_for('page_projet_perso',username = current_user.login,idProj=p.id) }}"><input class="btn btn-default" type="submit" value="Consulter"></a>
+          <a href="{{url_for('parametresProj',username=current_user.login,nomProj=p.nomProj)}}"><input class="btn btn-default" type="submit" value="Parametres"></a>
+          <a href="/projets/{{current_user.login}}/{{p.nomProj}}/quitter"><input class="btn btn-default" type="submit" value="Quitter"></a>
           </div>
         {% endfor %}
         {% if droite2 %}
@@ -34,7 +34,7 @@
         </a>
         {% endif %}
         </section>
-        <a href="{{ url_for('add_projets', username=current_user.login) }}"><input type="submit" value="Ajouter un Projet" id="ajoutproj"></a>
+        <a href="{{ url_for('add_projets', username=current_user.login) }}"><input class="btn btn-success" type="submit" value="Ajouter un Projet" id="ajoutproj"></a>
     </fieldset>
     <fieldset>
       <legend>Tous les projets</legend>
@@ -53,17 +53,21 @@
       <div id=search>
       <form method=post>
       {{ render_field(form.search) }}
-      <input type=submit value=Search>
+      <input class="btn btn-default" type=submit value=Search>
       </form>
       <script>
 $(document).ready(function(){
     $(".btn-success").click(function(){
         $(".collapse").collapse('show');
         document.getElementById("pro").style.flexWrap="wrap";
+        document.getElementById("moins").style.display='block';
+        document.getElementById("voirplus").style.display='none';
     });
     $(".btn-warning").click(function(){
         $(".collapse").collapse('hide');
         document.getElementById("pro").style.flexWrap="nowrap";
+        document.getElementById("voirplus").style.display='block';
+        document.getElementById("moins").style.display='none';
     });
 });
 </script>
@@ -110,8 +114,8 @@ $(document).ready(function(){
 
       </fieldset>
       {% if search %}
-      <button type="button" class="btn btn-success">Voir Plus</button>
-      <button type="button" class="btn btn-warning">Moins</button>
+      <button id="voirplus" type="button" class="btn btn-success">Voir Plus</button>
+      <button id="moins" type="button" class="btn btn-warning">Moins</button>
       {% endif %}
       {% endif %}
   {% endblock %}

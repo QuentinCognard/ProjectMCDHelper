@@ -118,3 +118,9 @@ a, a:hover{
 button{
   margin-left: 1em;
 }
+#moins{
+  display: none;
+}
+#voirplus{
+  display: block;
+}
