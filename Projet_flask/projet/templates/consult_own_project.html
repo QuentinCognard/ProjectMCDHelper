@@ -13,8 +13,10 @@
             <legend>{{ projet.nomMCD }}</legend>
             <img src="{{url_for('static',filename='mcd.png')}}">
           </fieldset>
-          <a href="{{ current_user.login }}/{{ p.id }}"><input type="submit" value="Consulter"></a>
-          <a href="#"><input type="submit" value="Supprimer"></a>
+          <div class="pt-md-3 pb-md-4">
+            <button href="#" class="btn btn-lg btn-bd-primary">Consulter</button>
+            <button class="btn btn-lg btn-bd-primary" href="#" >Supprimer</button>
+          </div>
         </div>
       {% endif %}
     </div>
