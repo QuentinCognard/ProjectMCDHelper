@@ -237,8 +237,7 @@ def demande(username,nomProj,master):
 	else:
 		N=Notification(nom="Demande de "+username,
 		expediteur=username,destinataire=master,idProj=get_Projet_byName(nomProj).id,
-		texte="Demande de participation à votre projet "+nomProj+" de "+username+". Il sera ajouté en visiteur.",
-		vu=False)
+		texte="Demande de participation à votre projet "+nomProj+" de "+username+". Il sera ajouté en visiteur.")
 		db.session.add(N)
 		db.session.commit()
 		flash("Demande envoyée")

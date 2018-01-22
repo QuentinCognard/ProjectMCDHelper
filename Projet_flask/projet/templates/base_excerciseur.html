@@ -37,14 +37,18 @@ function sendreponse(reponse,id,username,user){
      <li><button  class="btn btn-default " data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" id="notif"><span class="glyphicon glyphicon-bell"></span>Notifications></button>
        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
          {% for i in range(nbnotif) %}
-          <li><a data-toggle="popover" data-trigger="hover"  data-placement="left" data-container="body" title="{{notifs[i].nom}}" data-content="{{notifs[i].texte}}" id="titre{{i}}"
+         {% if i ==5 %}
+         <li><p id="info">Répondez à vos demandes pour afficher les autres</p></li>
+         {% elif i!=5 %}
+          <li><a data-toggle="popover" data-trigger="hover"  data-placement="left" data-container="body" title="{{notifs[i].date.strftime('%d-%m-%Y %T')}}: {{notifs[i].nom}}" data-content="{{notifs[i].texte}}" id="titre{{i}}"
             >{{notifs[i].nom}} <span class="glyphicon glyphicon-info-sign"></span>
             <div id="reponse">
             <input class="btn btn-success" type="Submit" onclick="sendreponse('y',{{notifs[i].idProj}},'{{notifs[i].expediteur}}','{{current_user.login}}')" value="Oui">
             <input class="btn btn-danger" type="Submit" onclick="sendreponse('n',{{notifs[i].idProj}},'{{notifs[i].expediteur}}','{{current_user.login}}')" value="Non"></div>
           <p id="info">La réponse vous ramènera à l'accueil</p></a></li>
-          {% if i !=nbnotif-1 %}
+          {% if i !=nbnotif-1 or i==4 %}
             <li role="separator" class="divider"></li>
+          {% endif %}
           {% endif %}
           {% endfor %}
         </ul>

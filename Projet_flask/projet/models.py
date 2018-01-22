@@ -99,15 +99,14 @@ class Notification(db.Model):
     destinataire=db.Column(db.String(100),db.ForeignKey("user.login"),primary_key=True)
     idProj=db.Column(db.Integer,db.ForeignKey("projet.id"), primary_key=True)
     texte=db.Column(db.String(300))
-    vu=db.Column(db.Boolean,default=False)
     date=db.Column(db.DateTime, nullable=False,default=datetime.utcnow)
 
 
 def get_nb_notifications(nom):
-    return len(Notification.query.filter(Notification.destinataire==nom,Notification.vu==False).all())
+    return len(Notification.query.filter(Notification.destinataire==nom).all())
 
 def get_notifications(nom):
-    return Notification.query.filter(Notification.destinataire==nom).order_by(Notification.date).all()
+    return Notification.query.filter(Notification.destinataire==nom).order_by(Notification.date.desc()).all()
 
 def get_user(login):
     User = User.query.filter(User.login==login).all()
