@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{{url_for('static', filename='addProjet.css')}}">
 {% endblock %}
 {% block contain %}
-  <body onmouseover=notif()>
+
   <a id="retour" href="{{url_for('page_projets',username=current_user.login,n=1,i=1)}}"><input type="Submit"  value="< Retour"></a></br>
 {% if current_user.login==username %}
 <h1>Ajouter un projet :</h1>

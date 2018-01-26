@@ -88,14 +88,14 @@ def connexion():
 @login_required
 def accueil_compte():
 	user = current_user
-	return render_template("profil_user.html", sujet='accueil', user = user)
+	return render_template("profil_user.html", sujet='accueil', user = user,nbnotif=get_nb_notifications(user.login),notifs=get_notifications(user.login))
 
 @app.route("/profil/editer/", methods=('GET', 'POST'))
 @login_required
 def editer_compte():
 	user = current_user
 	form = UserForm(nom = user.nom, prenom = user.prenom, photo = user.image)
-	return render_template("profil_user.html", sujet='edit', user = user, form = form)
+	return render_template("profil_user.html", sujet='edit', user = user, form = form,nbnotif=get_nb_notifications(user.login),notifs=get_notifications(user.login))
 
 @app.route("/profil/save_edit/", methods=('GET', 'POST'))
 @login_required

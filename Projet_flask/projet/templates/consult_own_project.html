@@ -4,7 +4,7 @@
   <link rel="stylesheet" href= "{{url_for('static',filename='own_project.css') }}"/>
 {% endblock %}
 {% block contain %}
-  <body onmouseover=notif()>
+
 {% if current_user.login != username %}
   <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
 {% else %}
@@ -39,5 +39,4 @@
     </ul>
   </div>
 </div>
-</body>
 {% endblock %}

@@ -31,23 +31,42 @@ h2{
   border: solid;
   padding-top: 1%;
   width: 35%;
-  margin-left: 35%;
+  margin-left: 32.5%;
+  margin-right: 32.5%;
   text-align: center;
 }
 
 #test_bis{
-  position:relative;
-	display:block;
-	overflow:auto;
+  margin-left:auto;
+  margin-right: auto;
+}
+#test_bis>label{
+  display: inline-block;
+  width: 100px;
+  margin-right: 9em;
+  vertical-align: top;
+  text-align: left;
+}
+
+#test_bis>*{
+  margin-top: 0.3em;
+}
+#photo{
+  display: inline-block;
+  margin-bottom: 0.5em;
+}
+#photo>label{
+  padding-top:0.3em;
+  margin-right: 20px;
+  vertical-align: top;
+  text-align: left;
 }
 
 #photo{
   margin-right: auto;
   margin-left: auto;
 }
+/*
 form>div>input[type=text]{
-  width:20%;
-}
-form>div>input[type=text]:focus{
-  width: 80%;
-}
+  width:40%;
+}*/

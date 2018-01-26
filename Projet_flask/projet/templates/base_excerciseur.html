@@ -7,7 +7,7 @@
 {% endblock %}
 {% block scripts %}
 <script>
-function notif(){
+window.onload=function notif(){
   document.getElementById('notif').innerHTML="<sup id='nb'>"+{{nbnotif}}+"</sup><span class='glyphicon glyphicon-bell'></span>Notifications"
   if ({{nbnotif}}>0){
     document.getElementById('nb').style.backgroundColor = "red";
@@ -34,7 +34,9 @@ function sendreponse(reponse,id,username,user){
    </div>
 
    <ul class="nav navbar-nav navbar-right">
+
      <li><button  class="btn btn-default " data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" id="notif"><span class="glyphicon glyphicon-bell"></span>Notifications></button>
+      {% if nbnotif!=0 %}
        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
          {% for i in range(nbnotif) %}
          {% if i ==5 %}
@@ -52,13 +54,15 @@ function sendreponse(reponse,id,username,user){
           {% endif %}
           {% endfor %}
         </ul>
-
+            {% endif %}
      </li>
+
      <li><a href="{{url_for('accueil_compte')}}"><span class="glyphicon glyphicon-user"></span> {{current_user.login}}</a></li>
       <li><a href="{{url_for('deconnexion')}}"><span class="glyphicon glyphicon-log-in"></span> Déconnexion</a></li>
    </ul>
  </div>
 </nav>
+
 {% endblock %}
 {% block contain %}
 {% endblock %}
