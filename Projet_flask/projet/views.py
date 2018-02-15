@@ -510,7 +510,7 @@ def page_ajouter_entite(username,idProj):
 		return render_template("add_entity.html", projet = proj,username=username,id=idProj,attributs=M.listeAttribut.choices, form=M,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
-<<<<<<< HEAD
+
 @app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
 def save_entity(username,idProj):
 	nbAtt = request.form.get("nbAtt")
@@ -524,11 +524,11 @@ def save_entity(username,idProj):
 	for y in range(1, int(nbAtt)+1):
 		if request.method=="POST":
 			 att = Attributs.query.get(request.form.get("idAtt"))
-			 att.entite_id = request.form.()
+			 att.entite_id = request.form()
 			 get("nbEnt")
 			 db.session.commit()
 	return render_template("relation_resume.html",username=username,idProj=idProj)
-=======
+
 # @app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
 # def save_entity(username,idProj):
 # 	nbAtt = request.form.get("nbAtt")
@@ -546,7 +546,7 @@ def save_entity(username,idProj):
 # 			 get("nbEnt")
 # 			 db.session.commit()
 # 	return render_template("relation_resume.html")
->>>>>>> Arthur/master
+
 
 # route vers le résumé des relations d'un MCD
 
