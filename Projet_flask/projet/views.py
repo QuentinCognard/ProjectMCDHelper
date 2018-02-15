@@ -459,11 +459,7 @@ def save_new_attributs(username, idProj):
 		att = Attributs(id=i, projet_id=idProj, nomAttribut=request.form.get("nom"+str(i)), genreAttribut=request.form.get("genre"+str(i)), typeAttribut=request.form.get("type"+str(i)))
 		db.session.add(att)
 	db.session.commit()
-	##############
-    # A MODIFIER #
-	##############
-    # DOIT PASSER A LA PAGE DE CREATION D'ENTITES
-	return redirect(url_for('page_projet_perso', username=username, idProj=idProj))
+	return redirect(url_for('page_ajouter_entite', username=username, idProj=idProj))
 
 @app.route("/projets/<string:username>/<int:idProj>/attributs")
 def page_modif_attributs(username, idProj):
