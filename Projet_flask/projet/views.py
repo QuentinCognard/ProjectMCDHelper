@@ -204,7 +204,7 @@ def add_projets(username):
 				db.session.commit()
 			else:
 				max_sup = 1
-				for projet in test("TestProjet"):
+				for projet in test(P.name.data):
 					if len(projet.nomProj.split("(")) > 1:
 						if max_sup <= int(projet.nomProj.split("(")[1].split(")")[0]):
 							max_sup = int(projet.nomProj.split("(")[1].split(")")[0]) + 1
@@ -365,7 +365,7 @@ def save_modifProj(username,nomProj):
 						projetCourant.nomProj = P.name.data
 					else:
 							max_sup = 1
-							for projet in test("TestProjet"):
+							for projet in test(P.name.data):
 								if len(projet.nomProj.split("(")) > 1:
 									if max_sup <= int(projet.nomProj.split("(")[1].split(")")[0]):
 										max_sup = int(projet.nomProj.split("(")[1].split(")")[0]) + 1
