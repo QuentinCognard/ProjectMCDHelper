@@ -1,66 +1,11 @@
-<!--
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>jQuery UI Draggable - Default functionality</title>
-  <link rel="stylesheet" href="{{url_for('static', filename='lucas.css')}}">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
 
-    var canvas = document.getElementById('canvas1');
-    var contexte = canvas.getContext('2d');
-
-    contexte.strokeStyle = '#48C';
-
-    contexte.moveTo(50,50);
-    contexte.lineTo(250,250);
-
-    contexte.stroke();
-
-  </script>
-
-<script>
-  $( function() {
-    $('.entite').draggable({
-    containment : '#grille'
-    });
-    $('.relation').draggable({
-    containment : '#grille'
-    });
-    $('.line').draggable({
-    containment : '#grille'
-    });
-  });
-  </script>
-
-
-</head>
-<body id="body">
-  <section id='grille'  background="{{url_for('static', filename='images/image_de_fond.png')}}">
-    {% for (entite,att) in dic_entite_attribut.items() %}
-    <div class="entite">
-      <section id="head">{{ entite.nomEntite }}</section>
-      <section id="att">
-        <ul>
-          {% for a in att %}
-          <li>{{a.nomAttribut}}</li>
-          {% endfor %}
-        </ul>
-      </section>
-    </div>
-    {% endfor %}
-    {% for rel in liste_relation %}
-    <div class="relation" >
-      <section id="att">{{rel.nomRelation}}</section>
-    </div>
-    {% endfor %}
-  </section>
-
-</body>
-</html> -->
+{% if sujet == 'test' %}
+<html>
+  <body>
+    <h1> COUCOU </h1>
+ </body>
+</html>
+{%else%}
 <html>
  <head>
    <link rel="stylesheet" href="{{url_for('static', filename='lucas.css')}}">
@@ -82,3 +27,4 @@ function draw() {
    <canvas id="canvas" width="2600" height="800"></canvas>
  </body>
 </html>
+{%endif%}

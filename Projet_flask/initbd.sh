@@ -8,5 +8,5 @@ rm MCDBD.db
 ./manage.py loadentite BD/entite.yml
 ./manage.py loadrelation BD/relation.yml
 ./manage.py loadattributs BD/att.yml
-./manage.py loadrelationentites BD/relentite.yml
+./manage.py loadrelationentite BD/relentite.yml
 ./manage.py runserver

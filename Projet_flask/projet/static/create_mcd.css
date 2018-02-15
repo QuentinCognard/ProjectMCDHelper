@@ -1,9 +1,32 @@
+
+.attribut {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.suppBout {
+  margin-right: 1em;
+  width: 3em;
+  height: 2em;
+}
+
+.ajouteAttribut{
+  margin: 2em;
+}
+
+.truc {
+  color: red;
+}
+
+p {
+  margin-right: 1em;
+}
 .bordmcd {
   border: 2px black solid;
 
 }
 
-div {
+/*div {
   margin-left: 10%;
   margin-right: 10%;
   padding-top: 1%;
@@ -11,7 +34,7 @@ div {
 
   padding-left: 3%;
   padding-right: 3%;
-}
+}*/
 
 .attEntite {
     border-top: 1px solid black;

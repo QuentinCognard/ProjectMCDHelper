@@ -1,5 +1,8 @@
 import os
 import os.path
+from .app import *
+from .models import *
+
 
 def mkpath(p):
     return os.path.normpath(
@@ -79,9 +82,27 @@ def importer_donnees(filename):
     mcd_textuel = fichier.read()
     dictionnaire_entite_attribut = recup_entite_attribut_textuel(mcd_textuel)
     dictionnaire_relation = recup_relation_textuel(mcd_textuel)
+    print("############################    Entites    ############################")
     ajouter_entite(dictionnaire_entite_attribut)
+    print("\n############################    Relations    ############################")
     ajouter_relation(dictionnaire_relation)
     # print("Dictionnaire entite : ", dictionnaire_entite_attribut)
     # print("Dictionnaire relation : ", dictionnaire_relation)
 
-importer_donnees("test.txt")
+# importer_donnees("test.txt")
+
+
+def ecrire_Entite(filename, idprojet):
+    fichier = open(os.path.join(mkpath('static/MCD/Lucas/'), filename), "w")
+    infos_projet = get_tout_du_projet(idprojet)
+    liste_entites = infos_projet[0]
+    liste_attributs = infos_projet[1]
+    liste_relations = infos_projet[2]
+    liste_relations_entites = infos_projet[3]
+    liste_relations_attributs = infos_projet[4]
+    print("Entite : ", liste_entites)
+    print("Attributs : ", liste_attributs)
+    print("Relations : ", liste_relations)
+    print("Relationsentite : ", liste_relations_entites)
+    print("Relationsattributs : ", liste_relations_attributs)
+    fichier.close()
