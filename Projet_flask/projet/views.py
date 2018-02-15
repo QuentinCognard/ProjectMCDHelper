@@ -459,11 +459,7 @@ def save_new_attributs(username, idProj):
 		att = Attributs(id=i, projet_id=idProj, nomAttribut=request.form.get("nom"+str(i)), genreAttribut=request.form.get("genre"+str(i)), typeAttribut=request.form.get("type"+str(i)))
 		db.session.add(att)
 	db.session.commit()
-	##############
-    # A MODIFIER #
-	##############
-    # DOIT PASSER A LA PAGE DE CREATION D'ENTITES
-	return redirect(url_for('page_projet_perso', username=username, idProj=idProj))
+	return redirect(url_for('page_ajouter_entite', username=username, idProj=idProj))
 
 @app.route("/projets/<string:username>/<int:idProj>/attributs")
 def page_modif_attributs(username, idProj):
@@ -510,23 +506,23 @@ def page_ajouter_entite(username,idProj):
 		return render_template("add_entity.html", projet = proj,username=username,id=idProj,attributs=M.listeAttribut.choices, form=M,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
-# @app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
-# def save_entity(username,idProj):
-# 	nbAtt = request.form.get("nbAtt")
-# 	nbEnt = request.form.get("nbEnt")
-# 	proj = get_proj(idProj)
-# 	for i in range(1, int(nbEnt)+1):
-# 		if request.method=="POST":
-# 			ent = Entite(id=i, projet_id=idProj, nomEntite=request.form.get("nom"+str(i-1)), positionEntite=i)
-# 			db.session.add(ent)
-# 			db.session.commit()
-# 	for y in range(1, int(nbAtt)+1):
-# 		if request.method=="POST":
-# 			 att = Attributs.query.get(request.form.get("idAtt"))
-# 			 att.entite_id = request.form.()
-# 			 get("nbEnt")
-# 			 db.session.commit()
-# 	return render_template("relation_resume.html")
+@app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
+def save_entity(username,idProj):
+	# nbAtt = request.form.get("nbAtt")
+	# nbEnt = request.form.get("nbEnt")
+	# proj = get_proj(idProj)
+	# for i in range(1, int(nbEnt)+1):
+	# 	if request.method=="POST":
+	# 		ent = Entite(id=i, projet_id=idProj, nomEntite=request.form.get("nom"+str(i-1)), positionEntite=i)
+	# 		db.session.add(ent)
+	# 		db.session.commit()
+	# for y in range(1, int(nbAtt)+1):
+	# 	if request.method=="POST":
+	# 		 att = Attributs.query.get(request.form.get("idAtt"))
+	# 		 att.entite_id = request.form.()
+	# 		 get("nbEnt")
+	# 		 db.session.commit()
+	return render_template("relation_resume.html")
 
 # route vers le résumé des relations d'un MCD
 
