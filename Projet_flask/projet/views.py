@@ -546,3 +546,23 @@ def page_ajouter_relation_tablee(username,idProj):
 	attributs=get_attributs_proj(idProj)
 	entites=get_entity(idProj)
 	return render_template("new_relations_tablee.html",entites=entites,attributs=attributs,username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+
+# route de save d'une relation
+
+# @app.route("/projets/<string:username>/<int:idProj>/new_relation/tablee/save", methods=['GET', 'POST'])
+# def save_relation_tablee(username,idProj):
+# 	nbAtt = request.form.get("nbAtt")
+# 	nbEnt = request.form.get("nbEnt")
+# 	proj = get_proj(idProj)
+# 	for i in range(1, int(nbEnt)+1):
+# 		if request.method=="POST":
+# 			ent = Entite(id=i, projet_id=idProj, nomEntite=request.form.get("nom"+str(i-1)), positionEntite=i)
+# 			db.session.add(ent)
+# 			db.session.commit()
+# 	for y in range(1, int(nbAtt)+1):
+# 		if request.method=="POST":
+# 			 att = Attributs.query.get(request.form.get("idAtt"))
+# 			 att.entite_id = request.form()
+# 			 get("nbEnt")
+# 			 db.session.commit()
+# 	return render_template("relation_resume.html",username=username,idProj=idProj)

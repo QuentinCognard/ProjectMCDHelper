@@ -17,8 +17,8 @@
 
 
 
-    <section>
-      <input id="hidden" type='hidden' name='nbEnt' value='0'>
+    <section id="sectEntite">
+      <input id="hiddenEnt" type='hidden' name='nbEnt' value='2'>
       <div class="entite" id="ent1">
         <label>Entite1: </label>
         <select >
@@ -35,7 +35,7 @@
         {% endfor %}
         </select>
       </div>
-      <button type="button" class="ajouteAttribut" onClick="ajouteEntite()">Ajouter entite</button>
+      <button type="button" class="ajouteEntite" onClick="ajouteEntite()">Ajouter entite</button>
     </section>
 
     <p>
@@ -48,6 +48,7 @@
 
 <script>
   var nbAtt = 0;
+  var nbEnt = 2;
   var listAtt = [];
   // supprime un attribut
   function removeAttribut(id){
@@ -120,7 +121,79 @@
       {% endfor %}
       }
 
+      // -----------------------------------------------------------------------
 
+      // supprime une entite
+      function removeEntite(id){
+        id = id.substr(1);
+        var parent = document.querySelector("#sectEntite");
+        var child = document.getElementById("ent"+id);
+        parent.removeChild(child);
+        var start=parseInt(id)+1;
+        var end=parseInt(nbEnt)+1;
+        for (var i = start; i < end; i++){
+          var entite = document.getElementById("ent"+i);
+          entite.id = "ent"+(i-1);
+          var bouton = document.getElementById("e"+i);
+          bouton.id = "e"+(i-1);
+        }
+        nbEnt -= 1;
+        var hidden = document.getElementById("hiddenEnt");
+        hidden.value=nbEnt;
+      }
+
+      // ajoute une entite
+      function ajouteEntite(){
+          nbEnt += 1;
+          var hidden = document.getElementById("hiddenEnt");
+          hidden.value=nbEnt;
+          var divEntite = document.createElement("div");
+          divEntite.className="entite";
+          divEntite.id = "ent"+nbEnt;
+
+          ajouteSuppButtonEnt(divEntite);
+          ajouteNomEnt(divEntite);
+
+          var divActuel = document.querySelector(".ajouteEntite");
+          document.querySelector("#sectEntite").insertBefore(divEntite, divActuel);
+      }
+
+      // ajoute le bouton de supression de l'entite
+      function ajouteSuppButtonEnt(divEntite){
+        var bouton = document.createElement("button");
+        divEntite.appendChild(bouton);
+        var textBouton = document.createTextNode("X");
+        bouton.appendChild(textBouton);
+        bouton.className = "suppBout btn btn-danger";
+        bouton.type = "button";
+        bouton.id = "e"+nbEnt;
+        bouton.onclick = function(){removeEntite(bouton.id)};
+      }
+
+      // ajoute le champ de saisie du nom
+      function ajouteNomEnt(divEntite){
+          var p1 = document.createElement("p");
+          divEntite.appendChild(p1)
+          var labNomEnt = document.createElement("label");
+          labNomEnt.for="input";
+          var textNom = document.createTextNode("Entite :");
+          labNomEnt.appendChild(textNom);
+          p1.appendChild(labNomEnt);
+
+          //Create array of options to be added
+
+          //Create and append select list
+          var selectList = document.createElement("select");
+          selectList.id = "mySelect";
+          p1.appendChild(selectList);
+          //Create and append the options
+          {% for elem in entites %}
+              var option = document.createElement("option");
+              option.value = "{{elem.nomEntite}}";
+              option.text = "{{elem.nomEntite}}";
+              selectList.appendChild(option);
+          {% endfor %}
+          }
 
 </script>
 {% endblock %}
