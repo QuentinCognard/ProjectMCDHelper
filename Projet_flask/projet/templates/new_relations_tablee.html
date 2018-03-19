@@ -4,7 +4,7 @@
   <link rel="stylesheet" href= "{{url_for('static',filename='new_relation.css') }}"/>
 {% endblock %}
 {% block contain %}
-<form method='post' class="bd-example" action="">
+<form method='post' class="bd-example" action="{{url_for('save_relation_tablee',username=username,idProj=idProj)}}">
   <fieldset class="fieldset">
     <legend>Nouvelle relation</legend>
     <p>
@@ -21,19 +21,23 @@
       <input id="hiddenEnt" type='hidden' name='nbEnt' value='2'>
       <div class="entite" id="ent1">
         <label>Entite1: </label>
-        <select >
+        <select id="selectEnt1" name="selectEnt1">
         {% for elem in entites %}
             <option value="{{elem.nomEntite}}">{{elem.nomEntite}}</option>
         {% endfor %}
         </select>
+        <label>Cardinalité: </label>
+        <input type="text" name="cardi1" required>
       </div>
       <div class="entite" id="ent2">
             <label>Entite2: </label>
-        <select >
+        <select id="selectEnt2" name="selectEnt2">
         {% for elem in entites %}
             <option value="{{elem.nomEntite}}">{{elem.nomEntite}}</option>
         {% endfor %}
         </select>
+        <label>Cardinalité: </label>
+        <input type="text" name="cardi2" required>
       </div>
       <button type="button" class="ajouteEntite" onClick="ajouteEntite()">Ajouter entite</button>
     </section>
@@ -62,6 +66,9 @@
       attribut.id = "att"+(i-1);
       var bouton = document.getElementById(""+i);
       bouton.id = ""+(i-1);
+      var select = document.getElementById("selectAtt"+i);
+      select.id = "selectAtt"+(i-1)
+      select.name = select.id;
     }
     nbAtt -= 1;
     var hidden = document.getElementById("hidden");
@@ -110,7 +117,8 @@
 
       //Create and append select list
       var selectList = document.createElement("select");
-      selectList.id = "mySelect";
+      selectList.id = "selectAtt"+nbAtt;
+      selectList.name = "selectAtt"+nbAtt;
       p1.appendChild(selectList);
       //Create and append the options
       {% for elem in attributs %}
@@ -136,6 +144,12 @@
           entite.id = "ent"+(i-1);
           var bouton = document.getElementById("e"+i);
           bouton.id = "e"+(i-1);
+          var select = document.getElementById("selectEnt"+i);
+          select.id = "selectEnt"+(i-1)
+          select.name = select.id;
+          var textField = document.getElementById("cardi"+i);
+          textField.id = "cardi"+(i-1)
+          textField.name = select.id;
         }
         nbEnt -= 1;
         var hidden = document.getElementById("hiddenEnt");
@@ -184,7 +198,8 @@
 
           //Create and append select list
           var selectList = document.createElement("select");
-          selectList.id = "mySelect";
+          selectList.id = "selectEnt"+nbEnt;
+          selectList.name = "selectEnt"+nbEnt;
           p1.appendChild(selectList);
           //Create and append the options
           {% for elem in entites %}
@@ -193,7 +208,16 @@
               option.text = "{{elem.nomEntite}}";
               selectList.appendChild(option);
           {% endfor %}
-          }
+          var label = document.createElement("label");
+          var textLab = document.createTextNode("Cardinalité : ");
+          label.appendChild(textLab);
+          divEntite.appendChild(label);
+          var textField = document.createElement("input");
+          textField.name = "cardi"+nbEnt;
+          textField.id = textField.name;
+          textField.type = "text";
+          divEntite.appendChild(textField);
+        }
 
 </script>
 {% endblock %}

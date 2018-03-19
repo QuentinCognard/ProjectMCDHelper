@@ -549,20 +549,25 @@ def page_ajouter_relation_tablee(username,idProj):
 
 # route de save d'une relation
 
-# @app.route("/projets/<string:username>/<int:idProj>/new_relation/tablee/save", methods=['GET', 'POST'])
-# def save_relation_tablee(username,idProj):
-# 	nbAtt = request.form.get("nbAtt")
-# 	nbEnt = request.form.get("nbEnt")
-# 	proj = get_proj(idProj)
-# 	for i in range(1, int(nbEnt)+1):
-# 		if request.method=="POST":
-# 			ent = Entite(id=i, projet_id=idProj, nomEntite=request.form.get("nom"+str(i-1)), positionEntite=i)
-# 			db.session.add(ent)
-# 			db.session.commit()
-# 	for y in range(1, int(nbAtt)+1):
-# 		if request.method=="POST":
-# 			 att = Attributs.query.get(request.form.get("idAtt"))
-# 			 att.entite_id = request.form()
-# 			 get("nbEnt")
-# 			 db.session.commit()
-# 	return render_template("relation_resume.html",username=username,idProj=idProj)
+@app.route("/projets/<string:username>/<int:idProj>/new_relation/tablee/save", methods=['GET', 'POST'])
+def save_relation_tablee(username,idProj):
+	nbAtt = request.form.get("nbAtt")
+	nbEnt = request.form.get("nbEnt")
+	proj = get_proj(idProj)
+	relations=Relation.query.all()
+	id=relations[len(relations)-1].id
+	relation=Relation(id+1,idProj,request.form.get("nomR"))
+	db.session(relation)
+	db.commit()
+	for i in range(1, int(nbEnt)+1):
+		if request.method=="POST":
+			re=Relationentite(relation_id=id,entite_id=get_entitybyname(idProj,request.form.get("selectAtt"+i)))
+			db.session.add(re)
+			db.session.commit()
+	for y in range(1, int(nbAtt)+1):
+		if request.method=="POST":
+			 att = Attributs.query.get(request.form.get("idAtt"))
+			 att.entite_id = request.form()
+			 get("nbEnt")
+			 db.session.commit()
+	return render_template("relation_resume.html",username=username,idProj=idProj)

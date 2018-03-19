@@ -228,3 +228,6 @@ def test(test):
 
 def get_entity(idProj):
     return Entite.query.filter(Entite.projet_id == idProj).all()
+
+def get_entitybyname(idProj,nom):
+    return Entite.query.filter(Entite.projet_id == idProj,nomEntite==nom).all()
