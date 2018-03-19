@@ -2,34 +2,42 @@
 {% block styles %}
 {{ super() }}
 
-<link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
+<link rel="stylesheet" href= "{{url_for('static',filename='new_relation.css') }}"/>
 {% endblock %}
 {% block contain %}
-
-<form class="bd-example">
+<script>
+  function valider(){
+    document.getElementById('valider').disabled=false;
+  }
+</script>
   <fieldset>
+        <legend>Nouveau MCD</legend>
+
+      <header>
+        <input type="radio" name="relation" onclick="valider()">Relation simple</input>
+        <input type="radio" name="relation" onclick="valider()">Relation tablée</input>
+        <input class="btn btn-success" id="valider" type="submit" value="Valider"disabled></input>
+      </header>
+      <article>
+        <section>
+          <h4>Relation simple:</h4>
+          <img src="{{ url_for('static', filename='images/relation-simple.png')}}">
+        </section>
+        <section>
+          <h4>Relation tablée:</h4>
+          <img src="{{ url_for('static', filename='images/relation-tablee.png')}}">
+        </section>
+      </article>
+
+      <footer>
+        <a href="{{url_for('page_ajouter_relation',username=username,idProj=idProj)}}"><button class="btn btn-warning" role="button">Annuler</button></a>
+        <button class="btn btn-success" type="submit">Valider</button>
+      </footer>
 
 
 <!-- Ce paragraphe devra se répéter autant de fois qu'il y a de relation -->
 
   <!-- Exemple d'affichage de relation entre 2 entités , boucle for -->
-    <div class="bordmcd">
-      <legend>Nouveau MCD</legend>
-
-      <p>Relation simple entre Entité1/Entité2
-        <a href="{{ url_for('page_ajouter_relation1',username=username,idProj=idProj) }}" class="btn btn-warning" role="button">Modifier</a>
-        <button type="submit" class="btn btn-danger">Supprimer</button>
-      </p>
-    </div>
-
-    <div>
-      <a href="{{ url_for('page_ajouter_relation1',username=username,idProj=idProj) }}" class="btn btn-primary" role="button">Ajouter une relation</a>
-
-      <a href="{{ url_for('page_resume_mcd',username=username,idProj=idProj) }}" class="btn btn-success" role="button">Valider</a>
-    </div>
-
-
 
   </fieldset>
-</form>
 {% endblock %}

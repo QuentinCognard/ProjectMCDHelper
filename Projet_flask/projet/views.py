@@ -414,29 +414,6 @@ def page_projet_perso(username, idProj):
 		return render_template("consult_own_project.html", projet = proj,username=username,id=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
-# <<<<<<< HEAD
-# @app.route("/projets")
-# def page_projets():
-# 	return render_template("accueil_projet.html")
-
-# route vers un projet perso en fonction de l'ID
-
-# @app.route("/projets/<idProj>/")
-# def page_projet_perso(idProj):
-	# proj = get_proj(idProj)
-	# if proj:
-	# 	return render_template("consult_own_project.html", projet = proj)
-	# else:
-	# 	return "Projet inconnu"
-	# Pour plus tard
-# @app.route("/projets/0")
-# def page_projet_perso():
-# 	return render_template("consult_own_project.html")
-
-# =======
-# >>>>>>> Arthur/master
-# route vers la creation d'un MCD en fonction de l'ID du projet
-
 
 @app.route("/projets/<string:username>/<int:idProj>/new-attributs")
 @login_required
@@ -473,10 +450,6 @@ def page_modif_attributs(username, idProj):
 		projet=get_projet(username, idProj),nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 
-@app.route("/projets/<string:username>/<int:idProj>/relations")
-@login_required
-def page_creer_relations(username, idProj):
-	return render_template("new_relations.html",username=username,id=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 class CreaMCDForm(FlaskForm):#Formulaire de création d'un MCD
 	listeAttribut=SelectField('Attributs',choices=[])
@@ -548,13 +521,13 @@ def save_entity(username,idProj):
 
 @app.route("/projets/<string:username>/<int:idProj>/relation_resume")
 def page_resume_relation(username,idProj):
-	return render_template("relation_resume.html",username=username,idProj=idProj)
+	return render_template("relation_resume.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 # route vers la Premier etape de la creation d'une relation
 
-@app.route("/projets/<string:username>/<int:idProj>/new_relation1")
-def page_ajouter_relation1(username,idProj):
-	return render_template("new_relation1.html",username=username,idProj=idProj)
+@app.route("/projets/<string:username>/<int:idProj>/new_relation")
+def page_ajouter_relation(username,idProj):
+	return render_template("new_relations.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 # route vers le resumer d'un MCD
 

@@ -1,0 +1,9 @@
+button{
+  margin-top: 2em;
+  margin-left: 2em;
+}
+section{
+  display: flex;
+  flex-wrap: nowrap;
+  margin-top: 3em;
+}
