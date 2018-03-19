@@ -523,6 +523,12 @@ def save_entity(username,idProj):
 def page_resume_relation(username,idProj):
 	return render_template("relation_resume.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
+# route vers la création d'une relation simple
+
+@app.route("/projets/<string:username>/<int:idProj>/new_relation/simple")
+def page_new_simple_relation(username, idProj):
+	return render_template("new_simple_relation.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username),entites=get_entity(idProj))
+
 # route vers la Premier etape de la creation d'une relation
 
 @app.route("/projets/<string:username>/<int:idProj>/new_relation")
