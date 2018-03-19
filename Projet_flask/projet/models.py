@@ -191,6 +191,9 @@ def get_all_projets(n):
 
 def get_attributs_projet(idProj):
     allatt= Attributs.query.join(Projet).filter(Projet.id==idProj).all()
+    res=[]
+    for elem in allat:
+        res.append(elem)
     return allat
 
 
@@ -222,3 +225,6 @@ def get_notif_byexp_dest_nom(nom,exp,dest,id):
 
 def test(test):
      return db.session.query(Projet).filter(Projet.nomProj.like("%" + test + "%")).all()
+
+def get_entity(idProj):
+    return Entite.query.filter(Entite.projet_id == idProj).all()

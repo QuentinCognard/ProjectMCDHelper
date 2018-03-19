@@ -19,22 +19,33 @@
 
     <section>
       <input id="hidden" type='hidden' name='nbEnt' value='0'>
-      <div class="entite" id="ent"+1>
-
+      <div class="entite" id="ent1">
+        <label>Entite1: </label>
+        <select >
+        {% for elem in entites %}
+            <option value="{{elem.nomEntite}}">{{elem.nomEntite}}</option>
+        {% endfor %}
+        </select>
       </div>
-      <div class="entite" id="ent"+2>
-
+      <div class="entite" id="ent2">
+            <label>Entite2: </label>
+        <select >
+        {% for elem in entites %}
+            <option value="{{elem.nomEntite}}">{{elem.nomEntite}}</option>
+        {% endfor %}
+        </select>
       </div>
-      <button type="button" class="ajouteAttribut" onClick="ajouteElement()">Ajouter entite</button>
+      <button type="button" class="ajouteAttribut" onClick="ajouteEntite()">Ajouter entite</button>
     </section>
 
     <p>
-      <a href=""><button class="btn btn-warning" role="button">Annuler</button></a>
+      <a href="{{url_for('page_ajouter_relation',username=username,idProj=idProj)}}"><button class="btn btn-warning" role="button">Annuler</button></a>
       <button class="btn btn-success" type="submit">Valider</button>
 
     </p>
   </fieldset>
 </form>
+
 <script>
   var nbAtt = 0;
   var listAtt = [];
@@ -50,9 +61,6 @@
       attribut.id = "att"+(i-1);
       var bouton = document.getElementById(""+i);
       bouton.id = ""+(i-1);
-      var nomAtt = document.getElementById("nom"+i);
-      nomAtt.id = "nom"+(i-1);
-      nomAtt.name = "nom"+(i-1);
     }
     nbAtt -= 1;
     var hidden = document.getElementById("hidden");
@@ -95,7 +103,7 @@
       labNomAtt.for="input";
       var textNom = document.createTextNode("Attribut :");
       labNomAtt.appendChild(textNom);
-            p1.appendChild(labNomAtt);
+      p1.appendChild(labNomAtt);
 
       //Create array of options to be added
 
