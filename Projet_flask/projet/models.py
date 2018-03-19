@@ -191,10 +191,7 @@ def get_all_projets(n):
 
 def get_attributs_projet(idProj):
     allatt= Attributs.query.join(Projet).filter(Projet.id==idProj).all()
-    res=[]
-    for a in allatt:
-        res.append(a)
-    return res
+    return allat
 
 
 def get_user_projet(nomProj):

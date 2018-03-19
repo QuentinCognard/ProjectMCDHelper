@@ -7,3 +7,19 @@ section{
   flex-wrap: nowrap;
   margin-top: 3em;
 }
+.attribut {
+  display: flex;
+  flex-wrap: wrap;
+}
+.suppBout {
+  margin-right: 1em;
+  width: 3em;
+  height: 2em;
+}
+.attribut *{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+div{
+  margin-bottom: 1em;
+}

@@ -534,3 +534,8 @@ def page_ajouter_relation(username,idProj):
 @app.route("/projets/<string:username>/<int:idProj>/mcd_resume")
 def page_resume_mcd(username,idProj):
 	return render_template("mcd_resume.html",username=username,idProj=idProj)
+
+@app.route("/projets/<string:username>/<int:idProj>/new_relation/tablee")
+def page_ajouter_relation_tablee(username,idProj):
+	attributs=get_attributs_proj(idProj)
+	return render_template("new_relations_tablee.html",attributs=attributs,username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))

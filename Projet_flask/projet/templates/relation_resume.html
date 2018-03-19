@@ -6,17 +6,28 @@
 {% endblock %}
 {% block contain %}
 <script>
-  function valider(){
+  function radio(){
     document.getElementById('valider').disabled=false;
+  }
+  function valider(){
+    var simple = document.getElementById('simple');
+    var idProj='{{ idProj }}'
+    var username=' {{ username }}'
+    if (simple.checked){
+      document.location.href="/projets/"+username+"/"+idProj+"/new_relation/simple";
+    }
+    else{
+      document.location.href="/projets/"+username+"/"+idProj+"/new_relation/tablee";
+    }
   }
 </script>
   <fieldset>
         <legend>Nouveau MCD</legend>
 
       <header>
-        <input type="radio" name="relation" onclick="valider()">Relation simple</input>
-        <input type="radio" name="relation" onclick="valider()">Relation tablée</input>
-        <input class="btn btn-success" id="valider" type="submit" value="Valider"disabled></input>
+        <input type="radio" id="simple" name="relation" onclick="radio()">Relation simple</input>
+        <input type="radio" id="tabl" name="relation" onclick="radio()">Relation tablée</input>
+        <input class="btn btn-success" id="valider" type="submit" onclick="valider()" value="Valider"disabled></input>
       </header>
       <article>
         <section>
