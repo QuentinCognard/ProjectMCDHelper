@@ -225,3 +225,6 @@ def get_notif_byexp_dest_nom(nom,exp,dest,id):
 
 def test(test):
      return db.session.query(Projet).filter(Projet.nomProj.like("%" + test + "%")).all()
+
+liste = get_tout_du_projet(1)
+print(liste)
