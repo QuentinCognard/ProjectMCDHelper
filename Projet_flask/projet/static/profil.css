@@ -1,0 +1,72 @@
+div>h2{
+  text-align: center;
+  font-size: 3em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+div>p{
+  font-size: 1.5em;
+  text-align: center;
+}
+
+img{
+display:block;
+width:75%;
+height: 30%;
+margin-left: auto;
+margin-right: auto;
+}
+
+
+.edit{
+  text-align: center;
+}
+
+h2{
+  text-align: center;
+}
+
+#test{
+  border: solid;
+  padding-top: 1%;
+  width: 35%;
+  margin-left: 32.5%;
+  margin-right: 32.5%;
+  text-align: center;
+}
+
+#test_bis{
+  margin-left:auto;
+  margin-right: auto;
+}
+#test_bis>label{
+  display: inline-block;
+  width: 100px;
+  margin-right: 9em;
+  vertical-align: top;
+  text-align: left;
+}
+
+#test_bis>*{
+  margin-top: 0.3em;
+}
+#photo{
+  display: inline-block;
+  margin-bottom: 0.5em;
+}
+#photo>label{
+  padding-top:0.3em;
+  margin-right: 20px;
+  vertical-align: top;
+  text-align: left;
+}
+
+#photo{
+  margin-right: auto;
+  margin-left: auto;
+}
+/*
+form>div>input[type=text]{
+  width:40%;
+}*/

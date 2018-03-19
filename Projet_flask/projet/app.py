@@ -10,7 +10,7 @@ manager = Manager(app)
 
 from flask_login import LoginManager
 login_manager = LoginManager(app)
-login_manager.login_view = "login"
+login_manager.login_view = "connexion"
 
 app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 from flask_bootstrap import Bootstrap

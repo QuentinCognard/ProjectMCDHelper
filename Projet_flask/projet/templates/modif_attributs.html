@@ -1,55 +1,130 @@
 {% extends "base_excerciseur.html" %}
+{% block styles %}
+{{ super() }}
+  <link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
+{% endblock %}
 {% block contain %}
 
-
-<form class="bd-example" action="/projets">
+<form method='post' class="bd-example" action="{{ url_for('save_new_attributs', username=username, idProj=idProj ) }}">
   <fieldset class="fieldset">
     <legend>Nouveau MCD</legend>
+
+<!-- fixe: Nom du MCD -->
+
+    <p>
+      <label for="input">Nom du MCD :</label>
+      <input type="text" name="nomMCD" placeholder="Nom du MCD" required value="{{ projet.nomMCD }}" />
+    </p>
+
+    {% for i in range(1, nbAtts+1) %}
+    <div class="attribut" id="att{{ i }}">
+      <button class="suppBout" type="button" id="{{ i }}" onClick="removeAttribut(this.id)">X</button>
+      <p>
+        <label>Nom de l'attribut :</label>
+        <input id="nom{{ i }}" name="nom{{ i }}" type="text" placeholder="Nom de l'attribut" required value="{{ attributs[i-1].nomAttribut }}" />
+      </p>
+      <p>
+        <label>Type de l'attribut :</label>
+        <select id="type{{ i }}" name="type{{ i }}">
+          {% if attributs[i-1].typeAttribut=="integer" %}
+            <option value="integer" selected>Integer</option>
+          {% else %}
+            <option value="integer">Integer</option>
+          {% endif %}
+
+          {% if attributs[i-1].typeAttribut=="float" %}
+            <option value="float" selected>Float</option>
+          {% else %}
+            <option value="float">Float</option>
+          {% endif %}
+
+          {% if attributs[i-1].typeAttribut=="string" %}
+            <option value="string" selected>String</option>
+          {% else %}
+            <option value="string">String</option>
+          {% endif %}
+
+          {% if attributs[i-1].typeAttribut=="char" %}
+            <option value="char" selected>Char</option>
+          {% else %}
+            <option value="char">Char</option>
+          {% endif %}
+
+          {% if attributs[i-1].typeAttribut=="date" %}
+            <option value="date" selected>Date</option>
+          {% else %}
+            <option value="date">Date</option>
+          {% endif %}
+        </select>
+      </p>
+      <p>
+        <label>Genre :</label>
+        <select id="genre{{ i }}" name="genre{{ i }}">
+          {% if attributs[i-1].genreAttribut=="masculin" %}
+            <option value="masculin" selected>Masculin</option>
+          {% else %}
+            <option value="masculin">Masculin</option>
+          {% endif %}
+
+          {% if attributs[i-1].genreAttribut=="feminin" %}
+            <option value="feminin" selected>Feminin</option>
+          {% else %}
+            <option value="feminin">Feminin</option>
+          {% endif %}
+        </select>
+      </p>
+    </div>
+    {% endfor %}
+
+<!-- Cette div devra se répéter autant de fois qu'il y a d'attributs avec la fonction javascript en dessous -->
+
+    <input id="hidden" type='hidden' name='nbAtt' value="{{ nbAtts }}">
+
+    <button type="button" class="ajouteAttribut" onClick="ajouteElement()">Ajouter attribut</button>
+
+    <p>
+      <a href="{{url_for('page_projet_perso',username=username,idProj=idProj)}}"><button type="button">Annuler</button></a>
+      <button type="submit" >Valider</button>
+    </p>
+
   </fieldset>
-
-  <div class="relation" id="rel1">
-    <input type="radio" name="relType" id="simple">Simple<br>
-    <input type="radio" name="relType" id="tablee">Tablée
-    <p>Tables: </p>
-    <select class="relTables">
-        <option value="">Table 1</option>
-        <option value="">Table 2</option>
-        <option value="">Table 3</option>
-        <option value="">Table 4</option>
-        <option value="">Table 5</option>
-    </select>
-    <select class="relTables">
-        <option value="">Table 1</option>
-        <option value="">Table 2</option>
-        <option value="">Table 3</option>
-        <option value="">Table 4</option>
-        <option value="">Table 5</option>
-    </select>
-  </div>
-
-
-  <button type="button" class="ajouteAttribut" onClick="ajouteElement()">Ajouter attribut</button>
-
-  <p>
-    <a href="#"><button role="button">Annuler</button></a>
-    <button type="submit">Valider</button>
-  </p>
 </form>
 
-<!-- <script>
-  var nbRel = 0;
+<script>
+  var nbAtt = parseInt({{ nbAtts }});
 
   // supprime un attribut
-  function removeRelation(id){
+  function removeAttribut(id){
     var parent = document.querySelector(".fieldset");
-    var child = document.getElementById("rel"+id);
+    var child = document.getElementById("att"+id);
     parent.removeChild(child);
+    var start=parseInt(id)+1;
+    var end=parseInt(nbAtt)+1;
+    for (var i = start; i < end; i++){
+      var attribut = document.getElementById("att"+i);
+      attribut.id = "att"+(i-1);
+      var bouton = document.getElementById(""+i);
+      bouton.id = ""+(i-1);
+      var nomAtt = document.getElementById("nom"+i);
+      nomAtt.id = "nom"+(i-1);
+      nomAtt.name = "nom"+(i-1);
+      var typeAtt = document.getElementById("type"+i);
+      typeAtt.id = "type"+(i-1);
+      typeAtt.name = "type"+(i-1);
+      var genreAtt = document.getElementById("genre"+i);
+      genreAtt.id = "genre"+(i-1);
+      genreAtt.name = "genre"+(i-1);
+    }
     nbAtt -= 1;
+    var hidden = document.getElementById("hidden");
+    hidden.value=nbAtt;
   }
 
   // ajoute un attribut
   function ajouteElement(){
-      nbRel += 1;
+      nbAtt += 1;
+      var hidden = document.getElementById("hidden");
+      hidden.value=nbAtt;
       var divAttribut = document.createElement("div");
       divAttribut.className="attribut";
       divAttribut.id = "att"+nbAtt;
@@ -74,7 +149,7 @@
     bouton.className = "suppBout";
     bouton.type = "button";
     bouton.id = nbAtt;
-    bouton.onclick = function(){removeAttribut(this.id)};
+    bouton.onclick = function(){removeAttribut(bouton.id)};
   }
 
   // ajoute le champde saisie du nom
@@ -82,10 +157,11 @@
       var p1 = document.createElement("p");
       divAttribut.appendChild(p1)
       var labNomAtt = document.createElement("label");
-      labNomAtt.for="input";
-      var textNom = document.createTextNode("Nom de l'attribut :");
+      var textNom = document.createTextNode("Nom de l'attribut : ");
       labNomAtt.appendChild(textNom);
       var inputNomAtt = document.createElement("input");
+      inputNomAtt.id = "nom"+nbAtt;
+      inputNomAtt.name = "nom"+nbAtt;
       inputNomAtt.type="text";
       inputNomAtt.placeholder="Nom de l'attribut";
       inputNomAtt.required="required";
@@ -98,10 +174,11 @@
       var p2 = document.createElement("p");
       divAttribut.appendChild(p2);
       var labTypeAtt = document.createElement("label");
-      labTypeAtt.for = "select";
-      var textType = document.createTextNode("Type de l'attribut :");
+      var textType = document.createTextNode("Type de l'attribut : ");
       labTypeAtt.appendChild(textType);
       var selTypeAtt = document.createElement("select");
+      selTypeAtt.id = "type"+nbAtt;
+      selTypeAtt.name = "type"+nbAtt;
       p2.appendChild(labTypeAtt);
       p2.appendChild(selTypeAtt);
       var opt1 = document.createElement("option");
@@ -170,11 +247,11 @@
       var p5 = document.createElement("p");
       divAttribut.appendChild(p5);
       var labGenreAtt = document.createElement("label");
-      labGenreAtt.for="select";
-      var textGenreAtt = document.createTextNode("Genre :");
+      var textGenreAtt = document.createTextNode("Genre : ");
       labGenreAtt.appendChild(textGenreAtt);
       var selGenreAtt = document.createElement("select");
-      // selGenreAtt.class="genreatt";
+      selGenreAtt.id = "genre"+nbAtt;
+      selGenreAtt.name = "genre"+nbAtt;
       var opt6 = document.createElement("option");
       var opt7 = document.createElement("option");
       opt6.value="masculin";
@@ -189,7 +266,6 @@
       p5.appendChild(selGenreAtt);
   }
 
-</script> -->
-
+</script>
 
 {% endblock %}

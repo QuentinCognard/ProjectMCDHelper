@@ -2,10 +2,16 @@
 {% block styles %}
 {{ super() }}
   <link rel="stylesheet" href= "{{url_for('static',filename='accueil_projet.css') }}"/>
+    <link rel="stylesheet" href= "{{url_for('static',filename='description.css') }}"/>
 
 {% endblock %}
 {% block contain %}
-<div id="membres">
+
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
+<a id="retour" href="{{url_for('parametresProj',username=current_user.login,nomProj=nomProj)}}"><input type="Submit"  value="< Retour"></a>
+<h1>Modifier projet :</h1><div id="membres">
   <h4> Membres du projet : </h4></br>
   {% for membres in membresProj %}
     <p>{{ membres.user_login }}: {{ membres.droit.nomDroit }}</p>
@@ -16,7 +22,7 @@
       <h3> Vous n'avez pas l'autorisation de supprimer, de modifier ou d'ajouter des membres. Demandez aux membres master d'effectuer les actions nécessaires.</h3>
     </div>
   {% else %}
-    <a href="{{ url_for('add_membre',username=username,nomProj=nomProj)}}"><input type="Submit" value="Ajouter Membre"></a>
+    <a href="{{ url_for('add_membre',username=username,nomProj=nomProj)}}"><input class="btn btn-success" type="Submit" value="Ajouter Membre"></a>
   </div>
     <div id="modif">
     <select id="select">
@@ -43,19 +49,21 @@
       }
       </script>
       <div id="input">
-        <input type="Submit" value="Modifier" onclick="modifier()">
-        <input type="Submit" value="Supprimer" onclick="supprimer()">
+        <input type="Submit" class="btn btn-warning" value="Modifier" onclick="modifier()">
+        <input type="Submit" class="btn btn-danger" value="Supprimer" onclick="supprimer()">
       </div>
   </div>
   {% with messages = get_flashed_messages() %}
     {% if messages %}
       <ul class=flashes>
       {% for message in messages %}
+      {% if message!= "Please log in to access this page." %}
         <li>{{ message }}</li>
+      {% endif %}
       {% endfor %}
       </ul>
     {% endif %}
   {% endwith %}
   {% endif %}
-
+{% endif %}
 {% endblock %}

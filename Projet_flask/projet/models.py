@@ -1,6 +1,7 @@
 from .app import *
 from flask_login import UserMixin
 from sqlalchemy import func
+from datetime import datetime
 
 class User(db.Model, UserMixin):
     prenom = db.Column(db.String(100))
@@ -50,11 +51,10 @@ class Entite(db.Model):
 class Attributs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key=True)
-    entite_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
+    entite_id = db.Column(db.Integer, db.ForeignKey("entite.id"))
     nomAttribut = db.Column(db.String(100))
     genreAttribut = db.Column(db.String(100))
     typeAttribut = db.Column(db.String(100))
-    valeurAttribut = db.Column(db.String(100))
     actifAttribut = db.Column(db.String(100))
     entite = db.relationship("Entite", foreign_keys=[entite_id], backref=db.backref("projetEntite", lazy="dynamic"))
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetAttribut", lazy="dynamic"))
@@ -92,6 +92,21 @@ def get_tout_du_projet(idprojet):
         liste.append(Relationentite.query.filter(Relationentite.relation==r).all())
         liste.append(Relationattributs.query.filter(Relationattributs.relation==r).all())
     return liste
+
+class Notification(db.Model):
+    nom= db.Column(db.Integer, primary_key=True)
+    expediteur=db.Column(db.String(100),db.ForeignKey("user.login"),primary_key=True)
+    destinataire=db.Column(db.String(100),db.ForeignKey("user.login"),primary_key=True)
+    idProj=db.Column(db.Integer,db.ForeignKey("projet.id"), primary_key=True)
+    texte=db.Column(db.String(300))
+    date=db.Column(db.DateTime, nullable=False,default=datetime.utcnow)
+
+
+def get_nb_notifications(nom):
+    return len(Notification.query.filter(Notification.destinataire==nom).all())
+
+def get_notifications(nom):
+    return Notification.query.filter(Notification.destinataire==nom).order_by(Notification.date.desc()).all()
 
 def get_user(login):
     User = User.query.filter(User.login==login).all()
@@ -174,9 +189,39 @@ def get_all_projets(n):
         res.append(p[i])
     return res
 
+def get_attributs_projet(idProj):
+    allatt= Attributs.query.join(Projet).filter(Projet.id==idProj).all()
+    res=[]
+    for a in allatt:
+        res.append(a)
+    return res
+
+
 def get_user_projet(nomProj):
     gerer=get_gerer_byProjet(nomProj)
     res=[]
     for g in gerer:
         res.append(g.user_login)
     return res
+
+
+def get_attributs_proj(idProj):
+    return Attributs.query.filter(Attributs.projet_id == idProj).all()
+
+def get_master_proj(nomProj):
+    projet=get_gerer_byProjet(nomProj)
+    for p in projet:
+        if p.droit_id==1:
+            return p.user_login
+    return None
+
+
+def get_notif_byexp_dest_id(exp,dest,id):
+    return Notification.query.filter(Notification.expediteur==exp,Notification.destinataire==dest,Notification.idProj==id).first()
+
+def get_notif_byexp_dest_nom(nom,exp,dest,id):
+    return Notification.query.filter(Notification.nom==nom,Notification.expediteur==exp,Notification.destinataire==dest,Notification.idProj==id).all()
+
+
+def test(test):
+     return db.session.query(Projet).filter(Projet.nomProj.like("%" + test + "%")).all()
