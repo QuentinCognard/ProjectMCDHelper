@@ -7,18 +7,18 @@
   <fieldset class="fieldset">
     <legend>Nouveau MCD</legend>
       {% for elem in relations %}
-      <p>Relation {{elem.nomRelation}} entre
+      <p>Relation <b>{{elem.nomRelation}}</b> entre
       {% for ent in entites %}
         {% if ent.relation_id==elem.id %}
-          {{ent.entite.nomEntite}}
+          <b>{{ent.entite.nomEntite}}</b>
         {% endif %}
         {% endfor %}
-        avec les attributs
+        avec le(s) attribut(s):
         {% for att in attributs %}
           {% if att.relation_id==elem.id %}
             {% for a1 in a %}
               {% if att.attribut_id==a1.id %}
-                  {{a1.nomAttribut}}
+                  <b>{{a1.nomAttribut}}</b>
               {% endif %}
             {% endfor %}
           {% endif %}
