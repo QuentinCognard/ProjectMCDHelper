@@ -4,3 +4,18 @@
 - id: 2
   projet_id: 1
   nomEntite: Chien
+- id: 3
+  projet_id: 2
+  nomEntite: Personne
+- id: 4
+  projet_id: 2
+  nomEntite: Chien
+- id: 5
+  projet_id: 2
+  nomEntite: Pates
+- id: 6
+  projet_id: 2
+  nomEntite: Date
+- id: 7
+  projet_id: 2
+  nomEntite: Label

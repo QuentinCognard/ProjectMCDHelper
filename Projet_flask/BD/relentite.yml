@@ -2,9 +2,47 @@
   relation_id: 1
   entite_id: 2
   cardinaliteE: 0-n
-  cardinaliteR: 1-1
 - id: 2
   relation_id: 1
   entite_id: 1
   cardinaliteE: 1-1
-  cardinaliteR: 1-1
+- id: 3
+  relation_id: 2
+  entite_id: 3
+  cardinaliteE: 1-1
+- id: 4
+  relation_id: 2
+  entite_id: 5
+  cardinaliteE: 1-1
+- id: 5
+  relation_id: 2
+  entite_id: 6
+  cardinaliteE: 1-1
+- id: 6
+  relation_id: 3
+  entite_id: 3
+  cardinaliteE: 1-1
+- id: 7
+  relation_id: 3
+  entite_id: 4
+  cardinaliteE: 1-1
+- id: 8
+  relation_id: 4
+  entite_id: 5
+  cardinaliteE: 1-1
+- id: 9
+  relation_id: 4
+  entite_id: 7
+  cardinaliteE: 1-1
+- id: 10
+  relation_id: 4
+  entite_id: 8
+  cardinaliteE: 1-1
+- id: 11
+  relation_id: 5
+  entite_id: 7
+  cardinaliteE: 1-1
+- id: 12
+  relation_id: 5
+  entite_id: 7
+  cardinaliteE: 1-1

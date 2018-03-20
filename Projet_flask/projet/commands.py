@@ -66,7 +66,7 @@ def loadrelationentite(filename):
     db.create_all()
     relation = yaml.load(open(filename))
     for a in relation:
-        o = Relationentite(id=a["id"],relation_id=a["relation_id"],entite_id=a["entite_id"],cardinaliteE=a["cardinaliteE"],cardinaliteR=a["cardinaliteR"])
+        o = Relationentite(id=a["id"],relation_id=a["relation_id"],entite_id=a["entite_id"],cardinaliteE=a["cardinaliteE"])
         db.session.add(o)
     db.session.commit()
 
