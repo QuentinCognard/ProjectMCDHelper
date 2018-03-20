@@ -16,43 +16,35 @@
       <input type="text" name="nomMCD" placeholder="Nom du MCD" required />
     </p>
 
-<!-- Cette div devra se répéter autant de fois qu'il y a d'attributs avec la fonction javascript en dessous
+<!-- Cette div devra se répéter autant de fois qu'il y a d'attributs avec la fonction javascript en dessous -->
 
     <div class="attribut">
       <p>
         <label for="input">Nom de l'attribut :</label>
-        <input type="text" class="nameatt" placeholder="Nom de l'attribut" />
+        <input type="text" id="nom1" name="nom1" placeholder="Nom de l'attribut" required />
       </p>
 
       <p>
         <label for="select" >Type de l'attribut :</label>
-        <select class="typeatt">
-            <option value="">Integer</option>
-            <option value="">Float</option>
-            <option value="">String</option>
-            <option value="">Char</option>
-            <option value="">Date</option>
+        <select id="type1" name="type1">
+            <option value="integer">Integer</option>
+            <option value="float">Float</option>
+            <option value="string">String</option>
+            <option value="char">Char</option>
+            <option value="date">Date</option>
         </select>
-      </p>
-
-      <p>
-        <label for="input">Valeur :</label>
-        <input type="number" class="valeuratt" placeholder="0" />
-      </p>
-
-      <p>
-        <label for="input">Quantité :</label>
-        <input type="number" class="quantiteatt" placeholder="0" />
       </p>
 
       <p>
         <label for="select">Genre :</label>
-        <select class="genreatt">
-          <option value="">Masculin</option>
-            <option value="">Féminin</option>
+        <select id="genre1" name="genre1">
+          <option value="masculin">Masculin</option>
+            <option value="feminin">Féminin</option>
         </select>
       </p>
-    </div> -->
+    </div>
+
+<!-- Fin de la div -->
 
     <input id="hidden" type='hidden' name='nbAtt' value='0'>
 
@@ -68,7 +60,7 @@
 </form>
 
 <script>
-  var nbAtt = 0;
+  var nbAtt = 1;
   var listAtt = [];
   // supprime un attribut
   function removeAttribut(id){
