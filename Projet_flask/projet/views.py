@@ -51,6 +51,10 @@ class CreerCompteForm(FlaskForm):
 class SearchForm(Form):
 	search = StringField('')
 
+class ObjetTest():
+	id = 0
+	nom = "coucou"
+
 @app.route("/") #route pour la page de connexion
 def home():
 	f = CreerCompteForm()
@@ -63,11 +67,19 @@ def lucas(id_projet):
 	return render_template("test.html", sujet = "test")
 
 
-@app.route("/projets/<string:username>/<int:idProj>/relations")
-def test_lucas():
-	ecrire_Entite("test2.txt")
-	return render_template("new_relations.html",username=username,id=idProj)
+@app.route("/test/parceque/personne/ne/viens/ici/ou/presque/<int:idProj>")
+def test_dessins_lucas_bis(idProj):
+	test = ObjetTest();
+	liste_tout = get_tout_du_projet(idProj)
+	string = repr(liste_tout)
+	return render_template("testV2.html",projet=test, bis=repr(liste_tout), entites = repr(liste_tout[0]), atts = repr(liste_tout[1]), rels = repr(liste_tout[2]), relsE = repr(liste_tout[3]), relsA = repr(liste_tout[4]))
 
+@app.route("/test/parceque/personne/ne/viens/ici/<int:idProj>")
+def test_dessins_lucas(idProj):
+	test = ObjetTest();
+	liste_tout = get_tout_du_projet(idProj)
+	string = repr(liste_tout)
+	return render_template("test.html",projet=test, bis=repr(liste_tout), entites = repr(liste_tout[0]), atts = repr(liste_tout[1]), rels = repr(liste_tout[2]), relsE = repr(liste_tout[3]), relsA = repr(liste_tout[4]))
 
 
 @app.route("/login/", methods=('GET', 'POST'))

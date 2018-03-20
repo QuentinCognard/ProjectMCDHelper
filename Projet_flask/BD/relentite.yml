@@ -3,3 +3,8 @@
   entite_id: 2
   cardinaliteE: 0-n
   cardinaliteR: 1-1
+- id: 2
+  relation_id: 1
+  entite_id: 1
+  cardinaliteE: 1-1
+  cardinaliteR: 1-1
