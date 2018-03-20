@@ -20,7 +20,7 @@
           <legend>{{ projet.nomMCD }}</legend>
         </fieldset>
         <img src="{{url_for('static',filename='mcd.png')}}">
-        <a href=""><input class="btn btn-default" type="submit" value="Consulter"></a>
+        <a href="{{url_for('consulter',username=username,idProj=id)}}"><input class="btn btn-default" type="submit" value="Consulter"></a>
         <a href="#"><input class="btn btn-warning" type="submit" value="Supprimer"></a>
       </div>
       {% else  %}

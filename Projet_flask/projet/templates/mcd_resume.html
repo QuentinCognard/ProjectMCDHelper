@@ -1,41 +1,55 @@
 {% extends "base_excerciseur.html" %}
 {% block styles %}
 {{ super() }}
-<link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
+<link rel="stylesheet" href= "{{url_for('static',filename='consulter.css') }}"/>
 {% endblock %}
 {% block contain %}
 
-<form class="bd-example">
   <fieldset>
 
     <!-- Vu d'ensemble du dictionnaire (valeurs d'exemple) -->
-
-    <div class="bordmcd">
-      <legend>Le MCD</legend>
+      <legend>{{proj.nomMCD}}</legend>
 
       <!-- for entité in dictionnaire -->
-      <label> Dictionnaire de données : </label>
-      <p>ENTITE1: attributs: bla1/bla2/bla3</p>
+      <label> Données du MCD : </label>
+      {% for e in ent %}
+      <p> Entité <b>{{e.nomEntite}}: </b>
+      {% for att in a %}
+      {% if att.entite_id==e.id %}
+        <b>{{att.nomAttribut}}</b> <i>{{att.typeAttribut}}</i>
+      {% endif %}
+      {% endfor %}
+      </p>
+      {% endfor %}
+
+
+
+      {% for elem in relations %}
+      <p>Relation <b>{{elem.nomRelation}}</b> entre
+      {% for ent in entites %}
+        {% if ent.relation_id==elem.id %}
+          <b>{{ent.entite.nomEntite}}</b>,
+        {% endif %}
+        {% endfor %}
+        avec le(s) attribut(s):
+        {% for att in attributs %}
+          {% if att.relation_id==elem.id %}
+            {% for a1 in a %}
+              {% if att.attribut_id==a1.id %}
+                  <b>{{a1.nomAttribut}}</b>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+
+      {% endfor %}
+      </p>
+      {% endfor %}
 
       <!-- for relation in bdd -->
-      <label>Relation :</label> <p> ENTITE1 <-> ENTITE2 </p>
-
-      <a href="/projets/0/create_mcd" class="btn btn-info" role="button">Modifier le dictionnaire</a>
-
-    </div>
-
-    <div class="border border-dark">
-       <img src="/static/images/Aoe2_sheep.png" class="img-thumbnail" alt="Cinque Terre" height="1000" width="500">
-    </div>
-
-    <div>
-      <a href="/projets" class="btn btn-success" role="button">Sauvegarder</a>
-      <a href="/projets" class="btn btn-danger" role="button">Annuler</a>
-    </div>
-
-
-
-
-  </fieldset>
-</form>
+      <section id="bouton">
+        <a href="" class="btn btn-primary" role="button">Modifier les attributs</a>
+        <a href="" class="btn btn-success" role="button">Modifier les entités</a>
+        <a href="" class="btn btn-warning" role="button">Modifier les relations</a>
+      </section>
+    </fieldset>
 {% endblock %}

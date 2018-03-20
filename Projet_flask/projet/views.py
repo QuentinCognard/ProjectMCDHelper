@@ -426,6 +426,18 @@ def page_projet_perso(username, idProj):
 		return render_template("consult_own_project.html", projet = proj,username=username,id=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
+#consulter un mcd
+@app.route("/projets/<string:username>/<int:idProj>/consult")
+@login_required
+def consulter(username,idProj):
+	proj=get_projet(username,idProj)
+	relations=getrelations(idProj)
+	entites=getrelationsentites()
+	att=get_attributs_projet(idProj)
+	attributs=getrelationsattributs(idProj)
+	Ent=get_entity(idProj)
+	return render_template("mcd_resume.html",ent=Ent,a=att,relations=relations,entites=entites,attributs=attributs,proj=proj,idProj=idProj,username=username,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+
 
 @app.route("/projets/<string:username>/<int:idProj>/new-attributs")
 @login_required
