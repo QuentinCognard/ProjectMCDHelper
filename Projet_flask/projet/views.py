@@ -51,6 +51,10 @@ class CreerCompteForm(FlaskForm):
 class SearchForm(Form):
 	search = StringField('')
 
+class ObjetTest():
+	id = 0
+	nom = "coucou"
+
 @app.route("/") #route pour la page de connexion
 def home():
 	f = CreerCompteForm()
@@ -63,11 +67,19 @@ def lucas(id_projet):
 	return render_template("test.html", sujet = "test")
 
 
-@app.route("/projets/<string:username>/<int:idProj>/relations")
-def test_lucas():
-	ecrire_Entite("test2.txt")
-	return render_template("new_relations.html",username=username,id=idProj)
+@app.route("/test/parceque/personne/ne/viens/ici/ou/presque/<int:idProj>")
+def test_dessins_lucas_bis(idProj):
+	test = ObjetTest();
+	liste_tout = get_tout_du_projet(idProj)
+	string = repr(liste_tout)
+	return render_template("testV2.html",projet=test, bis=repr(liste_tout), entites = repr(liste_tout[0]), atts = repr(liste_tout[1]), rels = repr(liste_tout[2]), relsE = repr(liste_tout[3]), relsA = repr(liste_tout[4]))
 
+@app.route("/test/parceque/personne/ne/viens/ici/<int:idProj>")
+def test_dessins_lucas(idProj):
+	test = ObjetTest();
+	liste_tout = get_tout_du_projet(idProj)
+	string = repr(liste_tout)
+	return render_template("test.html",projet=test, bis=repr(liste_tout), entites = repr(liste_tout[0]), atts = repr(liste_tout[1]), rels = repr(liste_tout[2]), relsE = repr(liste_tout[3]), relsA = repr(liste_tout[4]))
 
 
 @app.route("/login/", methods=('GET', 'POST'))
@@ -436,7 +448,11 @@ def save_new_attributs(username, idProj):
 		att = Attributs(id=i, projet_id=idProj, nomAttribut=request.form.get("nom"+str(i)), genreAttribut=request.form.get("genre"+str(i)), typeAttribut=request.form.get("type"+str(i)))
 		db.session.add(att)
 	db.session.commit()
-	return redirect(url_for('page_ajouter_entite', username=username, idProj=idProj))
+	##############
+	# A MODIFIER #
+	##############
+	# DOIT PASSER A LA PAGE DE CREATION D'ENTITES
+	return redirect(url_for('page_projet_perso', username=username, idProj=idProj))
 
 @app.route("/projets/<string:username>/<int:idProj>/attributs")
 def page_modif_attributs(username, idProj):
@@ -479,24 +495,41 @@ def page_ajouter_entite(username,idProj):
 		return render_template("add_entity.html", projet = proj,username=username,id=idProj,attributs=M.listeAttribut.choices, form=M,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
-
 @app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
 def save_entity(username,idProj):
 	nbAtt = request.form.get("nbAtt")
 	nbEnt = request.form.get("nbEnt")
 	proj = get_proj(idProj)
-	for i in range(1, int(nbEnt)+1):
-		if request.method=="POST":
-			ent = Entite(id=i, projet_id=idProj, nomEntite=request.form.get("nom"+str(i-1)), positionEntite=i)
-			db.session.add(ent)
-			db.session.commit()
-	for y in range(1, int(nbAtt)+1):
-		if request.method=="POST":
-			 att = Attributs.query.get(request.form.get("idAtt"))
-			 att.entite_id = request.form()
-			 get("nbEnt")
-			 db.session.commit()
-	return render_template("relation_resume.html",username=username,idProj=idProj)
+	mcdAtt = []
+	for i in range(int(nbEnt)):
+		nbAttEnt = request.form.get("nbAttEnt"+str(i+1))
+		for y in range(int(nbAttEnt)):
+			nomattselec = request.form.get("lesatt"+str(i+1)+str(y+1))
+			mcdAtt.append(nomattselec)
+
+	if len(mcdAtt) != len(list(set(mcdAtt))):
+		flash("Impossible! Des attributs sont utilisés plusieurs fois")
+		return redirect(url_for('page_ajouter_entite',username=username,idProj=idProj))
+
+	else:
+		for i in range(int(nbEnt)):
+			if request.method=="POST":
+				nbAttEnt = request.form.get("nbAttEnt"+str(i+1))
+				ent = Entite(id=get_nbid_entity()+1, projet_id=idProj, nomEntite=request.form.get("nom"+str(i+1)), positionEntite=i+1)
+				db.session.add(ent)
+				db.session.commit()
+			for y in range(int(nbAttEnt)):
+				if request.method=="POST":
+					idbdAtt = request.form.get("lesatt"+str(i+1)+str(y+1))
+					cleprimaire = request.form.get("checkprimary"+str(i+1)+str(y+1))
+					att = Attributs.query.get((idbdAtt,idProj))
+					if cleprimaire == "on":
+						att.primaryKey = True;
+					else :
+						att.primaryKey = False;
+					att.entite_id = ent.id
+					db.session.commit()
+		return render_template("relation_resume.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 # @app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
 # def save_entity(username,idProj):
