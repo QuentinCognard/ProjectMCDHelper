@@ -441,7 +441,33 @@ def consulter(username,idProj):
 @app.route("/projets/<string:username>/<int:idProj>/delete")
 @login_required
 def delete_MCD(username,idProj):
-	
+	relations=Relation.query.filter(Relation.projet_id==idProj).all()
+	allrelationsEnt=Relationentite.query.all()
+	relationsEnt=[]
+	idrelations=[]
+	for r in relations:
+		idrelations.append(r.id)
+	for relation in allrelationsEnt:
+		if relation.relation_id in idrelations:
+			relationsEnt.append(relation)
+	relationsAtt=Relationattributs.query.filter(Relationattributs.projet_id==idProj).all()
+	entites=Entite.query.filter(Entite.projet_id==idProj).all()
+	attributs=Attributs.query.filter(Attributs.projet_id==idProj).all()
+	for elem in relationsEnt:
+		db.session.delete(elem)
+	for elem in relationsAtt:
+		db.session.delete(elem)
+	for elem in relations:
+		db.session.delete(elem)
+	for elem in entites:
+		db.session.delete(elem)
+	for elem in attributs:
+		db.session.delete(elem)
+	projet=Projet.query.filter(Projet.id==idProj).first()
+	projet.nomMCD=""
+	db.session.commit()
+	return redirect((url_for('page_projet_perso', username=username, idProj=idProj)))
+
 
 @app.route("/projets/<string:username>/<int:idProj>/new-attributs")
 @login_required
