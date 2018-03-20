@@ -438,10 +438,9 @@ def consulter(username,idProj):
 	Ent=get_entity(idProj)
 	return render_template("mcd_resume.html",ent=Ent,a=att,relations=relations,entites=entites,attributs=attributs,proj=proj,idProj=idProj,username=username,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
-@app.route("/projets/<string:username>/<int:idProj>/delete")
-@login_required
-def delete_MCD(username,idProj):
-	
+# @app.route("/projets/<string:username>/<int:idProj>/delete")
+# @login_required
+# def delete_MCD(username,idProj):
 
 @app.route("/projets/<string:username>/<int:idProj>/new-attributs")
 @login_required
