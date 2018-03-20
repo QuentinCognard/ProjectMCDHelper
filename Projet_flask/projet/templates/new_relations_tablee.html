@@ -20,24 +20,24 @@
     <section id="sectEntite">
       <input id="hiddenEnt" type='hidden' name='nbEnt' value='2'>
       <div class="entite" id="ent1">
-        <label>Entite1: </label>
+        <label>Entite : </label>
         <select id="selectEnt1" name="selectEnt1">
         {% for elem in entites %}
             <option value="{{elem.nomEntite}}">{{elem.nomEntite}}</option>
         {% endfor %}
         </select>
         <label>Cardinalité: </label>
-        <input type="text" name="cardi1" required>
+        <input type="text" name="cardi1" required placeholder="0-n">
       </div>
       <div class="entite" id="ent2">
-            <label>Entite2: </label>
+            <label>Entite : </label>
         <select id="selectEnt2" name="selectEnt2">
         {% for elem in entites %}
             <option value="{{elem.nomEntite}}">{{elem.nomEntite}}</option>
         {% endfor %}
         </select>
         <label>Cardinalité: </label>
-        <input type="text" name="cardi2" required>
+        <input type="text" name="cardi2" required placeholder="0-n">
       </div>
       <button type="button" class="ajouteEntite" onClick="ajouteEntite()">Ajouter entite</button>
     </section>
@@ -216,6 +216,8 @@
           textField.name = "cardi"+nbEnt;
           textField.id = textField.name;
           textField.type = "text";
+          textField.placeholder = "0-n";
+          textField.required = "required";
           divEntite.appendChild(textField);
         }
 

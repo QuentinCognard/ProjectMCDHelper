@@ -516,19 +516,6 @@ def save_entity(username,idProj):
 # 			 db.session.commit()
 # 	return render_template("relation_resume.html")
 
-
-# route vers le résumé des relations d'un MCD
-
-@app.route("/projets/<string:username>/<int:idProj>/relation_resume")
-def page_resume_relation(username,idProj):
-	return render_template("relation_resume.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
-
-# route vers la création d'une relation simple
-
-@app.route("/projets/<string:username>/<int:idProj>/new_relation/simple")
-def page_new_simple_relation(username, idProj):
-	return render_template("new_simple_relation.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username),entites=get_entity(idProj))
-
 # route vers la Premier etape de la creation d'une relation
 
 @app.route("/projets/<string:username>/<int:idProj>/new_relation")
@@ -541,19 +528,21 @@ def page_ajouter_relation(username,idProj):
 def page_resume_mcd(username,idProj):
 	return render_template("mcd_resume.html",username=username,idProj=idProj)
 
-@app.route("/projets/<string:username>/<int:idProj>/new_relation/tablee")
-def page_ajouter_relation_tablee(username,idProj):
+@app.route("/projets/<string:username>/<int:idProj>/new_relation/create")
+def page_creer_relation(username,idProj):
 	attributs=get_attributs_proj(idProj)
 	entites=get_entity(idProj)
 	return render_template("new_relations_tablee.html",entites=entites,attributs=attributs,username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 # route de save d'une relation
 
-@app.route("/projets/<string:username>/<int:idProj>/new_relation/tablee/save", methods=['GET', 'POST'])
+@app.route("/projets/<string:username>/<int:idProj>/new_relation/save", methods=['GET', 'POST'])
 def save_relation_tablee(username,idProj):
 	nbAtt = request.form.get("nbAtt")
 	nbEnt = request.form.get("nbEnt")
 	proj = get_proj(idProj)
+	ide=0
+	ida=0
 	relations=Relation.query.all()
 	id=relations[len(relations)-1].id
 	relation=Relation(id=id+1,projet_id=idProj,nomRelation=request.form.get("nomR"))
@@ -561,16 +550,22 @@ def save_relation_tablee(username,idProj):
 	db.session.commit()
 	for i in range(1, int(nbEnt)+1):
 		if request.method=="POST":
-			entites=Entite.query.all()
-			id=entites[len(entites)-1].id
-			re=Relationentite(id=id,relation_id=id,entite_id=get_entitybyname(idProj,request.form.get("selectEnt"+str(i))).id,cardinaliteE=request.form.get("cardi"+str(i)))
+			print("####################################")
+			print(request.form.get("selectEnt"+str(i)))
+			print(get_entitybyname(idProj,request.form.get("selectEnt"+str(i))))
+			print("####################################")
+			entites=Relationentite.query.all()
+			if len(entites)!=0:
+				ide=entites[len(entites)-1].id
+			re=Relationentite(id=ide+1,relation_id=id,entite_id=get_entitybyname(idProj,request.form.get("selectEnt"+str(i))).id,cardinaliteE=request.form.get("cardi"+str(i)))
 			db.session.add(re)
 			db.session.commit()
 	for y in range(1, int(nbAtt)+1):
 		if request.method=="POST":
-			atts=Attributs.query.all()
-			id=atts[len(atts)-1].id
-			att = Relationattributs(id=id,projet_id=idProj,relation_id=id,attribut_id=getattributbyname(idProj,request.form.get("selectAtt"+str(y))).id)
+			atts=Relationattributs.query.all()
+			if len(atts)!=0:
+				ida=atts[len(atts)-1].id
+			att = Relationattributs(id=ida+1,projet_id=idProj,relation_id=id,attribut_id=getattributbyname(idProj,request.form.get("selectAtt"+str(y))).id)
 			db.session.add(att)
 			db.session.commit()
 	return render_template("new_relations.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
