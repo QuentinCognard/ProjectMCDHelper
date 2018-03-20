@@ -6,8 +6,27 @@
 {% block contain %}
   <fieldset class="fieldset">
     <legend>Nouveau MCD</legend>
+      {% for elem in relations %}
+      <p>Relation {{elem.nomRelation}} entre
+      {% for ent in entites %}
+        {% if ent.relation_id==elem.id %}
+          {{ent.entite.nomEntite}}
+        {% endif %}
+        {% endfor %}
+        avec les attributs
+        {% for att in attributs %}
+          {% if att.relation_id==elem.id %}
+            {% for a1 in a %}
+              {% if att.attribut_id==a1.id %}
+                  {{a1.nomAttribut}}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
 
-    <a href="{{ url_for('page_creer_relation', username=username, idProj=idProj ) }}"><button type="button">Ajouter relation</button></a>
+      {% endfor %}
+      </p>
+      {% endfor %}
+    <a href="{{ url_for('page_creer_relation', username=username, idProj=idProj ) }}"><button type="button" class="btn btn-info">Ajouter relation</button></a>
 
     <section>
 

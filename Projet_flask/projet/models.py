@@ -234,3 +234,12 @@ def get_entitybyname(idProj,nom):
 
 def getattributbyname(idProj,nom):
     return Attributs.query.filter(Attributs.projet_id == idProj,Attributs.nomAttribut==nom).first()
+
+def getrelations(idProj):
+    return Relation.query.filter(Relation.projet_id== idProj).all()
+
+def getrelationsentites():
+    return Relationentite.query.all()
+
+def getrelationsattributs(idProj):
+    return Relationattributs.query.filter(Relationattributs.projet_id==idProj).all()

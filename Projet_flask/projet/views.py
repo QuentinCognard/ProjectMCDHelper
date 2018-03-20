@@ -520,7 +520,11 @@ def save_entity(username,idProj):
 
 @app.route("/projets/<string:username>/<int:idProj>/new_relation")
 def page_ajouter_relation(username,idProj):
-	return render_template("new_relations.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+	relations=getrelations(idProj)
+	entites=getrelationsentites()
+	att=get_attributs_projet(idProj)
+	attributs=getrelationsattributs(idProj)
+	return render_template("new_relations.html",a=att,relations=relations,entites=entites,attributs=attributs,username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 # route vers le resumer d'un MCD
 
@@ -550,14 +554,10 @@ def save_relation_tablee(username,idProj):
 	db.session.commit()
 	for i in range(1, int(nbEnt)+1):
 		if request.method=="POST":
-			print("####################################")
-			print(request.form.get("selectEnt"+str(i)))
-			print(get_entitybyname(idProj,request.form.get("selectEnt"+str(i))))
-			print("####################################")
 			entites=Relationentite.query.all()
 			if len(entites)!=0:
 				ide=entites[len(entites)-1].id
-			re=Relationentite(id=ide+1,relation_id=id,entite_id=get_entitybyname(idProj,request.form.get("selectEnt"+str(i))).id,cardinaliteE=request.form.get("cardi"+str(i)))
+			re=Relationentite(id=ide+1,relation_id=id+1,entite_id=get_entitybyname(idProj,request.form.get("selectEnt"+str(i))).id,cardinaliteE=request.form.get("cardi"+str(i)))
 			db.session.add(re)
 			db.session.commit()
 	for y in range(1, int(nbAtt)+1):
@@ -565,7 +565,7 @@ def save_relation_tablee(username,idProj):
 			atts=Relationattributs.query.all()
 			if len(atts)!=0:
 				ida=atts[len(atts)-1].id
-			att = Relationattributs(id=ida+1,projet_id=idProj,relation_id=id,attribut_id=getattributbyname(idProj,request.form.get("selectAtt"+str(y))).id)
+			att = Relationattributs(id=ida+1,projet_id=idProj,relation_id=id+1,attribut_id=getattributbyname(idProj,request.form.get("selectAtt"+str(y))).id)
 			db.session.add(att)
 			db.session.commit()
 	return render_template("new_relations.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
