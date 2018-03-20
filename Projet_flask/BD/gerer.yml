@@ -1,9 +1,9 @@
 - idProjet : 1
-  idUser : 1
+  idUser : lukas
   idDroit : 1
-- idProjet : 1
-  idUser : 2
-  idDroit : 2
-- idProjet : 1
-  idUser : 3
-  idDroit : 3
+- idProjet : 2
+  idUser : lukas
+  idDroit : 1
+- idProjet : 2
+  idUser : admin
+  idDroit : 1

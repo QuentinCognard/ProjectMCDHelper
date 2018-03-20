@@ -62,25 +62,25 @@ def home():
 	f_bis = LoginForm()
 	return render_template("home.html", title= "Exerciseur MCD",form_bis=f, form=f_bis)
 
-@app.route("/lucas/test/<id_projet>", methods=('GET', 'POST')) #route pour la page de connexion
-def lucas(id_projet):
-	ecrire_Entite("test2.txt", id_projet)
-	return render_template("test.html", sujet = "test")
-
-
-@app.route("/test/parceque/personne/ne/viens/ici/ou/presque/<int:idProj>")
-def test_dessins_lucas_bis(idProj):
-	test = ObjetTest();
-	liste_tout = get_tout_du_projet(idProj)
-	string = repr(liste_tout)
-	return render_template("testV2.html",projet=test, bis=repr(liste_tout), entites = repr(liste_tout[0]), atts = repr(liste_tout[1]), rels = repr(liste_tout[2]), relsE = repr(liste_tout[3]), relsA = repr(liste_tout[4]))
-
-@app.route("/test/parceque/personne/ne/viens/ici/<int:idProj>")
-def test_dessins_lucas(idProj):
-	test = ObjetTest();
-	liste_tout = get_tout_du_projet(idProj)
-	string = repr(liste_tout)
-	return render_template("test.html",projet=test, bis=repr(liste_tout), entites = repr(liste_tout[0]), atts = repr(liste_tout[1]), rels = repr(liste_tout[2]), relsE = repr(liste_tout[3]), relsA = repr(liste_tout[4]))
+# @app.route("/lucas/test/<id_projet>", methods=('GET', 'POST')) #route pour la page de connexion
+# def lucas(id_projet):
+# 	ecrire_Entite("test2.txt", id_projet)
+# 	return render_template("test.html", sujet = "test")
+#
+#
+# @app.route("/test/parceque/personne/ne/viens/ici/ou/presque/<int:idProj>")
+# def test_dessins_lucas_bis(idProj):
+# 	test = ObjetTest();
+# 	liste_tout = get_tout_du_projet(idProj)
+# 	string = repr(liste_tout)
+# 	return render_template("testV2.html",projet=test, bis=repr(liste_tout), entites = repr(liste_tout[0]), atts = repr(liste_tout[1]), rels = repr(liste_tout[2]), relsE = repr(liste_tout[3]), relsA = repr(liste_tout[4]))
+#
+# @app.route("/test/parceque/personne/ne/viens/ici/<int:idProj>")
+# def test_dessins_lucas(idProj):
+# 	test = ObjetTest();
+# 	liste_tout = get_tout_du_projet(idProj)
+# 	string = repr(liste_tout)
+# 	return render_template("test.html",projet=test, bis=repr(liste_tout), entites = repr(liste_tout[0]), atts = repr(liste_tout[1]), rels = repr(liste_tout[2]), relsE = repr(liste_tout[3]), relsA = repr(liste_tout[4]))
 
 
 @app.route("/login/", methods=('GET', 'POST'))
@@ -464,7 +464,8 @@ def consulter(username,idProj):
 	att=get_attributs_projet(idProj)
 	attributs=getrelationsattributs(idProj)
 	Ent=get_entity(idProj)
-	return render_template("mcd_resume.html",ent=Ent,a=att,relations=relations,entites=entites,attributs=attributs,proj=proj,idProj=idProj,username=username,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+	liste_tout = get_tout_du_projet(idProj)
+	return render_template("mcd_resume.html",ent=Ent,a=att,relations=relations,entites=entites,attributs=attributs,proj=proj,idProj=idProj,username=username,nbnotif=get_nb_notifications(username),notifs=get_notifications(username), r_entites = repr(liste_tout[0]), r_atts = repr(liste_tout[1]), r_rels = repr(liste_tout[2]), r_relsE = repr(liste_tout[3]), r_relsA = repr(liste_tout[4]))
 
 @app.route("/projets/<string:username>/<int:idProj>/delete")
 @login_required
