@@ -516,7 +516,6 @@ def save_entity(username,idProj):
 	nbEnt = request.form.get("nbEnt")
 	proj = get_proj(idProj)
 	mcdAtt = []
-
 	for i in range(int(nbEnt)):
 		nbAttEnt = request.form.get("nbAttEnt"+str(i+1))
 		for y in range(int(nbAttEnt)):
