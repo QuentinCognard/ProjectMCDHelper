@@ -568,4 +568,4 @@ def save_relation_tablee(username,idProj):
 			att = Relationattributs(id=ida+1,projet_id=idProj,relation_id=id+1,attribut_id=getattributbyname(idProj,request.form.get("selectAtt"+str(y))).id)
 			db.session.add(att)
 			db.session.commit()
-	return render_template("new_relations.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+	return redirect((url_for('page_ajouter_relation', username=username, idProj=idProj)))
