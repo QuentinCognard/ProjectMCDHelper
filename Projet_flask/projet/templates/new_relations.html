@@ -7,10 +7,11 @@
   <fieldset class="fieldset">
     <legend>Nouveau MCD</legend>
       {% for elem in relations %}
+      <a href="{{ url_for('delete_relation', username=username, idProj=idProj, idRel=elem.id ) }}"><button class="suppBout btn btn-danger" type="button">X</button></a>
       <p>Relation <b>{{elem.nomRelation}}</b> entre
       {% for ent in entites %}
         {% if ent.relation_id==elem.id %}
-          <b>{{ent.entite.nomEntite}}</b>
+          <b>{{ent.entite.nomEntite}}</b>,
         {% endif %}
         {% endfor %}
         avec le(s) attribut(s):
@@ -31,10 +32,17 @@
     <section>
 
     <a href="{{url_for('page_projet_perso',username=username,idProj=idProj)}}"><button class="btn btn-warning" role="button">Annuler</button></a>
-      <button class="btn btn-success" type="submit">Valider</button>
+    <a href="{{url_for('consulter',username=username,idProj=idProj)}}"><button class="btn btn-success" type="submit">Valider</button></a>
 
     </section>
 
 
   </fieldset>
+
+  <script>
+  function supprimer(id){
+    console.log(id);
+    location.reload();
+  }
+  </script>
 {% endblock %}

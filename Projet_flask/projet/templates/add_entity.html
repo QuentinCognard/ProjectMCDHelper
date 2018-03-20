@@ -50,7 +50,7 @@
       <p>
         <button class ="btn btn-primary" type="button" onClick="ajouteEntite()">Ajouter Entité</button>
       </p>
-      <a href="/projets" class="btn btn-danger" role="button">Annuler</a>
+      <a href="{{url_for('page_projet_perso',username=username,idProj=id)}}" class="btn btn-danger" role="button">Annuler</a>
 
 
       <input class="btn btn-success" type="submit" value="Ajouter les Entités"></input>
