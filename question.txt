@@ -22,3 +22,10 @@ la dépendance : identifiants -> données de la relation ?
 - Aucune entité est vide.
 
 - Les entités ont au moins une clé primaire.
+
+- Toutes les entités possèdent des relations ?
+
+- La forme des attributs correspond bien à ce que vous souhaitez ?
+
+
+
