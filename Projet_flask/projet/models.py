@@ -274,3 +274,9 @@ def getrelationsattributs(idProj):
 
 def get_relAtt_byProjRel(idProj, idRel):
     return Relationattributs.query.filter(Relationattributs.projet_id==idProj).filter(Relationattributs.relation_id==idRel).all()
+
+def get_entityrel_byIdRel(idRel):
+    return Relationentite.query.filter(Relationentite.relation_id==idRel).all()
+
+def get_relation_byId(idRel, idProj):
+    return Relation.query.filter(Relation.id == idRel).filter(Relation.projet_id == idProj).one()

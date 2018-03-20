@@ -603,6 +603,11 @@ def save_relation_tablee(username,idProj):
 @app.route("/projets/<string:username>/<int:idProj>/new_relation/delete/<int:idRel>")
 def delete_relation(username, idProj, idRel):
 	attRel = get_relAtt_byProjRel(idProj,idRel)
+	entRel = get_entityrel_byIdRel(idRel)
 	for ar in attRel:
 		db.session.delete(ar)
+	for er in entRel:
+		db.session.delete(er)
+	db.session.delete(get_relation_byId(idRel, idProj))
 	db.session.commit()
+	return redirect((url_for('page_ajouter_relation', username=username, idProj=idProj)))
