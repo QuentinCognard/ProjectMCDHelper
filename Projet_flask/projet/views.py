@@ -452,7 +452,7 @@ def save_new_attributs(username, idProj):
 	# A MODIFIER #
 	##############
 	# DOIT PASSER A LA PAGE DE CREATION D'ENTITES
-	return redirect(url_for('page_projet_perso', username=username, idProj=idProj))
+	return redirect(url_for('page_ajouter_entite', username=username, idProj=idProj))
 
 @app.route("/projets/<string:username>/<int:idProj>/attributs")
 def page_modif_attributs(username, idProj):
@@ -478,11 +478,6 @@ class CreaMCDForm(FlaskForm):#Formulaire de création d'un MCD
 		A=Attributs.query.filter_by(id=idAttribut)
 		A.entite_id=idEntite
 		db.session.commit()
-
-@app.route("/projets/0/new-mcd")
-@login_required
-def page_creer_mcd():
-	return render_template("create_mcd.html")
 
 # route vers l'ajout d'une entité
 
@@ -529,7 +524,7 @@ def save_entity(username,idProj):
 						att.primaryKey = False;
 					att.entite_id = ent.id
 					db.session.commit()
-		return render_template("relation_resume.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+		return render_template("new_relations.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 # @app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
 # def save_entity(username,idProj):
