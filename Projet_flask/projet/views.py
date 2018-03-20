@@ -273,7 +273,30 @@ def parametresProj(username,nomProj):
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/suppProj")
 def suppProj(username,nomProj):
+	idProj=get_Projet_byName(nomProj).id
 	if( get_nom_droit(get_gerer_byNom(nomProj,username).droit_id) == "master"):
+		relations=Relation.query.filter(Relation.projet_id==idProj).all()
+		allrelationsEnt=Relationentite.query.all()
+		relationsEnt=[]
+		idrelations=[]
+		for r in relations:
+			idrelations.append(r.id)
+		for relation in allrelationsEnt:
+			if relation.relation_id in idrelations:
+				relationsEnt.append(relation)
+		relationsAtt=Relationattributs.query.filter(Relationattributs.projet_id==idProj).all()
+		entites=Entite.query.filter(Entite.projet_id==idProj).all()
+		attributs=Attributs.query.filter(Attributs.projet_id==idProj).all()
+		for elem in relationsEnt:
+			db.session.delete(elem)
+		for elem in relationsAtt:
+			db.session.delete(elem)
+		for elem in relations:
+			db.session.delete(elem)
+		for elem in entites:
+			db.session.delete(elem)
+		for elem in attributs:
+			db.session.delete(elem)
 		gere=get_gerer_byProjet(nomProj)
 		if gere !=[] :
 			for g in gere:
