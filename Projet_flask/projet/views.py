@@ -597,3 +597,12 @@ def save_relation_tablee(username,idProj):
 			db.session.add(att)
 			db.session.commit()
 	return redirect((url_for('page_ajouter_relation', username=username, idProj=idProj)))
+
+# route d'effacement d'une relation
+
+@app.route("/projets/<string:username>/<int:idProj>/new_relation/delete/<int:idRel>")
+def delete_relation(username, idProj, idRel):
+	attRel = get_relAtt_byProjRel(idProj,idRel)
+	for ar in attRel:
+		db.session.delete(ar)
+	db.session.commit()

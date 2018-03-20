@@ -271,3 +271,6 @@ def getrelationsentites():
 
 def getrelationsattributs(idProj):
     return Relationattributs.query.filter(Relationattributs.projet_id==idProj).all()
+
+def get_relAtt_byProjRel(idProj, idRel):
+    return Relationattributs.query.filter(Relationattributs.projet_id==idProj).filter(Relationattributs.relation_id==idRel).all()
