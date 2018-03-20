@@ -33,3 +33,8 @@ section{
   flex-wrap: wrap;
   margin-left: 2em;
 }
+
+
+.entite label{
+  margin-left: 1em;
+}

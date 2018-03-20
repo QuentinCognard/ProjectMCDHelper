@@ -556,18 +556,21 @@ def save_relation_tablee(username,idProj):
 	proj = get_proj(idProj)
 	relations=Relation.query.all()
 	id=relations[len(relations)-1].id
-	relation=Relation(id+1,idProj,request.form.get("nomR"))
-	db.session(relation)
-	db.commit()
+	relation=Relation(id=id+1,projet_id=idProj,nomRelation=request.form.get("nomR"))
+	db.session.add(relation)
+	db.session.commit()
 	for i in range(1, int(nbEnt)+1):
 		if request.method=="POST":
-			re=Relationentite(relation_id=id,entite_id=get_entitybyname(idProj,request.form.get("selectAtt"+i)))
+			entites=Entite.query.all()
+			id=entites[len(entites)-1].id
+			re=Relationentite(id=id,relation_id=id,entite_id=get_entitybyname(idProj,request.form.get("selectEnt"+str(i))).id,cardinaliteE=request.form.get("cardi"+str(i)))
 			db.session.add(re)
 			db.session.commit()
 	for y in range(1, int(nbAtt)+1):
 		if request.method=="POST":
-			 att = Attributs.query.get(request.form.get("idAtt"))
-			 att.entite_id = request.form()
-			 get("nbEnt")
-			 db.session.commit()
-	return render_template("relation_resume.html",username=username,idProj=idProj)
+			atts=Attributs.query.all()
+			id=atts[len(atts)-1].id
+			att = Relationattributs(id=id,projet_id=idProj,relation_id=id,attribut_id=getattributbyname(idProj,request.form.get("selectAtt"+str(y))).id)
+			db.session.add(att)
+			db.session.commit()
+	return render_template("new_relations.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))

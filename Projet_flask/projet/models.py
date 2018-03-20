@@ -72,11 +72,11 @@ class Relationentite(db.Model):
     relation = db.relationship("Relation", foreign_keys=[relation_id], backref=db.backref("relationid", lazy="dynamic"))
     entite_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
     cardinaliteE = db.Column(db.String(100))
-    cardinaliteR = db.Column(db.String(100))
     entite = db.relationship("Entite", foreign_keys=[entite_id], backref=db.backref("Entite", lazy="dynamic"))
 
 class Relationattributs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key=True)
     relation_id = db.Column(db.Integer, db.ForeignKey("relation.id"), primary_key=True)
     relation = db.relationship("Relation", foreign_keys=[relation_id], backref=db.backref("relationattid", lazy="dynamic"))
     attribut_id = db.Column(db.Integer, db.ForeignKey("attributs.id"), primary_key=True)
@@ -192,9 +192,9 @@ def get_all_projets(n):
 def get_attributs_projet(idProj):
     allatt= Attributs.query.join(Projet).filter(Projet.id==idProj).all()
     res=[]
-    for elem in allat:
+    for elem in allatt:
         res.append(elem)
-    return allat
+    return res
 
 
 def get_user_projet(nomProj):
@@ -230,4 +230,7 @@ def get_entity(idProj):
     return Entite.query.filter(Entite.projet_id == idProj).all()
 
 def get_entitybyname(idProj,nom):
-    return Entite.query.filter(Entite.projet_id == idProj,nomEntite==nom).all()
+    return Entite.query.filter(Entite.projet_id == idProj,Entite.nomEntite==nom).first()
+
+def getattributbyname(idProj,nom):
+    return Attributs.query.filter(Attributs.projet_id == idProj,Attributs.nomAttribut==nom).first()
