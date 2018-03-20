@@ -1,0 +1,24 @@
+Question possible version BETA 1.2 :
+
+
+- L'entité possède au moins 2 attributs ?
+
+- L'entité possède un identifiant ?
+
+- chaque attributs ont qu'une valeur, pour une itérration de l'entité ?
+
+- Les cardinalités respecte cette regles : 
+		0 - 1 : présence 0 ou 1 fois maximum
+		0 - n : présence de 0 à n fois
+		1 - 1 : présence obligatoire et seulement 1 fois
+		1 - n : présence obligatoire et n fois
+
+- un attirbut n'est pas nommer pareil dans 2 entités différentes ? 
+
+- si une association est porteuse de données, les attributs identifiants des entités reliées
+par cette association permettent elles de determiner les données de l'association et de définir
+la dépendance : identifiants -> données de la relation ?
+
+- Aucune entité est vide.
+
+- Les entités ont au moins une clé primaire.
