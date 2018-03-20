@@ -55,7 +55,7 @@ class Attributs(db.Model):
     nomAttribut = db.Column(db.String(100))
     genreAttribut = db.Column(db.String(100))
     typeAttribut = db.Column(db.String(100))
-    actifAttribut = db.Column(db.String(100))
+    primaryKey = db.Column(db.Boolean)
     entite = db.relationship("Entite", foreign_keys=[entite_id], backref=db.backref("projetEntite", lazy="dynamic"))
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetAttribut", lazy="dynamic"))
 
@@ -115,6 +115,14 @@ def get_user(login):
 def get_proj(idProj):
     projet = Projet.query.filter(Projet.id==idProj).all()
     return projet
+
+def get_nbid_entity():
+    req = db.session.query(db.func.count(Entite.id)).scalar()
+    return req
+
+def get_nbid_attribut():
+    req = db.session.query(db.func.count(Attributs.id)).scalar()
+    return req
 
 @login_manager.user_loader
 def load_user(login):
