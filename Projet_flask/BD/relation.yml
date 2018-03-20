@@ -1,3 +1,15 @@
 - id: 1
   projet_id: 1
   nomrelation: Possède
+- id: 2
+  projet_id: 2
+  nomrelation: Aime
+- id: 3
+  projet_id: 2
+  nomrelation: Possède
+- id: 4
+  projet_id: 2
+  nomrelation: Fournis par
+- id: 5
+  projet_id: 2
+  nomrelation: A une

@@ -16,3 +16,39 @@
   nomAttribut: nom
   genreAttribut: str
   typeAttribut: VARCHAR
+- id: 4
+  projet_id: 2
+  entite_id: 3
+  nomAttribut: prenom
+  genreAttribut: str
+  typeAttribut: VARCHAR
+- id: 5
+  projet_id: 2
+  entite_id: 4
+  nomAttribut: prenom
+  genreAttribut: str
+  typeAttribut: VARCHAR
+- id: 6
+  projet_id: 2
+  entite_id: 6
+  nomAttribut: date
+  genreAttribut: str
+  typeAttribut: VARCHAR
+- id: 7
+  projet_id: 2
+  entite_id: 5
+  nomAttribut: nom
+  genreAttribut: str
+  typeAttribut: VARCHAR
+- id: 8
+  projet_id: 2
+  entite_id: 7
+  nomAttribut: nomLab
+  genreAttribut: str
+  typeAttribut: VARCHAR
+- id: 9
+  projet_id: 2
+  entite_id: 8
+  nomAttribut: taille
+  genreAttribut: str
+  typeAttribut: VARCHAR

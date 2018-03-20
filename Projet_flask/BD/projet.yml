@@ -3,3 +3,8 @@
   nomMcd: McdTest
   DescProjet: test d un projet
   mcd_textuel: test.txt
+- idProjet: 2
+  nomProjet: TESTLUCAS
+  nomMcd: TESTLUCAS
+  DescProjet: test d un projet par lucas
+  mcd_textuel: lucas.txt

@@ -62,7 +62,7 @@ class Attributs(db.Model):
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetAttribut", lazy="dynamic"))
 
     def __repr__(self):
-        return "{};{};{};{};{};{};{}".format(self.id,self.projet_id,self.entite_id,self.nomAttribut,self.genreAttribut,self.typeAttribut,self.actifAttribut)
+        return "{};{};{};{};{};{},{}".format(self.id,self.projet_id,self.entite_id,self.nomAttribut,self.genreAttribut,self.typeAttribut,self.primaryKey)
 
 class Relation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -82,7 +82,7 @@ class Relationentite(db.Model):
     entite = db.relationship("Entite", foreign_keys=[entite_id], backref=db.backref("Entite", lazy="dynamic"))
 
     def __repr__(self):
-        return "{};{};{};{};{}".format(self.id,self.relation_id,self.entite_id,self.cardinaliteE,self.cardinaliteR)
+        return "{};{};{};{}".format(self.id,self.relation_id,self.entite_id,self.cardinaliteE)
 
 class Relationattributs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
