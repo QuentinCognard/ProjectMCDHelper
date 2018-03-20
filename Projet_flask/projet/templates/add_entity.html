@@ -14,19 +14,20 @@
       <legend>Nouveau MCD</legend>
       <p>
         <label for="input">Nom Entité :</label>
-        <input type="text" id="nameent" nom= "nom0" placeholder="Nom de l'entité" />
+        <input type="text" id="nom1" name= "nom1" placeholder="Nom de l'entité" />
       </p>
 
-      <input id="hiddenEnt" type="hidden" name="nbEnt" value="0">
+      <input id="hiddenEnt" type="hidden" name="nbEnt" value=1></input>
+      <input id="hiddeAtt1" type="hidden" name="nbAttEnt1" value=1 autocomplete='off'></input>
+
 
     <div class="lesattributs">
-    <div class="attEntite">
+    <div id="idDivAtt11" class="attEntite">
       <p>
         <label for="select">Nom attribut :</label>
-        <input id="hiddenAtt" type="hidden" name="nbAtt" value="0">
-        <select id="lesatt0" name="lesatt0">
+        <select id="lesatt11" name="lesatt11">
           {% for attribut in form.listeAttribut.choices %}
-            <option value=attribut>{{ attribut.nomAttribut }}</option>
+            <option value="{{ attribut.id }}">{{ attribut.nomAttribut }}</option>
           {% endfor %}
 
         </select>
@@ -34,13 +35,13 @@
 
       <p>
         <label for="input"> Clé primaire </label>
-          <input id="checkprimary" type="checkbox">
+          <input id="checkprimary11" name="checkprimary11" type="checkbox">
       </p>
     </div>
   </div>
 
     <p>
-      <button class ="btn btn-info" type="button" onClick="ajouteAttribut('0')">Ajouter Attribut</button>
+      <button class ="btn btn-info" type="button" onClick="ajouteAttribut(1)">Ajouter Attribut</button>
     </p>
 
     </div>
@@ -60,8 +61,7 @@
 
 <script>
 
-  var nbAtt = 0;
-  var nbEnt = 0;
+  var nbEnt = 1;
 
   firstdiv = document.querySelector(".bordmcd");
   firstdiv.id="ent"+nbEnt;
@@ -73,28 +73,45 @@
     // document.write(parent.id);
     // document.write(child.id);
     parent.removeChild(child);
-    nbEnt --;
+    console.log(nbEnt);
+    nbEnt -= 1;
+    console.log(nbEnt);
+    var hidEnt=document.getElementById("hiddenEnt");
+    hidEnt.value=nbEnt;
   }
 
   // supprime un attribut d'une entite
-    function removeAttribut(attid,entid){
+    function removeAttribut(attid,entid,nbEntS){
       var child = document.getElementById(attid);
       var parent = document.getElementById(entid);
       var divattParent = parent.querySelector(".lesattributs");
       // document.write(parent);
-    divattParent.removeChild(child);
-    nbAtt --;
+      divattParent.removeChild(child);
+      var hidAtt=document.getElementById("hiddeAtt"+nbEntS);
+      console.log(hidAtt.value);
+      hidAtt.value --;
+      console.log(hidAtt.value);
+
   }
 
   // ajoute une entite
   function ajouteEntite(){
       nbEnt += 1;
+      console.log(nbEnt);
       var divEntite = document.createElement("div");
       divEntite.className="bordmcd";
       divEntite.id = "ent"+nbEnt;
 
       var hidEnt=document.getElementById("hiddenEnt");
       hidEnt.value=nbEnt;
+
+      var hidAtt = document.createElement("input");
+      hidAtt.id = "hiddeAtt"+nbEnt;
+      hidAtt.type = "hidden";
+      hidAtt.name= "nbAttEnt"+nbEnt;
+      hidAtt.value = 0;
+
+      divEntite.appendChild(hidAtt);
 
 
       var divActuel = document.querySelector(".bordmcd");
@@ -166,17 +183,19 @@
 
   // ajoute un attribut
   function ajouteAttribut(nbEntS){
-      nbAtt += 1;
+      var nbAttloc = document.getElementById("hiddeAtt"+nbEntS);
+      nbAttloc.value++;
+
       var parent = document.getElementById("ent"+nbEntS);
 
       var divAttribut = document.createElement("div");
       divAttribut.className="attEntite";
-      divAttribut.id = "att"+nbAtt;
+      divAttribut.id = "idDivAtt"+nbEntS+nbAttloc.value;
 
 
-      ajouteSuppButtonAtt(divAttribut,parent);
-      ajouteNomAtt(divAttribut);
-      ajouteCle(divAttribut);
+      ajouteSuppButtonAtt(divAttribut,parent,nbEntS);
+      ajouteNomAtt(divAttribut,nbEntS);
+      ajouteCle(divAttribut,nbEntS);
       // ajouteValeur(divAttribut);
       // ajouteQuantite(divAttribut);
       // ajouteGenre(divAttribut);
@@ -194,7 +213,7 @@
   }
 
   // ajoute le bouton de supression d'une entité
-  function ajouteSuppButtonAtt(divAttribut,parent){
+  function ajouteSuppButtonAtt(divAttribut,parent,nbEntS){
     var bouton = document.createElement("button");
     divAttribut.appendChild(bouton);
     var textBouton = document.createTextNode("-");
@@ -202,36 +221,36 @@
     bouton.className = "btn btn-danger";
     bouton.type = "button";
     bouton.id = divAttribut.id;
-    bouton.onclick = function(){removeAttribut(divAttribut.id,parent.id)};
+    bouton.onclick = function(){removeAttribut(divAttribut.id,parent.id,nbEntS)};
   }
 
   // ajoute le champ de choix des attributs
-  function ajouteNomAtt(divAttribut){
+  function ajouteNomAtt(divAttribut,nbEntS){
+    var nbAttloc = document.getElementById("hiddeAtt"+nbEntS)
     var p2 = document.createElement("p");
     divAttribut.appendChild(p2);
     var labTypeAtt = document.createElement("label");
     labTypeAtt.for = "select";
     var textType = document.createTextNode("Choisir un attribut :");
     labTypeAtt.appendChild(textType);
-    var hidAtt=document.getElementById("hiddenAtt");
-    hidAtt.value=nbAtt;
     var selTypeAtt = document.createElement("select");
-    selTypeAtt.id = "lesatt"+nbAtt;
-    selTypeAtt.name = "lesatt"+nbAtt;
+    selTypeAtt.id = "lesatt"+nbEntS+nbAttloc.value;
+    selTypeAtt.name = "lesatt"+nbEntS+nbAttloc.value;
     p2.appendChild(labTypeAtt);
     p2.appendChild(selTypeAtt);
     {% for attribut in form.listeAttribut.choices %}
       // var hidAtt = document.getElementById("hiddenAtt");
       // hidAtt.value=attribut.id;
       var optatt = document.createElement("option");
-      optatt.value = "{{ attribut.nomAttribut }}";
+      optatt.value = "{{ attribut.id }}";
       var textOptatt = document.createTextNode("{{ attribut.nomAttribut }}");
       optatt.appendChild(textOptatt);
       selTypeAtt.appendChild(optatt);
     {% endfor %}
   }
 
-  function ajouteCle(divAttribut){
+  function ajouteCle(divAttribut,nbEntS){
+    var nbAttloc = document.getElementById("hiddeAtt"+nbEntS)
     var p1 = document.createElement("p");
     divAttribut.appendChild(p1)
     var labCle = document.createElement("label");
@@ -239,7 +258,8 @@
     var textCle = document.createTextNode(" Clé primaire ");
     labCle.appendChild(textCle);
     var inputCle = document.createElement("input");
-    inputCle.id="checkprimary";
+    inputCle.name="checkprimary"+nbEntS+nbAttloc.value;
+    inputCle.id="checkprimary"+nbEntS+nbAttloc.value;
     inputCle.type="checkbox";
     p1.appendChild(labCle);
     p1.appendChild(inputCle);
@@ -248,4 +268,17 @@
 
 
 </script>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+    {% if message!= "Please log in to access this page." %}
+      <li>{{ message }}</li>
+      {% endif %}
+    {% endfor %}
+    </ul>
+  {% endif %}
+
+{% endwith %}
 {% endblock %}

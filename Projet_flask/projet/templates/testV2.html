@@ -1,0 +1,161 @@
+<html>
+  <body>
+    <h1 style="color: orange;"> COUCOU </h1>
+ </body>
+</html>
+<html>
+ <head>
+   <p id="bis">{{bis}}</p>
+   <p id="entites" hidden>{{entites}}</p>
+   <p id="atts" hidden>{{atts}}</p>
+   <p id="rels" hidden>{{rels}}</p>
+   <p id="relsE" hidden>{{relsE}}</p>
+   <p id="relsA" hidden>{{relsA}}</p>
+   <button onclick="draw()">CLIQUE ICI TA RACE !!!!!!!</button><br>
+ </head>
+ <body style="height:100%;">
+   <canvas style="border:solid;" id="canvas" width="980"  height="300"></canvas>
+ </body>
+  <script>
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+  var cw = 1200;
+  var ch = 5000;
+  var posx;
+  var posy;
+  var e;
+  var a;
+  var r;
+  var re;
+  var ra;
+  var liste_entite;
+  var liste_atts;
+  var liste_relation;
+  var liste_relation_entite;
+  var liste_relation_entite_attributs;
+
+  function init(){
+    // Fonction qui recup les donnees et les instancies
+    cw = 1200;
+    ch = 5000;
+    posx = 10;
+    posy = 10;
+    e = document.getElementById("entites").innerHTML;
+    a = document.getElementById("atts").innerHTML;
+    r = document.getElementById("rels").innerHTML;
+    re = document.getElementById("relsE").innerHTML;
+    ra = document.getElementById("relsA").innerHTML;
+    liste_entite = MrPropre(e);
+    liste_atts =  MrPropre(a);
+    liste_relation =  MrPropre(r);
+    liste_relation_entite =  MrPropre(re);
+    liste_relation_entite_attributs =  MrPropre(ra);
+  }
+  function MrPropre(liste_salle){
+    // Fonction qui rend propre les donnees recup
+    var sans_crochet_droit = liste_salle.replace(/]/g, "");
+    var sans_crochet_gauche = sans_crochet_droit.replace(/\[/g, "");
+    var sans_espaces = sans_crochet_gauche.replace(/ /g, "");
+    var liste_propre = sans_espaces.split(",");
+    var liste_finale = [];
+    for(var i=0;i<liste_propre.length;++i){
+      var to_add = liste_propre[i].split(";");
+      liste_finale.push(to_add);
+    }
+    return liste_finale;
+  }
+  function drawE(e, liste_att_entite){
+    if(e.length <5){
+      if(e[3] == "None"){
+        if(posx == 10){
+          px = 10;
+        }
+        else{
+          px = posx + 150;
+        }
+        py = posy;
+      }
+      else{
+        px = e[3][0] - (e[2].length * 10)/2;
+        py = posy;
+      }
+      var positionEnt = [];
+      positionEnt.push(px,py);
+      ctx.beginPath();
+      ctx.moveTo(px,py);
+      ctx.lineTo(px + e[2].length * 10 ,py);
+      ctx.lineTo(px + e[2].length * 10 ,py + 35 +  liste_att_entite.length * 10);
+      ctx.lineTo(px,py + 35 +  liste_att_entite.length * 10);
+      ctx.lineTo(px,py);
+      ctx.moveTo(px,py+20);
+      ctx.lineTo(px + e[2].length * 10 ,py + 20 );
+      ctx.font = "10px Arial";
+      ctx.fillText(e[2], px + 10, py+50/3);
+      for(var i=0;i<liste_att_entite.length;++i){
+        ctx.fillText(liste_att_entite[i][3], px + 10, py+35);
+        py += 10;
+      }
+      posx = posx + e[2].length * 10;
+      posy = py +35
+      positionEnt.push(posx,posy);
+      e[3] = positionEnt;
+      posy = 10;
+      e.push(true);
+      ctx.stroke();
+    }
+  }
+  function draw(){
+    //Fonction qui lance le dessin du MCD
+    init();
+    // INFOS AFFICHAGES
+    // LISTE_ENTITE :
+    // [ [idE,idP,nomEn,positionE{,draw}] ]
+    // console.log(liste_entite);
+    // LISTE_ATTRIBUTS :
+    // [ [idA,idP,idE,nomA,genreA,typeA,actifA] ]
+    // console.log(liste_atts);
+    // LISTE_RELATION :
+    // [ [idR,idP,nomRe] ]
+    // console.log(liste_relation);
+    // LISTE_RELATION_ENTITE :
+    // [ [idRE,idR,idE,cardE,cardR] ]
+    // console.log(liste_relation_entite);
+    // LISTE_RELATION_ENTITE_ATTRIBUTS :
+    // [ [idRA,idR,idA] ]
+    // console.log(liste_relation_entite_attributs);
+    // RECUPERATION DES INFOS GRACE A L ID DU PROJET
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for(var i=0;i<liste_entite.length;++i){
+      if(i == 0){
+
+        // Recupt entite et dessine entite
+        var e = liste_entite[i];
+        var liste_att = [];
+        for(var j=0; j <liste_atts.length;++j){
+          if(liste_atts[j][2] == e[0]){
+            liste_att.push(liste_atts[j]);
+          }
+        }
+        drawE(e,liste_att);
+        console.log(liste_entite);
+
+        // recup relation associe a l entite
+        var liste_R = [];
+        for(var k=0;k<liste_relation_entite.length;++k){
+          if(liste_relation_entite[k][2] == e[0]){
+            for(var g=0;g<liste_relation.length;++g){
+              if(liste_relation_entite[k][1] == liste_relation[g][0]){
+                liste_R.push(liste_relation[g]);
+              }
+            }
+          }
+        }
+        console.log(liste_R);
+        // drawRe(liste_R)
+      }
+    }
+
+
+  }
+  </script>
+</html>

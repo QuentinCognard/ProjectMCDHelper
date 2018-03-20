@@ -1,30 +1,176 @@
-
-{% if sujet == 'test' %}
 <html>
   <body>
     <h1> COUCOU </h1>
  </body>
 </html>
-{%else%}
 <html>
  <head>
    <link rel="stylesheet" href="{{url_for('static', filename='lucas.css')}}">
-  <script type="application/x-javascript">
-function draw() {
- var canvas = document.getElementById("canvas");
- var ctx = canvas.getContext("2d");
+   <p id="bis" >{{bis}}</p>
+   <p id="entites" >{{entites}}</p>
+   <p id="atts" >{{atts}}</p>
+   <p id="rels" >{{rels}}</p>
+   <p id="relsE" >{{relsE}}</p>
+   <p id="relsA" >{{relsA}}</p>
+   <button onclick="draw()">CLIQUE ICI TA RACE !!!!!!!</button>
+ </head>
+ <body>
+   <canvas id="canvas" width="1200"  heigth="5000">
+   </canvas>
+ </body>
+  <script>
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+  var cw = 1200;
+  var ch = 5000;
+  var posx;
+  var posy;
+  var e;
+  var a;
+  var r;
+  var re;
+  var ra;
+  var posEntite;
+  var liste_entite;
+  var liste_atts;
+  var liste_relation;
+  var liste_relation_entite;
+  var liste_relation_entite_attributs;
 
- ctx.fillStyle = "rgb(0,0,0)";
- ctx.fillRect (10, 10, 555, 550);
- ctx.fillStyle = "rgb(255,255,255)";
- ctx.fillRect (11, 11, 553, 548);
- ctx.fillStyle = "rgb(0,0,0)";
- ctx.fillRect (11, 100, 555, 2);
+  function init(){
+    cw = 1200;
+    ch = 5000;
+    posx = 10;
+    posy = 10;
+    e = document.getElementById("entites").innerHTML;
+    a = document.getElementById("atts").innerHTML;
+    r = document.getElementById("rels").innerHTML;
+    re = document.getElementById("relsE").innerHTML;
+    ra = document.getElementById("relsA").innerHTML;
+    posEntite = [];
+    liste_entite = e.split(",");
+    liste_atts =  a.split(",");
+    liste_relation =  r.split(",");
+    liste_relation_entite =  re.split(",");
+    liste_relation_entite_attributs =  ra.split(",");
+  }
+
+  function drawE(e, liste_att_entite){
+    var e1 = [];
+    e1.push(e,posx,posy);
+    ctx.beginPath();
+    ctx.moveTo(posx,posy);
+    ctx.lineTo(posx + e[2].length * 10 ,posy);
+    ctx.lineTo(posx + e[2].length * 10 ,posy + 35 +  liste_att_entite.length * 10);
+    ctx.lineTo(posx,posy + 35 +  liste_att_entite.length * 10);
+    ctx.lineTo(posx,posy);
+    ctx.moveTo(posx,posy+20);
+    ctx.lineTo(posx + e[2].length * 10 ,posy + 20 );
+    ctx.font = "10px Arial";
+    ctx.fillText(e[2], posx + 10, posy+50/3);
+    for(var i=0;i<liste_att_entite.length;++i){
+      ctx.fillText(liste_att_entite[i][3], posx + 10, posy+35);
+      posy += 10;
+    }
+    posy = 10;
+    e1.push(e,posx + e[2].length * 10 ,posy + 35 +  liste_att_entite.length * 10);
+    posEntite.push(e1);
+    posx = posx + e[2].length * 10 + 150;
+    posy = 10;
+    ctx.stroke();
+  }
+
+  function drawRe(Relation, liste_entite_relation){
+    var e = [];
+    var pos = [];
+    var relation = Relation;
+    for(var i=0; i<liste_entite_relation.length;++i){
+      for(var j=0;j<posEntite.length;++j){
+        var tmp = posEntite[j][0][0];
+        if(tmp.length > 1){
+          tmp = tmp.substr(1);
+        }
+        var tmpbis = liste_entite_relation[i][2];
+        if(tmpbis.length > 1){
+          tmpbis = tmpbis.substr(1);
+        }
+        if(tmpbis == tmp){
+          pos.push(posEntite[j][1],posEntite[j][2],posEntite[j][4],posEntite[j][5])
+        }
+      }
+    }
+    var nbent = pos.length / 4;
+    for(var k= 0;k<nbent;++k){
+      e.push(pos.slice(k*4,(k+1)*4))
+    }
+    var posRx;
+    var posRy;
+    if(e[0][0] < e[1][0]){
+      ppx = Math.max(e[0][2],e[0][0]);
+      pgx = Math.min(e[1][0],e[1][2]);
+      var ttx =  pgx - 20;
+      var ptx =  ppx + 10;
+      posRx = ((Math.min(e[0][2],e[0][0]) + Math.max(e[1][0],e[1][2])) / 2) - 10;
+    }
+    else{
+      ppx = Math.min(e[0][2],e[0][0]);
+      pgx = Math.max(e[1][0],e[1][2]);
+      var ttx =  pgx + 10;
+      var ptx =  ppx - 20;
+      posRx = ((Math.min(e[1][2],e[1][0]) + Math.max(e[0][0],e[0][2])) / 2) + 10;
+    }
+    posRy = Math.min(Math.max(e[0][3],e[0][2]),Math.max(e[1][1],e[1][3])) / 2 + 10;
+    ctx.beginPath();
+    ctx.ellipse(posRx,posRy,20,40,90*Math.PI/180,0,2*Math.PI)
+    ctx.fillText(Relation[2], posRx - Relation[2].length * 3, posRy - 5);
+    ctx.moveTo(ppx,posRy);
+    ctx.lineTo(pgx,posRy);
+    ctx.fillText(liste_entite_relation[0][3], ttx, posRy);
+    ctx.fillText(liste_entite_relation[1][3], ptx, posRy);
+    ctx.stroke();
+  }
+
+
+  function draw(){
+    init();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // DESSINE LES ENTITES
+    for(var i=0;i<liste_entite.length;i++){
+      var tmp = liste_entite[i];
+      var e = tmp.split(";");
+      if(e[0].length > 1){
+        var id_e = e[0].substr(1);
+      }
+      else{
+        var id_e = e[0];
+      }
+
+      var tmp_att = liste_atts;
+      var liste_att_entite = [];
+      for(var j=0; j <tmp_att.length;++j){
+        var a = tmp_att[j].split(";");
+        if(a[2] == id_e){
+          liste_att_entite.push(a);
+        }
+      }
+      drawE(e, liste_att_entite);
+    }
+    // DESSINE LA RELATION
+    for(var i=0;i<liste_relation.length;++i){
+      var Relation = liste_relation[i].split(";");
+      var idR = Relation[0];
+      if(idR.length > 1){
+        idR = idR.substr(1);
+      }
+      var liste_entite_relation = [];
+      for(var j=0;j<liste_relation_entite.length;j++){
+        var Rel_entite = liste_relation_entite[j].split(";");
+        if(Rel_entite[1] == idR){
+          liste_entite_relation.push(Rel_entite);
+        }
+      }
+      drawRe(Relation, liste_entite_relation);
+    }
 }
   </script>
- </head>
- <body onload="draw()">
-   <canvas id="canvas" width="2600" height="800"></canvas>
- </body>
 </html>
-{%endif%}

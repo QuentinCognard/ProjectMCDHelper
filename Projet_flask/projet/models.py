@@ -47,6 +47,8 @@ class Entite(db.Model):
     positionEntite = db.Column(db.String(100))
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetEntite", lazy="dynamic"))
 
+    def __repr__(self):
+        return "{};{};{};{}".format(self.id,self.projet_id,self.nomEntite,self.positionEntite)
 
 class Attributs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -55,16 +57,21 @@ class Attributs(db.Model):
     nomAttribut = db.Column(db.String(100))
     genreAttribut = db.Column(db.String(100))
     typeAttribut = db.Column(db.String(100))
-    actifAttribut = db.Column(db.String(100))
+    primaryKey = db.Column(db.Boolean)
     entite = db.relationship("Entite", foreign_keys=[entite_id], backref=db.backref("projetEntite", lazy="dynamic"))
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetAttribut", lazy="dynamic"))
 
+    def __repr__(self):
+        return "{};{};{};{};{};{};{}".format(self.id,self.projet_id,self.entite_id,self.nomAttribut,self.genreAttribut,self.typeAttribut,self.actifAttribut)
 
 class Relation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key=True)
     nomRelation = db.Column(db.String(100))
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetRelationn", lazy="dynamic"))
+
+    def __repr__(self):
+        return "{};{};{}".format(self.id,self.projet_id,self.nomRelation)
 
 class Relationentite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -74,6 +81,9 @@ class Relationentite(db.Model):
     cardinaliteE = db.Column(db.String(100))
     entite = db.relationship("Entite", foreign_keys=[entite_id], backref=db.backref("Entite", lazy="dynamic"))
 
+    def __repr__(self):
+        return "{};{};{};{};{}".format(self.id,self.relation_id,self.entite_id,self.cardinaliteE,self.cardinaliteR)
+
 class Relationattributs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key=True)
@@ -82,15 +92,25 @@ class Relationattributs(db.Model):
     attribut_id = db.Column(db.Integer, db.ForeignKey("attributs.id"), primary_key=True)
     attributs = db.relationship("Attributs", foreign_keys=[attribut_id], backref=db.backref("attributid", lazy="dynamic"))
 
+    def __repr__(self):
+        return "{};{};{};{}".format(self.id,self.relation_id,self.relation,self.attribut_id)
+
 
 def get_tout_du_projet(idprojet):
     liste = []
-    liste.append(Entite.query.filter(Entite.projet_id==idprojet).all())
-    liste.append(Attributs.query.filter(Attributs.projet_id==idprojet).all())
-    liste.append(Relation.query.filter(Relation.projet_id==idprojet).all())
-    for r in liste[2]:
-        liste.append(Relationentite.query.filter(Relationentite.relation==r).all())
-        liste.append(Relationattributs.query.filter(Relationattributs.relation==r).all())
+    listeE = Entite.query.filter(Entite.projet_id==idprojet).all()
+    listeA = Attributs.query.filter(Attributs.projet_id==idprojet).all()
+    listeR = Relation.query.filter(Relation.projet_id==idprojet).all()
+    listeRE = []
+    listeRA = []
+    for r in listeR:
+        listeRE.append(Relationentite.query.filter(Relationentite.relation==r).all())
+        listeRA.append(Relationattributs.query.filter(Relationattributs.relation==r).all())
+    liste.append(listeE)
+    liste.append(listeA)
+    liste.append(listeR)
+    liste.append(listeRE)
+    liste.append(listeRA)
     return liste
 
 class Notification(db.Model):
@@ -115,6 +135,14 @@ def get_user(login):
 def get_proj(idProj):
     projet = Projet.query.filter(Projet.id==idProj).all()
     return projet
+
+def get_nbid_entity():
+    req = db.session.query(db.func.count(Entite.id)).scalar()
+    return req
+
+def get_nbid_attribut():
+    req = db.session.query(db.func.count(Attributs.id)).scalar()
+    return req
 
 @login_manager.user_loader
 def load_user(login):
