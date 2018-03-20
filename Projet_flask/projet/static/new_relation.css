@@ -1,0 +1,40 @@
+button{
+  margin-top: 2em;
+  margin-left: 0.5em;
+}
+section{
+  display: flex;
+  flex-wrap: nowrap;
+  margin-top: 3em;
+}
+.attribut{
+  display: flex;
+  flex-wrap: wrap;
+
+}
+.suppBout {
+  margin-right: 1em;
+  width: 3em;
+  height: 2em;
+}
+.attribut *, .entite *{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+div{
+  margin-bottom: 1em;
+}
+section{
+  display: block;
+}
+
+.entite{
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 2em;
+}
+
+
+.entite label{
+  margin-left: 1em;
+}

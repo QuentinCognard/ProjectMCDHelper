@@ -72,11 +72,11 @@ class Relationentite(db.Model):
     relation = db.relationship("Relation", foreign_keys=[relation_id], backref=db.backref("relationid", lazy="dynamic"))
     entite_id = db.Column(db.Integer, db.ForeignKey("entite.id"), primary_key=True)
     cardinaliteE = db.Column(db.String(100))
-    cardinaliteR = db.Column(db.String(100))
     entite = db.relationship("Entite", foreign_keys=[entite_id], backref=db.backref("Entite", lazy="dynamic"))
 
 class Relationattributs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key=True)
     relation_id = db.Column(db.Integer, db.ForeignKey("relation.id"), primary_key=True)
     relation = db.relationship("Relation", foreign_keys=[relation_id], backref=db.backref("relationattid", lazy="dynamic"))
     attribut_id = db.Column(db.Integer, db.ForeignKey("attributs.id"), primary_key=True)
@@ -200,8 +200,8 @@ def get_all_projets(n):
 def get_attributs_projet(idProj):
     allatt= Attributs.query.join(Projet).filter(Projet.id==idProj).all()
     res=[]
-    for a in allatt:
-        res.append(a)
+    for elem in allatt:
+        res.append(elem)
     return res
 
 
@@ -233,3 +233,21 @@ def get_notif_byexp_dest_nom(nom,exp,dest,id):
 
 def test(test):
      return db.session.query(Projet).filter(Projet.nomProj.like("%" + test + "%")).all()
+
+def get_entity(idProj):
+    return Entite.query.filter(Entite.projet_id == idProj).all()
+
+def get_entitybyname(idProj,nom):
+    return Entite.query.filter(Entite.projet_id == idProj,Entite.nomEntite==nom).first()
+
+def getattributbyname(idProj,nom):
+    return Attributs.query.filter(Attributs.projet_id == idProj,Attributs.nomAttribut==nom).first()
+
+def getrelations(idProj):
+    return Relation.query.filter(Relation.projet_id== idProj).all()
+
+def getrelationsentites():
+    return Relationentite.query.all()
+
+def getrelationsattributs(idProj):
+    return Relationattributs.query.filter(Relationattributs.projet_id==idProj).all()

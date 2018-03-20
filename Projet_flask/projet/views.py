@@ -414,29 +414,6 @@ def page_projet_perso(username, idProj):
 		return render_template("consult_own_project.html", projet = proj,username=username,id=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
-# <<<<<<< HEAD
-# @app.route("/projets")
-# def page_projets():
-# 	return render_template("accueil_projet.html")
-
-# route vers un projet perso en fonction de l'ID
-
-# @app.route("/projets/<idProj>/")
-# def page_projet_perso(idProj):
-	# proj = get_proj(idProj)
-	# if proj:
-	# 	return render_template("consult_own_project.html", projet = proj)
-	# else:
-	# 	return "Projet inconnu"
-	# Pour plus tard
-# @app.route("/projets/0")
-# def page_projet_perso():
-# 	return render_template("consult_own_project.html")
-
-# =======
-# >>>>>>> Arthur/master
-# route vers la creation d'un MCD en fonction de l'ID du projet
-
 
 @app.route("/projets/<string:username>/<int:idProj>/new-attributs")
 @login_required
@@ -477,10 +454,6 @@ def page_modif_attributs(username, idProj):
 		projet=get_projet(username, idProj),nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 
-@app.route("/projets/<string:username>/<int:idProj>/relations")
-@login_required
-def page_creer_relations(username, idProj):
-	return render_template("new_relations.html",username=username,id=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 class CreaMCDForm(FlaskForm):#Formulaire de création d'un MCD
 	listeAttribut=SelectField('Attributs',choices=[])
@@ -564,21 +537,56 @@ def save_entity(username,idProj):
 # 			 db.session.commit()
 # 	return render_template("relation_resume.html")
 
-
-# route vers le résumé des relations d'un MCD
-
-@app.route("/projets/<string:username>/<int:idProj>/relation_resume")
-def page_resume_relation(username,idProj):
-	return render_template("relation_resume.html",username=username,idProj=idProj)
-
 # route vers la Premier etape de la creation d'une relation
 
-@app.route("/projets/<string:username>/<int:idProj>/new_relation1")
-def page_ajouter_relation1(username,idProj):
-	return render_template("new_relation1.html",username=username,idProj=idProj)
+@app.route("/projets/<string:username>/<int:idProj>/new_relation")
+def page_ajouter_relation(username,idProj):
+	relations=getrelations(idProj)
+	entites=getrelationsentites()
+	att=get_attributs_projet(idProj)
+	attributs=getrelationsattributs(idProj)
+	return render_template("new_relations.html",a=att,relations=relations,entites=entites,attributs=attributs,username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 # route vers le resumer d'un MCD
 
 @app.route("/projets/<string:username>/<int:idProj>/mcd_resume")
 def page_resume_mcd(username,idProj):
 	return render_template("mcd_resume.html",username=username,idProj=idProj)
+
+@app.route("/projets/<string:username>/<int:idProj>/new_relation/create")
+def page_creer_relation(username,idProj):
+	attributs=get_attributs_proj(idProj)
+	entites=get_entity(idProj)
+	return render_template("new_relations_tablee.html",entites=entites,attributs=attributs,username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+
+# route de save d'une relation
+
+@app.route("/projets/<string:username>/<int:idProj>/new_relation/save", methods=['GET', 'POST'])
+def save_relation_tablee(username,idProj):
+	nbAtt = request.form.get("nbAtt")
+	nbEnt = request.form.get("nbEnt")
+	proj = get_proj(idProj)
+	ide=0
+	ida=0
+	relations=Relation.query.all()
+	id=relations[len(relations)-1].id
+	relation=Relation(id=id+1,projet_id=idProj,nomRelation=request.form.get("nomR"))
+	db.session.add(relation)
+	db.session.commit()
+	for i in range(1, int(nbEnt)+1):
+		if request.method=="POST":
+			entites=Relationentite.query.all()
+			if len(entites)!=0:
+				ide=entites[len(entites)-1].id
+			re=Relationentite(id=ide+1,relation_id=id+1,entite_id=get_entitybyname(idProj,request.form.get("selectEnt"+str(i))).id,cardinaliteE=request.form.get("cardi"+str(i)))
+			db.session.add(re)
+			db.session.commit()
+	for y in range(1, int(nbAtt)+1):
+		if request.method=="POST":
+			atts=Relationattributs.query.all()
+			if len(atts)!=0:
+				ida=atts[len(atts)-1].id
+			att = Relationattributs(id=ida+1,projet_id=idProj,relation_id=id+1,attribut_id=getattributbyname(idProj,request.form.get("selectAtt"+str(y))).id)
+			db.session.add(att)
+			db.session.commit()
+	return redirect((url_for('page_ajouter_relation', username=username, idProj=idProj)))
