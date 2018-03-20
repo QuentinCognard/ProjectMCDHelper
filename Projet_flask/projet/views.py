@@ -8,6 +8,7 @@ from .models import *
 from .bibliotheque import *
 from hashlib import sha256
 from werkzeug.utils import secure_filename
+from werkzeug import FileStorage
 import os
 import shutil
 from flask_wtf import FlaskForm
@@ -32,8 +33,8 @@ class LoginForm(FlaskForm):
 
 class UserForm(FlaskForm):
 	id = HiddenField('id')
-	nom = StringField('Nom :')
-	prenom = StringField('Prénom :')
+	nom = StringField('Nom :',[validators.Length(min=4, max=25)])
+	prenom = StringField('Prénom :',[validators.Length(min=4, max=25)])
 	photo = FileField('Photo de profil :')
 
 
@@ -122,11 +123,15 @@ def save_compte():
 		if form.photo.data != "":
 			f = form.photo.data
 			filename = secure_filename(f.filename)
-			user.image = filename
-			f.save(os.path.join(mkpath('static/images/User/'), filename))
-		db.session.commit()
-		return redirect(url_for('accueil_compte'))
-	return redirect(url_for('editer_compte'))
+			if f.filename!='':
+				user.image = filename
+				f.save(os.path.join(mkpath('static/images/User/'), filename))
+				db.session.commit()
+				return redirect(url_for('accueil_compte'))
+			else:
+				db.session.commit()
+				return redirect(url_for('accueil_compte'))
+		return redirect(url_for('editer_compte'))
 
 
 @app.route("/logout/")

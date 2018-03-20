@@ -1,8 +1,15 @@
 from flask import Flask
+import os
+from flask import Flask, request, redirect, url_for
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = '/path/to/the/uploads'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY']= "b1715ebf-801a-4188-900c-87cb7a7d493a"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 from flask_script import Manager

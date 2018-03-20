@@ -55,7 +55,7 @@
     {{ form.nom.label}}{{form.nom(class_="from-control")}}<br>
     {{ form.prenom.label}}{{form.prenom(class_="from-control")}}<br>
     <div id="photo">
-    {{ form.photo.label}}{{form.photo(accept=".jpg",id="photo")}}<br> <img src="{{ url_for('static', filename='images/User/' + (user.image | string))}}">
+        {{ form.photo.label}}{{form.photo(accept=".jpg",id="photo")}}<br> <img src="{{ url_for('static', filename='images/User/' + (user.image | string))}}">
   </div>
   </div>
   <input class="btn btn-success" type="submit" value="Valider">
