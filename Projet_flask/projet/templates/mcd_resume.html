@@ -10,7 +10,8 @@
   <fieldset>
 
     <!-- Vu d'ensemble du dictionnaire (valeurs d'exemple) -->
-      <legend>{{proj.nomMCD}}</legend>
+      <legend id="mcd_name">{{proj.nomMCD}}</legend>
+      <p id="tmp" hidden>{{proj.nomMCD}}</p>
 
       <!-- for entité in dictionnaire -->
       <label> Données du MCD : </label>
@@ -409,9 +410,14 @@
        var canvas = document.getElementById("canvas");
        var imgData = canvas.toDataURL("image/png", 1.0);
        var pdf = new jsPDF();
+       var name_mcd = document.getElementById("mcd_name").innerHTML;
+       var name_mcd_bis = document.getElementById("tmp").innerHTML;
+
+       console.log(name_mcd);
+       console.log(name_mcd_bis);
 
        pdf.addImage(imgData, 'JPEG', 0, 0);
-       pdf.save("mcd.pdf");
+       pdf.save(name_mcd + ".pdf");
      }, false);
 
      </script>
