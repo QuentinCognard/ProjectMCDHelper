@@ -10,7 +10,8 @@
   <fieldset>
 
     <!-- Vu d'ensemble du dictionnaire (valeurs d'exemple) -->
-      <legend>{{proj.nomMCD}}</legend>
+      <legend id="mcd_name">{{proj.nomMCD}}</legend>
+      <p id="tmp" hidden>{{proj.nomMCD}}</p>
 
       <!-- for entité in dictionnaire -->
       <label> Données du MCD : </label>
@@ -53,6 +54,7 @@
           <a href="{{url_for('page_modif_attributs',idProj=idProj,username=username)}}" class="btn btn-primary" role="button">Modifier les attributs</a>
           <a href="" class="btn btn-success" role="button">Modifier les entités</a>
           <a href="{{ url_for('page_ajouter_relation', idProj=idProj, username=username) }}" class="btn btn-warning" role="button">Modifier les relations</a>
+          <button class="btn" id="download"><img id="pdfpic" src="{{url_for('static',filename='images/pdf.png') }}"></button>
         </section>
       {% endif %}
     </fieldset>
@@ -63,12 +65,24 @@
       <p id="relsE" hidden>{{r_relsE}}</p>
       <p id="relsA" hidden>{{r_relsA}}</p>
       <canvas style="border:solid;" id="canvas" width="980"  height="300"></canvas>
-      <button class="btn" id="download"><img id="pdfpic" src="{{url_for('static',filename='images/pdf.png') }}"></button>
     </section>
     <section>
       <a href="/projets/{{current_user.login}}/{{proj.id}}/consult/verifProjet"  role="button"> <button id="verif" class="btn btn-info">Vérifier le MCD </button></a>
     </section>
      <script>
+     window.onload=function notif(){
+       document.getElementById('notif').innerHTML="<sup id='nb'>"+{{nbnotif}}+"</sup><span class='glyphicon glyphicon-bell'></span>Notifications"
+       if ({{nbnotif}}>0){
+         document.getElementById('nb').style.backgroundColor = "red";
+         document.getElementById('nb').style.color = "white";
+         document.getElementById('nb').style.borderRadius = "50%";
+         document.getElementById('nb').style.padding = "0.2em";
+
+       }
+       $('[data-toggle="popover"]').popover();
+
+
+     }
      var canvas = document.getElementById("canvas");
      var ctx = canvas.getContext("2d");
      var cw = 1200;
@@ -396,9 +410,14 @@
        var canvas = document.getElementById("canvas");
        var imgData = canvas.toDataURL("image/png", 1.0);
        var pdf = new jsPDF();
+       var name_mcd = document.getElementById("mcd_name").innerHTML;
+       var name_mcd_bis = document.getElementById("tmp").innerHTML;
+
+       console.log(name_mcd);
+       console.log(name_mcd_bis);
 
        pdf.addImage(imgData, 'JPEG', 0, 0);
-       pdf.save("mcd.pdf");
+       pdf.save(name_mcd + ".pdf");
      }, false);
 
      </script>

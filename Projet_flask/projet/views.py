@@ -746,3 +746,8 @@ def delete_relation(username, idProj, idRel):
 def verifProjet(username,idProj):
 	proj=get_projet(username,idProj)
 	return render_template("verifProj.html",username=username,idProj=idProj,proj=proj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+
+
+@app.route("/projets/<string:username>/Aide",methods=['GET','POST'])
+def aide(username):
+	return render_template("aide.html",username=username,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
