@@ -34,7 +34,7 @@ function sendreponse(reponse,id,username,user){
    </div>
 
    <ul class="nav navbar-nav navbar-right">
-
+     <li><a href="{{url_for('contacter', username=username )}}"><span class="glyphicon glyphicon-comment"></span> Contact</a></li>
      <li><button  class="btn btn-default " data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" id="notif"><span class="glyphicon glyphicon-bell"></span>Notifications></button>
       {% if nbnotif!=0 %}
        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
