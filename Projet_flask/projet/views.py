@@ -542,7 +542,6 @@ def save_modif_attributs(username, idProj):
 	for i in range(1, int(nbAtt)+1):
 		att = Attributs(id=i, projet_id=idProj, nomAttribut=request.form.get("nom"+str(i)), genreAttribut=request.form.get("genre"+str(i)), typeAttribut=request.form.get("type"+str(i)))
 		newAtts.append(( att, request.form.get("hidden"+str(i)) ))
-
 	aSupp = []
 	tjrsLa = []
 	if len(oldAtts) != 0:
@@ -551,7 +550,7 @@ def save_modif_attributs(username, idProj):
 		for a,i in newAtts:
 			if i != "None":
 				tjrsLa.append(int(i))
-		for e in tjrsLa:
+		for e in aSupp:
 			aSupp.remove(e)
 	for a in oldAtts:
 		if a.id in aSupp:
