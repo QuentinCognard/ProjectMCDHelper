@@ -62,6 +62,11 @@ def home():
 	f_bis = LoginForm()
 	return render_template("home.html", title= "Exerciseur MCD",form_bis=f, form=f_bis)
 
+@app.route("/<string:username>/contact")
+def contacter(username):
+	user = current_user
+	return render_template("contact.html", user = user, nbnotif=get_nb_notifications(user.login), notifs=get_notifications(user.login))
+
 # @app.route("/lucas/test/<id_projet>", methods=('GET', 'POST')) #route pour la page de connexion
 # def lucas(id_projet):
 # 	ecrire_Entite("test2.txt", id_projet)
