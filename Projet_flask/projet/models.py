@@ -280,3 +280,6 @@ def get_entityrel_byIdRel(idRel):
 
 def get_relation_byId(idRel, idProj):
     return Relation.query.filter(Relation.id == idRel).filter(Relation.projet_id == idProj).one()
+
+def get_relAtt_byAtt(attId, idProj):
+    return Relationattributs.query.filter(Relationattributs.attribut_id == attId).filter(Relationattributs.projet_id == idProj).all()
