@@ -64,8 +64,7 @@ def home():
 
 @app.route("/<string:username>/contact")
 def contacter(username):
-	user = current_user
-	return render_template("contact.html", user = user, nbnotif=get_nb_notifications(user.login), notifs=get_notifications(user.login))
+	return render_template("contact.html", username = username, nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 # @app.route("/lucas/test/<id_projet>", methods=('GET', 'POST')) #route pour la page de connexion
 # def lucas(id_projet):
