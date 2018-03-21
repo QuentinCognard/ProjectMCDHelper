@@ -11,6 +11,9 @@ button,p{
 #valid{
   margin-bottom: 1em;
 }
+#questionnaire{
+  padding-bottom: 2em;
+}
 /* .boutton{
   display: none;
 } */
