@@ -68,13 +68,13 @@ def home():
 # 	return render_template("test.html", sujet = "test")
 #
 #
-# @app.route("/test/parceque/personne/ne/viens/ici/ou/presque/<int:idProj>")
-# def test_dessins_lucas_bis(idProj):
-# 	test = ObjetTest();
-# 	liste_tout = get_tout_du_projet(idProj)
-# 	string = repr(liste_tout)
-# 	return render_template("testV2.html",projet=test, bis=repr(liste_tout), entites = repr(liste_tout[0]), atts = repr(liste_tout[1]), rels = repr(liste_tout[2]), relsE = repr(liste_tout[3]), relsA = repr(liste_tout[4]))
-#
+@app.route("/test/parceque/personne/ne/viens/ici/ou/presque/<int:idProj>")
+def test_dessins_lucas_bis(idProj):
+	test = ObjetTest();
+	liste_tout = get_tout_du_projet(idProj)
+	string = repr(liste_tout)
+	return render_template("testV2.html",projet=test, bis=repr(liste_tout), entites = repr(liste_tout[0]), atts = repr(liste_tout[1]), rels = repr(liste_tout[2]), relsE = repr(liste_tout[3]), relsA = repr(liste_tout[4]))
+
 # @app.route("/test/parceque/personne/ne/viens/ici/<int:idProj>")
 # def test_dessins_lucas(idProj):
 # 	test = ObjetTest();
@@ -581,7 +581,7 @@ def save_entity(username,idProj):
 		for i in range(int(nbEnt)):
 			if request.method=="POST":
 				nbAttEnt = request.form.get("nbAttEnt"+str(i+1))
-				ent = Entite(id=get_nbid_entity()+1, projet_id=idProj, nomEntite=request.form.get("nom"+str(i+1)), positionEntite=i+1)
+				ent = Entite(id=get_nbid_entity()+1, projet_id=idProj, nomEntite=request.form.get("nom"+str(i+1)))
 				db.session.add(ent)
 				db.session.commit()
 			for y in range(int(nbAttEnt)):

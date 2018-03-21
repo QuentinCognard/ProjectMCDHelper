@@ -7,3 +7,16 @@ label{
 a{
   margin-left: 1em;
 }
+
+#pdfpic{
+  width: 80%;
+  height: 80%;
+}
+
+#download{
+  width: 5%;
+  height: 5%;
+}
+#download:hover{
+  background-color: black;
+}
