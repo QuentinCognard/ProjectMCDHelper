@@ -66,4 +66,9 @@
   {% endwith %}
   {% endif %}
 {% endif %}
+<div id="modif">
+  {% for droit in droits %}
+    <p>{{droit.nomDroit}}: {{droit.descDroit}}</p>
+  {% endfor %}
+</div>
 {% endblock %}

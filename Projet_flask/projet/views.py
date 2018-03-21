@@ -157,7 +157,7 @@ def creer_compte():
 			db.session.add(o)
 			db.session.commit()
 			login_user(o)
-			flash('Votre compte à bien été créer')
+			flash('Votre compte à bien été créé')
 			return redirect(url_for('page_projets',username=o.login,n=1,i=1))
 	return render_template("home.html",form_bis = f, form = f_bis, title = "Exerciceur de MCD", error=False)
 
@@ -250,7 +250,7 @@ def description(username,nomProj):
 @login_required
 def demande(username,nomProj,master):
 	if get_notif_byexp_dest_nom("Demande de "+username,username,master,get_Projet_byName(nomProj).id)!=[]:
-		flash("Demande déjà envoyé")
+		flash("Demande déjà envoyée")
 	else:
 		N=Notification(nom="Demande de "+username,
 		expediteur=username,destinataire=master,idProj=get_Projet_byName(nomProj).id,
@@ -315,11 +315,12 @@ def suppProj(username,nomProj):
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres")
 @login_required
 def membres(username,nomProj):
+	droits=Droit.query.all()
 	membresProj=get_gerer_byProjet(nomProj)
 	if( get_nom_droit(get_gerer_byNom(nomProj,username).droit_id) == "master"):
-		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=True,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+		return render_template("membres.html",droits=droits,username=username,nomProj=nomProj,membresProj=membresProj,master=True,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	else:
-		return render_template("membres.html",username=username,nomProj=nomProj,membresProj=membresProj,master=False,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+		return render_template("membres.html",droits=droits,username=username,nomProj=nomProj,membresProj=membresProj,master=False,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/Membres/add", methods=['GET', 'POST'])
 @login_required
@@ -351,7 +352,7 @@ def modifier_membres(username,nomProj,droit,nom):
 		db.session.add(Gerer(idProj,nom,get_id_droit(droit)))
 		db.session.commit()
 	else:
-		flash(" impossible : "+nom+" est master")
+		flash(" Impossible : "+nom+" est master")
 	return redirect(url_for("membres",username=username,nomProj=nomProj))
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/membres/supprimer/<string:nom>", methods=['GET','POST'])
@@ -363,7 +364,7 @@ def supprimer_membres(username,nomProj,nom):
 		db.session.commit()
 		flash(""+nom+" a été supprimé de la liste des membres")
 	else:
-		flash("impossible : "+nom+" est master")
+		flash("Impossible : "+nom+" est master")
 	return redirect(url_for("membres",username=username,nomProj=nomProj))
 
 
@@ -397,7 +398,7 @@ def save_modifProj(username,nomProj):
 	affiche=P.name.data
 	projetCourant=get_Projet_byName(nomProj)
 	if projetCourant.nomProj==P.name.data:
-		flash("le nom n'a pas changé")
+		flash("Le nom n'a pas changé")
 	else:
 		if P.validate_on_submit():
 				if P.name.data != "":
@@ -419,10 +420,10 @@ def save_modifProj(username,nomProj):
 					projetCourant.descProj = P.description.data
 				db.session.commit()
 				return redirect(url_for('parametresProj',username=username,nomProj=affiche))
-				flash("Le projet à bien été modifié")
+				flash("Le projet a bien été modifié")
 
 
-		flash("Impossible de modifié le projet, le nom ou la description est trop court(e) ou trop long")
+		flash("Impossible de modifier le projet, le nom ou la description est trop court(e) ou trop long")
 	return redirect(url_for('modifProj',username=username,nomProj=nomProj))
 
 @app.route("/projets/<string:username>/<string:nomProj>/quitter")
@@ -436,7 +437,7 @@ def quitter(username,nomProj):
 		db.session.commit()
 		flash(""+nomProj+" a été supprimé de la liste de vos projets")
 	else:
-		flash("impossible de quitter le projet, vous êtes master")
+		flash("Impossible de quitter le projet, vous êtes master")
 		return redirect('/projets/'+username+'/1/1')
 # @app.route("/projets/<idProj>/")
 # def page_projet_perso(idProj):
@@ -450,8 +451,9 @@ def quitter(username,nomProj):
 @login_required
 def page_projet_perso(username, idProj):
 	proj = get_projet(username, idProj)
+	droitUser=getDroitUser(username,idProj)
 	if proj != None:
-		return render_template("consult_own_project.html", projet = proj,username=username,id=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+		return render_template("consult_own_project.html",droitUser=droitUser, projet = proj,username=username,id=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
 #consulter un mcd
@@ -464,7 +466,8 @@ def consulter(username,idProj):
 	att=get_attributs_projet(idProj)
 	attributs=getrelationsattributs(idProj)
 	Ent=get_entity(idProj)
-	return render_template("mcd_resume.html",ent=Ent,a=att,relations=relations,entites=entites,attributs=attributs,proj=proj,idProj=idProj,username=username,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+	droitUser=getDroitUser(username,idProj)
+	return render_template("mcd_resume.html",droitUser=droitUser,ent=Ent,a=att,relations=relations,entites=entites,attributs=attributs,proj=proj,idProj=idProj,username=username,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 @app.route("/projets/<string:username>/<int:idProj>/delete")
 @login_required

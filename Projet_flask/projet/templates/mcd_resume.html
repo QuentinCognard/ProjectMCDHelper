@@ -46,10 +46,12 @@
       {% endfor %}
 
       <!-- for relation in bdd -->
-      <section id="bouton">
-        <a href="" class="btn btn-primary" role="button">Modifier les attributs</a>
-        <a href="" class="btn btn-success" role="button">Modifier les entités</a>
-        <a href="{{ url_for('page_ajouter_relation', idProj=idProj, username=username) }}" class="btn btn-warning" role="button">Modifier les relations</a>
-      </section>
+      {% if droitUser!="visiteur" %}
+        <section id="bouton">
+          <a href="" class="btn btn-primary" role="button">Modifier les attributs</a>
+          <a href="" class="btn btn-success" role="button">Modifier les entités</a>
+          <a href="{{ url_for('page_ajouter_relation', idProj=idProj, username=username) }}" class="btn btn-warning" role="button">Modifier les relations</a>
+        </section>
+      {% endif %}
     </fieldset>
 {% endblock %}
