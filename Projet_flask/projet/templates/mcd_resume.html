@@ -69,6 +69,19 @@
       <a href="/projets/{{current_user.login}}/{{proj.id}}/consult/verifProjet"  role="button"> <button id="verif" class="btn btn-info">Vérifier le MCD </button></a>
     </section>
      <script>
+     window.onload=function notif(){
+       document.getElementById('notif').innerHTML="<sup id='nb'>"+{{nbnotif}}+"</sup><span class='glyphicon glyphicon-bell'></span>Notifications"
+       if ({{nbnotif}}>0){
+         document.getElementById('nb').style.backgroundColor = "red";
+         document.getElementById('nb').style.color = "white";
+         document.getElementById('nb').style.borderRadius = "50%";
+         document.getElementById('nb').style.padding = "0.2em";
+
+       }
+       $('[data-toggle="popover"]').popover();
+
+
+     }
      var canvas = document.getElementById("canvas");
      var ctx = canvas.getContext("2d");
      var cw = 1200;
