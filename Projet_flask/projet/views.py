@@ -510,6 +510,7 @@ def page_new_attributs(username, idProj):
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
 @app.route("/projets/<string:username>/<int:idProj>/new-attributs/save/", methods=['POST',])
+@login_required
 def save_new_attributs(username, idProj):
 	oldAtts = get_attributs_proj(idProj)
 	for a in oldAtts:
@@ -528,6 +529,7 @@ def save_new_attributs(username, idProj):
 	return redirect(url_for('page_ajouter_entite', username=username, idProj=idProj))
 
 @app.route("/projets/<string:username>/<int:idProj>/attributs")
+@login_required
 def page_modif_attributs(username, idProj):
 	atts = get_attributs_proj(idProj)
 	return render_template(
@@ -555,6 +557,7 @@ class CreaMCDForm(FlaskForm):#Formulaire de création d'un MCD
 # route vers l'ajout d'une entité
 
 @app.route("/projets/<string:username>/<int:idProj>/new_entity")
+@login_required
 def page_ajouter_entite(username,idProj):
 	M=CreaMCDForm(request.form)
 	M.listeAttribut.choices = get_attributs_projet(idProj)
@@ -564,6 +567,7 @@ def page_ajouter_entite(username,idProj):
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
 @app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
+@login_required
 def save_entity(username,idProj):
 	nbAtt = request.form.get("nbAtt")
 	nbEnt = request.form.get("nbEnt")
@@ -620,6 +624,7 @@ def save_entity(username,idProj):
 # route vers la Premier etape de la creation d'une relation
 
 @app.route("/projets/<string:username>/<int:idProj>/new_relation")
+@login_required
 def page_ajouter_relation(username,idProj):
 	relations=getrelations(idProj)
 	entites=getrelationsentites()
@@ -630,6 +635,7 @@ def page_ajouter_relation(username,idProj):
 # route vers le resumer d'un MCD
 
 @app.route("/projets/<string:username>/<int:idProj>/mcd_resume")
+@login_required
 def page_resume_mcd(username,idProj):
 	return render_template("mcd_resume.html",username=username,idProj=idProj)
 
@@ -642,6 +648,7 @@ def page_creer_relation(username,idProj):
 # route de save d'une relation
 
 @app.route("/projets/<string:username>/<int:idProj>/new_relation/save", methods=['GET', 'POST'])
+@login_required
 def save_relation_tablee(username,idProj):
 	nbAtt = request.form.get("nbAtt")
 	nbEnt = request.form.get("nbEnt")
@@ -674,6 +681,7 @@ def save_relation_tablee(username,idProj):
 # route d'effacement d'une relation
 
 @app.route("/projets/<string:username>/<int:idProj>/new_relation/delete/<int:idRel>")
+@login_required
 def delete_relation(username, idProj, idRel):
 	attRel = get_relAtt_byProjRel(idProj,idRel)
 	entRel = get_entityrel_byIdRel(idRel)

@@ -4,6 +4,7 @@
 <link rel="stylesheet" href= "{{url_for('static',filename='consulter.css') }}"/>
 {% endblock %}
 {% block contain %}
+<a id="retour" href="{{url_for('page_projet_perso',username=current_user.login,idProj=idProj)}}"><input type="Submit"  value="< Retour"></a>
 
   <fieldset>
 
