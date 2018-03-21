@@ -742,3 +742,8 @@ def delete_relation(username, idProj, idRel):
 	db.session.delete(get_relation_byId(idRel, idProj))
 	db.session.commit()
 	return redirect((url_for('page_ajouter_relation', username=username, idProj=idProj)))
+
+@app.route("/projets/<string:username>/<int:idProj>/consult/verifProjet",methods=['GET','POST'])
+def verifProjet(username,idProj):
+	proj=get_projet(username,idProj)
+	return render_template("verifProj.html",username=username,idProj=idProj,proj=proj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))

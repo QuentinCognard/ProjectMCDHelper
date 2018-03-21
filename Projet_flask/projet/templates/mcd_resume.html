@@ -64,6 +64,10 @@
       <p id="relsA" hidden>{{r_relsA}}</p>
       <canvas style="border:solid;" id="canvas" width="980"  height="300"></canvas>
       <button class="btn" id="download"><img id="pdfpic" src="{{url_for('static',filename='images/pdf.png') }}"></button>
+    </section>
+    <section>
+      <a href="/projets/{{current_user.login}}/{{proj.id}}/consult/verifProjet"  role="button"> <button id="verif" class="btn btn-info">Vérifier le MCD </button></a>
+    </section>
      <script>
      var canvas = document.getElementById("canvas");
      var ctx = canvas.getContext("2d");
