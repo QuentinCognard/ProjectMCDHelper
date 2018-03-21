@@ -7,6 +7,7 @@
   <fieldset class="fieldset">
     <legend>Nouveau MCD</legend>
       {% for elem in relations %}
+      <section id="relations">
       <a href="{{ url_for('delete_relation', username=username, idProj=idProj, idRel=elem.id ) }}"><button class="suppBout btn btn-danger" type="button">X</button></a>
       <p>Relation <b>{{elem.nomRelation}}</b> entre
       {% for ent in entites %}
@@ -26,6 +27,7 @@
 
       {% endfor %}
       </p>
+    </section>
       {% endfor %}
     <a href="{{ url_for('page_creer_relation', username=username, idProj=idProj ) }}"><button type="button" class="btn btn-info">Ajouter relation</button></a>
 

@@ -38,3 +38,12 @@ section{
 label{
   margin-left: 1em;
 }
+
+#relations{
+  display: flex;
+  flex-wrap: nowrap;
+}
+#relations *{
+  margin-top: auto;
+  margin-bottom: auto;
+}
