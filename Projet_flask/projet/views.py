@@ -436,6 +436,7 @@ def quitter(username,nomProj):
 		db.session.delete(get_gerer_byNom(nomProj,username))
 		db.session.commit()
 		flash(""+nomProj+" a été supprimé de la liste de vos projets")
+		return redirect('/projets/'+username+'/1/1')
 	else:
 		flash("Impossible de quitter le projet, vous êtes master")
 		return redirect('/projets/'+username+'/1/1')
