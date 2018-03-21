@@ -1,0 +1,159 @@
+{% extends "base_excerciseur.html" %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href= "{{url_for('static',filename='verifProj.css') }}"/>
+{% endblock %}
+{% block contain %}
+
+  <fieldset>
+
+
+<section id="questionnaire">
+    <h2> Questionnez vous sur votre MCD  ! </h2><br>
+
+    <legend id="quest1" >1. Les entités possèdes au moins un identifiant ( primary Key). </legend>
+
+    <button  id="oui1"  onclick="oui(1)" class="btn btn-success" role="button">Oui</button>
+    <button  id="non1"  onclick="non(1)"  class="btn btn-danger" role="button">Non / Je ne sais pas</button>
+
+    <p id="expl1" class="invisibl"> Chaque entités doit être composé d'au moins un attributs identifiant celle-ci.
+       Un identifiant sera forcement unique et permettera de reconnaître à quel itération de l'entité on à affaire.
+       Par exemple : une entité Personne aura un identifiants unique " Id " et des attributs plus classique " nom " et " prénom ".
+     </p>
+     <p id="exploui1" class="invisibl"> Bravo ! il important d'avoir un identifiant pour chaque entité pour pouvoir un attribut unique permettant de rendre unique chaque itération </p>
+     <a id="modif1" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
+
+    <legend id="quest2">2. Les identifiants sont tous pertinants et unique.</legend>
+
+        <button id="oui2" href="" onclick="oui(2)" class="btn btn-success boutton" role="button">Oui</button>
+        <button id="non2" href="" onclick="non(2)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
+
+        <p id="expl2" class="invisibl" >
+Un identifiants ( primary key ) est un attributs qui doit être unique. Un identifiants
+va donc être la pluspart du temps une entrée statique et qui n'est pas rentrée par l'utilisateur
+comme un ID par exemple.
+         </p>
+         <p id="exploui2" class="invisibl"> Bien joué , un identifiant est est unique !  </p>
+         <a id="modif2" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
+    <legend id="quest3">3. Chaque attributs possède une seul valeur pour une valeur de sont entité.</legend>
+
+            <button id="oui3" href="" onclick="oui(3)" class="btn btn-success boutton" role="button">Oui</button>
+            <button id="non3" href="" onclick="non(3)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
+
+            <p id="expl3" class="invisibl">
+              Si un attribut peut prendre plusieurs valeurs pour un exemple de l'entité, alors il devra être dans une entité propre.
+               Par exemple dans une entité " Élève " on pourra très bien avoir un attribut " Prénom " mais pas " Notes " car l'élève possède
+               plusieurs notes. On créera donc une entités " Notes ".
+            </p>
+            <p id="exploui3" class="invisibl"> Très bien ! Un attributs possèdant plusieurs valeurs pour un exemple d'entité n'existe pas et doit être sous la forme d'une entité.</p>
+            <a id="modif3" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
+
+          <legend id="quest4">4. Il n'y à aucun attributs nommé pareil dans le MCD et tous les attributs ont un nom cohérant. </legend>
+
+                    <button id="oui4" href="" onclick="oui(4)" class="btn btn-success boutton" role="button">Oui</button>
+                    <button id="non4" href="" onclick="non(4)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
+
+                    <p id="expl4" class="invisibl">
+                      Pour des raisons de clareté et pour éviter les problèmes lors de la création de la base de données, un MCD ne doit pas contenir
+                      2 attributs ou même 2 entités nommées pareil. Si on doit par exemple donner un nom à l'entité A et à l'entité B on nommera donc les attributs "nomA" et "nomB" par exemple.
+                      Enfin la facilité de compréhension des noms des attributs sont important si quelqu'un un jour reprend notre base de données, elle doit être facilement compréhensible.
+
+                    </p>
+                    <p id="exploui4" class="invisibl"> Bien. Pour éviter les problèmes, un bon nommage des attributs en important ! </p>
+                    <a id="modif4" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
+            <legend id="quest5" >5. Les cardinalitées respectent les règles universelles des MCD. </legend>
+                      <button id="oui5" href="" onclick="oui(5)" class="btn btn-success boutton" role="button">Oui</button>
+                      <button id="non5" href="" onclick="non(5)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
+
+                      <p id="expl5" class="invisibl">
+                        Les cardinalitées servent à compter le nombre minimum et maximum de possibilités que chaque entités contiennent dans la relation liant 2 ou plusieurs objets.
+                        Certaines règles sont établies pour vous aidez à bien comprendre comment utiliser les cardinalitées. Voici un exemple de règles : <br>
+                        0 - 1 : présence 0 ou 1 fois maximum<br>
+		                    0 - n : présence de 0 à n fois<br>
+		                    1 - 1 : présence obligatoire et seulement 1 fois<br>
+		                    1 - n : présence obligatoire et n fois<br>
+                            </p>
+                            <p id="exploui5" class="invisibl">Impressionant ! les règles sur les cardinalitées sont importantes pour la bonne compréhension de l'utilité des entités. </p>
+                     <a id="modif5" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button> </a>
+
+                <legend id="quest6">6. si une association est porteuse de données, les attributs identifiants des entités reliées
+par cette association permettent elles de determiner les données de l'association et de définir
+la dépendance : identifiants -> données de la relation ?
+ </legend>
+
+                <button id="oui6" href="" onclick="oui(6)" class="btn btn-success boutton" role="button">Oui</button>
+                <button id="non6" href="" onclick="non(6)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
+
+                      <p id="expl6" class="invisibl">
+                        Les identifiants des entités reliées par une relation doivent pouvoir detérminé l'identifiants de cette relation ! On doit donc pouvoir retrouver
+                        à coup sûr cette identifiants en connaissant ceux des entités.
+                       </p>
+                       <p id="exploui6" class="invisibl">Pas mal. les identifiants des entités doivent absolument permettres de retrouver celui de la relation associé. </p>
+                       <a id="modif6" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
+
+              <legend id="quest7">7. Les attributs des relations sont des verbes à l'infinitif
+        </legend>
+
+                 <button id="oui7" href="" onclick="oui(7)" class="btn btn-success boutton" role="button">Oui</button>
+                 <button id="non7" href="" onclick="non(7)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
+
+                  <p id="expl7" class="invisibl">
+                  C'est une règle dans la conception de base de données. Si les attributs de votre relation n'est pas un verbe à l'infinitif ( souvent accompagné d'un adverbe)
+                  alors il y n'a sans doute rien à faire dans cette relation ou est mal formulé.
+                            </p>
+                            <p id="exploui7" class="invisibl"> Super ! Les identifiants sont toujours des verbes à l'infinitif. </p>
+                  <a id="modif7" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button> </a>
+
+        <legend id="quest8"> 8. Une question sera poser ici mais je sais pas laquelle LUL
+            </legend>
+
+                  <button id="oui8" href="" onclick="oui(8)" class="btn btn-success boutton" role="button">Oui</button>
+                 <button id="non8" href="" onclick="non(8)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
+
+                  <p id="expl8" class="invisibl">
+Bang
+                                </p>
+                                <p id="exploui8" class="invisibl"> BOOM ! </p>
+                <a id="modif8" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD</button> </a>
+              <br>  <button id="valid" class="btn btn-success invisibl" onclick="valid()" > Valider </button>
+         <script>
+         var cpt=1;
+         var erreur=0;
+         function oui(id){
+           console.log(cpt);
+          // document.getElementById("quest"+(id+1)).style.display='block';
+          // document.getElementById("oui"+(id+1)).style.display='block';
+          // document.getElementById("non"+(id+1)).style.display='block';
+          document.getElementById("exploui"+id).style.display='block';
+          document.getElementById("oui"+id).style.display='none';
+          document.getElementById("non"+id).style.display='none';
+          // document.getElementById("quest"+id).style.display='none';
+          if(cpt==8){
+            document.getElementById("valid").style.display='block';
+
+
+          }
+          cpt+=1;
+         }
+         function non(id){
+           document.getElementById("expl"+id).style.display='block';
+           document.getElementById("modif"+id).style.display='block';
+           document.getElementById("oui"+id).style.display='none';
+           document.getElementById("non"+id).style.display='none';
+           // document.getElementById("quest"+(id+1)).style.display='block';
+           // document.getElementById("oui"+(id+1)).style.display='block';
+           // document.getElementById("non"+(id+1)).style.display='block';
+           // document.getElementById("quest"+id).style.display='none';
+           cpt+=1;
+           erreur+=1;
+         }
+         function valid(){
+           document.getElementById("questionnaire").innerHTML="";
+           document.getElementById("questionnaire").innerHTML="<p> Vérification terminé , vous avez "+erreur+" erreur. </p> <a href='{{url_for('consulter',username=current_user.login,idProj=idProj)}}' role='button'><button  class='btn btn-info'> Retour au MCD</button> </a>  ";
+         }
+
+
+
+         </script>
+       </section>
+{% endblock %}

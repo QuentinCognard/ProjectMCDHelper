@@ -51,5 +51,8 @@
         <a href="" class="btn btn-success" role="button">Modifier les entités</a>
         <a href="" class="btn btn-warning" role="button">Modifier les relations</a>
       </section>
+      <section>
+        <a href="/projets/{{current_user.login}}/{{proj.id}}/consult/verifProjet"  role="button"> <button id="verif" class="btn btn-info">Vérifier le MCD </button></a>
+      </section>
     </fieldset>
 {% endblock %}

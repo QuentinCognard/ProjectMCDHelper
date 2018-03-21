@@ -19,6 +19,8 @@ Question possible version BETA 1.2 :
 par cette association permettent elles de determiner les données de l'association et de définir
 la dépendance : identifiants -> données de la relation ?
 
-- Aucune entité est vide.
-
 - Les entités ont au moins une clé primaire.
+
+-date
+
+- verbe infinitif
