@@ -405,19 +405,37 @@
        }
      }
 
+     var name_mcd = document.getElementById("mcd_name").innerHTML;
+     var final = name_mcd;
+     for (var i = 0; i < name_mcd.length; i++)
+     {
+       if(name_mcd[i] == '&')
+       {
+         var tmp = name_mcd.substr(0,i);
+         var tmp_bis = name_mcd.substr(i+5);
+         var final = tmp + " & " + tmp_bis;
+       }
+       console.log(final);
+    }
 
      download.addEventListener("click", function() {
+
        var canvas = document.getElementById("canvas");
        var imgData = canvas.toDataURL("image/png", 1.0);
        var pdf = new jsPDF();
        var name_mcd = document.getElementById("mcd_name").innerHTML;
-       var name_mcd_bis = document.getElementById("tmp").innerHTML;
-
-       console.log(name_mcd);
-       console.log(name_mcd_bis);
-
+       var final = name_mcd;
+       for (var i = 0; i < name_mcd.length; i++)
+       {
+         if(name_mcd[i] == '&')
+         {
+           var tmp = name_mcd.substr(0,i);
+           var tmp_bis = name_mcd.substr(i+5);
+           var final = tmp + " & " + tmp_bis;
+         }
+      }
        pdf.addImage(imgData, 'JPEG', 0, 0);
-       pdf.save(name_mcd + ".pdf");
+       pdf.save(final + ".pdf");
      }, false);
 
      </script>
