@@ -49,7 +49,7 @@
       <!-- for relation in bdd -->
       {% if droitUser!="visiteur" %}
         <section id="bouton">
-          <a href="" class="btn btn-primary" role="button">Modifier les attributs</a>
+          <a href="{{url_for('page_modif_attributs',idProj=idProj,username=username)}}" class="btn btn-primary" role="button">Modifier les attributs</a>
           <a href="" class="btn btn-success" role="button">Modifier les entités</a>
           <a href="{{ url_for('page_ajouter_relation', idProj=idProj, username=username) }}" class="btn btn-warning" role="button">Modifier les relations</a>
         </section>

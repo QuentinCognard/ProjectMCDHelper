@@ -283,3 +283,6 @@ def get_relation_byId(idRel, idProj):
 
 def getDroitUser(username,idProj):
     return (Gerer.query.filter(Gerer.user_login==username,Gerer.projet_id==idProj).first()).droit.nomDroit
+
+def get_relAtt_byAtt(attId, idProj):
+    return Relationattributs.query.filter(Relationattributs.attribut_id == attId).filter(Relationattributs.projet_id == idProj).all()

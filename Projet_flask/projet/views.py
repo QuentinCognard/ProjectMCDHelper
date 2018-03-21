@@ -529,6 +529,51 @@ def save_new_attributs(username, idProj):
 	# DOIT PASSER A LA PAGE DE CREATION D'ENTITES
 	return redirect(url_for('page_ajouter_entite', username=username, idProj=idProj))
 
+@app.route("/projets/<string:username>/<int:idProj>/modif-attributs/save/", methods=['POST',])
+@login_required
+def save_modif_attributs(username, idProj):
+	oldAtts = get_attributs_proj(idProj)
+	newAtts = []
+	nbAtt = request.form.get("nbAtt")
+	for i in range(1, int(nbAtt)+1):
+		att = Attributs(id=i, projet_id=idProj, nomAttribut=request.form.get("nom"+str(i)), genreAttribut=request.form.get("genre"+str(i)), typeAttribut=request.form.get("type"+str(i)))
+		newAtts.append(( att, request.form.get("hidden"+str(i)) ))
+
+	aSupp = []
+	tjrsLa = []
+	if len(oldAtts) != 0:
+		for nb in range(1, len(oldAtts)+1):
+			aSupp.append(nb)
+		for a,i in newAtts:
+			if i != "None":
+				tjrsLa.append(int(i))
+		for e in tjrsLa:
+			aSupp.remove(e)
+	for a in oldAtts:
+		if a.id in aSupp:
+			relAtt = get_relAtt_byAtt(a.id, idProj)
+			for ra in relAtt:
+				db.session.delete(ra)
+			db.session.delete(a)
+			db.session.commit()
+	for a in oldAtts:
+		for a2,i in newAtts:
+			if i != "None" and a.id == int(i):
+				a.id = a2.id
+				a.projet_id==idProj
+				a.nomAttribut = a2.nomAttribut
+				a.genreAttribut = a2.genreAttribut
+				a.typeAttribut = a2.typeAttribut
+				db.session.commit()
+	for a,i in newAtts:
+		if i == "None":
+			db.session.add(a)
+
+	proj = get_projet(username, idProj)
+	proj.nomMCD = request.form.get("nomMCD")
+	db.session.commit()
+	return redirect(url_for('consulter', username=username, idProj=idProj))
+
 @app.route("/projets/<string:username>/<int:idProj>/attributs")
 @login_required
 def page_modif_attributs(username, idProj):
