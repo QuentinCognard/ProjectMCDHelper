@@ -5,6 +5,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
 {% endblock %}
 {% block contain %}
+<a id="retour" href="{{url_for('page_projet_perso',username=current_user.login,idProj=idProj)}}"><input type="Submit"  value="< Retour"></a>
 
   <fieldset>
 
@@ -47,11 +48,13 @@
       {% endfor %}
 
       <!-- for relation in bdd -->
-      <section id="bouton">
-        <a href="" class="btn btn-primary" role="button">Modifier les attributs</a>
-        <a href="" class="btn btn-success" role="button">Modifier les entités</a>
-        <a href="{{ url_for('page_ajouter_relation', idProj=idProj, username=username) }}" class="btn btn-warning" role="button">Modifier les relations</a>
-      </section>
+      {% if droitUser!="visiteur" %}
+        <section id="bouton">
+          <a href="{{url_for('page_modif_attributs',idProj=idProj,username=username)}}" class="btn btn-primary" role="button">Modifier les attributs</a>
+          <a href="" class="btn btn-success" role="button">Modifier les entités</a>
+          <a href="{{ url_for('page_ajouter_relation', idProj=idProj, username=username) }}" class="btn btn-warning" role="button">Modifier les relations</a>
+        </section>
+      {% endif %}
     </fieldset>
     <section>
       <p id="entites" hidden>{{r_entites}}</p>

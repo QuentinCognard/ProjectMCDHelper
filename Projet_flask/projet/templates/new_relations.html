@@ -29,8 +29,11 @@
       {% endfor %}
     <a href="{{ url_for('page_creer_relation', username=username, idProj=idProj ) }}"><button type="button" class="btn btn-info">Ajouter relation</button></a>
 
-    <section>
 
+    <section>
+      <section>
+        <label><i>Vous pouvez ajouter ici toutes les relations que vous allez utiliser dans votre MCD qui peut contenir des attributs</i></label>
+      </section>
     <a href="{{url_for('page_projet_perso',username=username,idProj=idProj)}}"><button class="btn btn-warning" role="button">Annuler</button></a>
     <a href="{{url_for('consulter',username=username,idProj=idProj)}}"><button class="btn btn-success" type="submit">Valider</button></a>
 

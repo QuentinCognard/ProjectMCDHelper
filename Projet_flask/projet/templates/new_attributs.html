@@ -50,8 +50,9 @@
 
     <button type="button" class="ajouteAttribut btn btn-info" onClick="ajouteElement()">Ajouter attribut</button>
 
+    <label><i>Vous pouvez ajouter ici tous les attributs que vous allez utiliser dans votre MCD</i></label>
     <p>
-      <a href="{{url_for('page_projet_perso',username=username,idProj=id)}}"><button class="btn btn-warning" role="button">Annuler</button></a>
+      <a href="{{url_for('page_projet_perso',username=username,idProj=id)}}" class="btn btn-danger" role="button">Annuler</a>
       <button class="btn btn-success" type="submit">Valider</button>
 
     </p>

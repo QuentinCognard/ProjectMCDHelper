@@ -44,8 +44,11 @@
 
     <p>
       <a href="{{url_for('page_ajouter_relation',username=username,idProj=idProj)}}"><button class="btn btn-warning" role="button">Annuler</button></a>
-      <button class="btn btn-success" type="submit">Valider</button>
-
+      {% if entites!=[] %}
+        <button class="btn btn-success" type="submit">Valider</button>
+      {% else %}
+        <button class="btn btn-success" type="submit" disabled>Valider (Pas d'entités)</button>
+      {% endif %}
     </p>
   </fieldset>
 </form>

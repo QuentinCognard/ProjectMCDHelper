@@ -21,10 +21,19 @@
         </fieldset>
         <img src="{{url_for('static',filename='mcd.png')}}">
         <a href="{{url_for('consulter',username=username,idProj=id)}}"><input class="btn btn-default" type="submit" value="Consulter"></a>
-        <a href="{{url_for('delete_MCD',username=username,idProj=id)}}"><input class="btn btn-warning" type="submit" value="Supprimer"></a>
+        {% if droitUser!="visiteur" %}
+          <a href="{{url_for('delete_MCD',username=username,idProj=id)}}"><input class="btn btn-warning" type="submit" value="Supprimer"></a>
+        {% else %}
+        <a href=""><input class="btn btn-warning" type="submit" value="Supprimer (Vous n'avez pas les droits pour cela)" disabled></a>
+        {% endif %}
       </div>
       {% else  %}
-        <a  href="{{url_for('page_new_attributs',username=username,idProj=id)}}" role="button"><input class="btn btn-default" type="submit" value="Ajouter un MCD"></a>
+
+        {% if droitUser!="visiteur" %}
+          <a  href="{{url_for('page_new_attributs',username=username,idProj=id)}}" role="button"><input class="btn btn-default" type="submit" value="Ajouter un MCD"></a>
+        {% else %}
+            <a  href="" role="button" ><input class="btn btn-default" type="submit" value="Ajouter un MCD (Vous n'avez pas les droits pour cela)" disabled></a>
+        {% endif %}
       {% endif %}
       </fieldset>
     </div>
