@@ -62,7 +62,7 @@ class Attributs(db.Model):
     projet = db.relationship("Projet", foreign_keys=[projet_id], backref=db.backref("projetAttribut", lazy="dynamic"))
 
     def __repr__(self):
-        return "{};{};{};{};{};{},{}".format(self.id,self.projet_id,self.entite_id,self.nomAttribut,self.genreAttribut,self.typeAttribut,self.primaryKey)
+        return "{};{};{};{};{};{};{}".format(self.id,self.projet_id,self.entite_id,self.nomAttribut,self.genreAttribut,self.typeAttribut,self.primaryKey)
 
 class Relation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -100,6 +100,7 @@ def get_tout_du_projet(idprojet):
     liste = []
     listeE = Entite.query.filter(Entite.projet_id==idprojet).all()
     listeA = Attributs.query.filter(Attributs.projet_id==idprojet).all()
+    print(listeA)
     listeR = Relation.query.filter(Relation.projet_id==idprojet).all()
     listeRE = []
     listeRA = []

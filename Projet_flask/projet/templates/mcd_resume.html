@@ -51,7 +51,7 @@
       {% if droitUser!="visiteur" %}
         <section id="bouton">
           <a href="{{url_for('page_modif_attributs',idProj=idProj,username=username)}}" class="btn btn-primary" role="button">Modifier les attributs</a>
-          <a href="" class="btn btn-success" role="button">Modifier les entités</a>
+          <a href="{{ url_for('page_ajouter_entite', idProj=idProj, username=username) }}" class="btn btn-success" role="button">Modifier les entités</a>
           <a href="{{ url_for('page_ajouter_relation', idProj=idProj, username=username) }}" class="btn btn-warning" role="button">Modifier les relations</a>
           <a class="btn btn-primary" role="button" onclick='draw()'>Charger le MCD</a>
         </section>
@@ -151,8 +151,8 @@
         ctx.beginPath();
         ctx.moveTo(px,py);
         ctx.lineTo(px + largeur * 10 ,py);
-        ctx.lineTo(px + largeur * 10 ,py + 35 +  liste_att_entite.length * 10);
-        ctx.lineTo(px,py + 35 +  liste_att_entite.length * 10);
+        ctx.lineTo(px + largeur * 10 ,py + 35 +  liste_att_entite.length * 20);
+        ctx.lineTo(px,py + 35 +  liste_att_entite.length * 20);
         ctx.lineTo(px,py);
         ctx.moveTo(px,py+20);
         ctx.lineTo(px + largeur * 10 ,py + 20 );
@@ -160,7 +160,12 @@
         ctx.fillText(e[2], px + 10, py+50/3);
         for(var i=0;i<liste_att_entite.length;++i){
           ctx.fillText(liste_att_entite[i][3], px + 10, py+35);
-          py += 10;
+          if(liste_att_entite[i][6] == "True"){
+            console.log("coucou");
+            ctx.moveTo(px + 10,py+40);
+            ctx.lineTo(px + liste_att_entite[i][3].length * 10,py + 40 );
+          }
+          py += 20;
         }
         posx = px + largeur * 10;
         posy = py + 35
@@ -219,13 +224,35 @@
             entites[k][3] = newpos;
           }
         }
+        else if(k == 2){
+          if(entites.length != 4){
+            ctx.moveTo(posX + 100,posY + 20);
+            ctx.lineTo(posX + 100,posY + 50);
+            ctx.fillText(l_r_e[k][3], posX + 100, posY + 30);
+            if(entites[k].length != 5){
+              var newpos = [];
+              newpos.push(posX + 100 - (entites[k][2].length * 3 / 2),posY + 50);
+              entites[k][3] = newpos;
+            }
+          }
+          else{
+            ctx.moveTo(posX+100,posY + 20);
+            ctx.lineTo(posX+75,posY + 50);
+            ctx.fillText(l_r_e[k][3], posX+75, posY + 30);
+            if(entites[k].length != 5){
+              var newpos = [];
+              newpos.push(posX + 75 - (entites[k][2].length * 3 / 2),posY + 50);
+              entites[k][3] = newpos;
+            }
+          }
+        }
         else{
           ctx.moveTo(posX + 100,posY + 20);
-          ctx.lineTo(posX + 100,posY + 100);
-          ctx.fillText(l_r_e[k][3], posX + 100, posY + 80);
+          ctx.lineTo(posX + 150,posY + 50);
+          ctx.fillText(l_r_e[k][3], posX + 150, posY + 30);
           if(entites[k].length != 5){
             var newpos = [];
-            newpos.push(posX + 100 - (entites[k][2].length * 3 / 2),posY + 100);
+            newpos.push(posX + 150 - (entites[k][2].length * 3 / 2),posY + 50);
             entites[k][3] = newpos;
           }
         }
@@ -372,16 +399,15 @@
       }
     }
     function draw(){
-      console.log("Coucou");
       //Fonction qui lance le dessin du MCD
       init();
       // INFOS AFFICHAGES
       // LISTE_ENTITE :
       // [ [idE,idP,nomEn,positionE{,draw}] ]
-      console.log(liste_entite);
+      // console.log(liste_entite);
       // LISTE_ATTRIBUTS :
       // [ [idA,idP,idE,nomA,genreA,typeA,actifA] ]
-      console.log(liste_atts);
+      // console.log(liste_atts);
       // LISTE_RELATION :
       // [ [idR,idP,nomRe,{draw}] ]
       // console.log(liste_relation);
