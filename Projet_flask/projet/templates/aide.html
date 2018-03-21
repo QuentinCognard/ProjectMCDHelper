@@ -1,16 +1,60 @@
 {% extends "base_excerciseur.html" %}
 {% block styles %}
 {{ super() }}
-
+  <link rel="stylesheet" href= "{{url_for('static',filename='aide.css') }}"/>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>
+function attributs(){
+  $('.div').empty();
+  var div=document.getElementById('1');
+  div.className="div";
+  var p = document.createElement("p");
+  div.appendChild(p);
+  var text = document.createTextNode("Salut ");
+  p.appendChild(text);
+}
+function entites(){
+  $('.div').empty();
+  var div=document.getElementById('2');
+  div.className="div";
+  var p = document.createElement("p");
+  div.appendChild(p);
+  var text = document.createTextNode("Salut ");
+  p.appendChild(text);
+}
+function relations(){
+  $('.div').empty();
+  var div=document.getElementById('3');
+  div.className="div";
+  var p = document.createElement("p");
+  div.appendChild(p);
+  var text = document.createTextNode("Salut ");
+  p.appendChild(text);
+}
+function cardi(){
+  $('.div').empty();
+  var div=document.getElementById('4');
+  div.className="div";
+  var p = document.createElement("p");
+  div.appendChild(p);
+  var text = document.createTextNode("Salut ");
+  p.appendChild(text);
+}
+</script>
 {% endblock %}
 {% block contain %}
 <section id="Cours">
 <fieldset>
   <legend> Retrouvez ici les cours pour apprendre à crée un MCD ! </legend>
-  <button type="button" class="btn btn-dark btn-lg btn-block">Cours sur les attributs</button>
-  <button type="button" class="btn btn-primary btn-lg btn-block">Cours sur les entitées</button>
-  <button type="button" class="btn btn-primary btn-lg btn-block">Cours sur les relations</button>
-  <button type="button" class="btn btn-primary btn-lg btn-block">Cours sur les cardinalitées</button>
-
+  <button onclick="attributs()" type="button" class="btn btn-lg btn-block but">Cours sur les attributs</button>
+  <div class="div"id="1"></div>
+  <button onclick="entites()" type="button" class="btn btn-lg btn-block but">Cours sur les entitées</button>
+  <div class="div" id="2"></div>
+  <button onclick="relations()" type="button" class="btn btn-lg btn-block but">Cours sur les relations</button>
+  <div class="div" id="3"></div>
+  <button onclick="cardi()" type="button" class="btn btn-lg btn-block but">Cours sur les cardinalitées</button>
+  <div class="div" id="4"></div>
 </section>
 {% endblock %}
