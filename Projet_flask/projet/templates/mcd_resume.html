@@ -54,6 +54,7 @@
           <a href="{{url_for('page_modif_attributs',idProj=idProj,username=username)}}" class="btn btn-primary" role="button">Modifier les attributs</a>
           <a href="" class="btn btn-success" role="button">Modifier les entités</a>
           <a href="{{ url_for('page_ajouter_relation', idProj=idProj, username=username) }}" class="btn btn-warning" role="button">Modifier les relations</a>
+          <button class="btn" id="download"><img id="pdfpic" src="{{url_for('static',filename='images/pdf.png') }}"></button>
         </section>
       {% endif %}
     </fieldset>
@@ -64,7 +65,6 @@
       <p id="relsE" hidden>{{r_relsE}}</p>
       <p id="relsA" hidden>{{r_relsA}}</p>
       <canvas style="border:solid;" id="canvas" width="980"  height="300"></canvas>
-      <button class="btn" id="download"><img id="pdfpic" src="{{url_for('static',filename='images/pdf.png') }}"></button>
     </section>
     <section>
       <a href="/projets/{{current_user.login}}/{{proj.id}}/consult/verifProjet"  role="button"> <button id="verif" class="btn btn-info">Vérifier le MCD </button></a>
