@@ -74,6 +74,9 @@
       <a href="/projets/{{current_user.login}}/{{proj.id}}/consult/verifProjet"  role="button"> <button id="verif" class="btn btn-info">Vérifier le MCD </button></a>
     </section>
     <script>
+
+    // Variables Globales
+
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     var cw = 1200;
@@ -121,6 +124,8 @@
       }
       return liste_finale;
     }
+
+    // Fonction permettant de dessiner une entité.
     function drawE(e){
       var largeur = e[2].length;
       if(e.length <5){
@@ -180,6 +185,9 @@
         ctx.stroke();
       }
     }
+
+    // fonction permettant de recuprer l'ensemble des enitées associé à une relation.
+
     function getListeRelationEntite(relation){
       var l_r_e = [];
       for(var i=0;i<liste_relation_entite.length;++i){
@@ -189,6 +197,9 @@
       }
       return l_r_e;
     }
+
+    // fonction qui permet de dessiner une relation de manière horizontale.
+
     function drawRH(rel,l_r_e){
       var entites = [];
       var posX = posx;
@@ -266,6 +277,8 @@
       rel.push(true);
     }
 
+    // fonction qui permet de dessiner une relation de manière vertical.
+
     function drawRV(rel,l_r_e){
       var entites = [];
       var posX = posx;
@@ -310,6 +323,8 @@
       }
       rel.push(true);
     }
+
+    // fonction qui permet de dessiner une Relation sur une entité à elle-même
 
     function drawRsolo(liste_r){
       var entites;
@@ -370,6 +385,8 @@
       rel.push(true);
     }
 
+    // Fonction qui permet de dessiner une relation.
+
     function drawR(liste_r){
       var verifdraw = [];
       for(var k=0;k<liste_r.length;++k){
@@ -402,6 +419,7 @@
         }
       }
     }
+
     function draw(){
       //Fonction qui lance le dessin du MCD
       init();
@@ -441,6 +459,8 @@
           drawR(liste_R)
       }
     }
+
+    // fonction permettant l'exportation du dessin sous format .pdf
      download.addEventListener("click", function() {
 
        var canvas = document.getElementById("canvas");
