@@ -420,7 +420,7 @@ def search_results(search,username):
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj")
 @login_required
-def Proj(username,nomProj):
+def modifProj(username,nomProj):
 	P = ProjetForm(name=nomProj,description=get_Projet_byName(nomProj).descProj)
 	return render_template('modifProj.html',form=P,username=username,nomProj=nomProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
