@@ -162,7 +162,7 @@ def creer_compte():
 			passwd = m.hexdigest()
 			o = User(prenom = f.prenom.data, nom = f.nom.data, mail = f.mail.data, login = f.login.data, password = passwd)
 			##############################code a mettre
-			send_mail(o.mail,o.login,o.password)
+			# send_mail(o.mail,o.login,o.password)
 			db.session.add(o)
 			db.session.commit()
 			login_user(o)
@@ -285,7 +285,7 @@ def demande(username,nomProj,master):
 		N=Notification(nom="Demande de "+username,
 		expediteur=username,destinataire=master,idProj=get_Projet_byName(nomProj).id,
 		texte="Demande de participation à votre projet "+nomProj+" de "+username+". Il sera ajouté en visiteur.")
-		send_mail_notif(User.query.filter(User.login==master).first().mail,User.query.filter(User.login==username).first().mail)
+		# send_mail_notif(User.query.filter(User.login==master).first().mail,User.query.filter(User.login==username).first().mail)
 		db.session.add(N)
 		db.session.commit()
 		flash("Demande envoyée")
