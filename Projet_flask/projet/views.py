@@ -714,8 +714,7 @@ def modif_entity(username,idProj):
 	M.listeAttribut.choices = get_attributs_projet(idProj)
 	M.listeEntite.choices = get_entites_projet(idProj)
 	proj = get_proj(idProj)
-	print(len(M.listeEntite.choices))
-	print(M.listeAttribut.choices)
+
 	return render_template("modif_entity.html", projet = proj,username=username,id=idProj,form=M,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 # @app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
