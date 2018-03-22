@@ -4,6 +4,9 @@
 <link rel="stylesheet" href= "{{url_for('static',filename='consulter.css') }}"/>
 {% endblock %}
 {% block contain %}
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
 <a id="retour" href="{{url_for('page_projet_perso',username=current_user.login,idProj=idProj)}}"><input type="Submit"  value="< Retour"></a>
 
   <fieldset>
@@ -458,5 +461,7 @@
      }, false);
 
 </script>
+
+{% endif %}
 
 {% endblock %}

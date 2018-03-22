@@ -248,6 +248,9 @@ function cardi(){
 </script>
 {% endblock %}
 {% block contain %}
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
 <section id="Cours">
 <fieldset>
   <legend> Retrouvez ici les cours pour apprendre à crée un MCD ! </legend>
@@ -260,4 +263,5 @@ function cardi(){
   <button onclick="cardi()" type="button" class="btn btn-lg btn-block">Cours sur les cardinalitées</button>
   <div class="div" id="4"></div>
 </section>
+{% endif %}
 {% endblock %}

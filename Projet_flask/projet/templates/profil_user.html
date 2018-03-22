@@ -5,6 +5,9 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='profil.css') }}">
 {% endblock %}
 {% block contain %}
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
 {% if sujet == 'accueil' %}
 
 <div class="container">
@@ -61,5 +64,6 @@
   <input class="btn btn-success" type="submit" value="Valider">
 </form>
 {% else %}
+{% endif %}
 {% endif %}
 {% endblock %}
