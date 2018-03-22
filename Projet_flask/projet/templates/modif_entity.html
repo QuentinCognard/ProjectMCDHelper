@@ -1,0 +1,557 @@
+{% extends "base_excerciseur.html" %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
+{% endblock %}
+{% block contain %}
+
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
+
+<form role="form" method="POST" class="bd-example" action="{{ url_for('save_entity', username=username, idProj=id) }}">
+  <fieldset class="lesentites">
+
+
+<!-- Cette div devra se répéter autant de fois qu'il y a d'entité -->
+<legend>Nouveau MCD</legend>
+<input name="lesent" type="hidden" type="text" id="lesent" value="" autocomplete='off'>
+
+<input id="hiddenEnt" type="hidden" name="nbEnt" value=0></input>
+
+
+  </fieldset>
+  <div>
+    <p>
+      <button class ="btn btn-primary" type="button" onClick="ajouteEntite()">Ajouter Entité</button>
+    </p>
+    <a href="/projets" class="btn btn-danger" role="button">Annuler</a>
+
+
+    <input class="btn btn-success" type="submit" value="Ajouter les Entités"></input>
+  </div>
+</form>
+
+<script>
+
+var nbEnt = 0;
+
+
+{% for entite in form.listeEntite.choices %}
+
+
+    nbEnt += 1;
+    var divEntite = document.createElement("div");
+    divEntite.className="bordmcd";
+    divEntite.id = "ent"+"{{entite.id}}";
+
+    var listeEntite = document.getElementById("lesent");
+    listeEntite.value += nbEnt;
+
+    var hidEnt=document.getElementById("hiddenEnt");
+    hidEnt.value=nbEnt;
+
+    var nbEntS = nbEnt
+
+
+
+    var hidAtt = document.createElement("input");
+    hidAtt.id = "hiddeAtt"+nbEnt;
+    hidAtt.type = "hidden";
+    hidAtt.name= "nbAttEnt"+"{{entite.id}}";
+    hidAtt.value = 0;
+    divEntite.appendChild(hidAtt);
+
+    var attPEnt = document.createElement("input");
+    attPEnt.id = "lesattPEnt"+"{{entite.id}}";
+    attPEnt.type = "hidden";
+    attPEnt.name= "lesattPEnt"+"{{entite.id}}";
+    attPEnt.value = "";
+
+    divEntite.appendChild(attPEnt);
+
+    // var divActuel = document.querySelector(".bordmcd");
+    // document.querySelector(".lesentites").insertBefore(divEntite,divActuel.nextSibling);
+
+    var divActuel = document.querySelector(".lesentites");
+    divActuel.appendChild(divEntite);
+
+
+    var bouton = document.createElement("button");
+    divEntite.appendChild(bouton);
+    var textBouton = document.createTextNode("-");
+    bouton.appendChild(textBouton);
+    bouton.className = "btn btn-danger";
+    bouton.type = "button";
+    bouton.id = divEntite.id;
+    bouton.onclick = function(){
+        var parent = document.querySelector(".lesentites");
+        var child = document.getElementById("ent"+"{{entite.id}}");
+        var listeEntite = document.getElementById("lesent");
+        listeEntite.value = listeEntite.value.toString().replace({{entite.id}}, '');
+        parent.removeChild(child);
+        var hidEnt=document.getElementById("hiddenEnt");
+        hidEnt.value=nbEnt;};
+
+      var p1 = document.createElement("p");
+      divEntite.appendChild(p1)
+      var labNomEnt = document.createElement("label");
+      labNomEnt.for="input";
+      var textNom = document.createTextNode("Nom Entité :");
+      labNomEnt.appendChild(textNom);
+      var inputNomEnt = document.createElement("input");
+      inputNomEnt.id = "nom"+"{{entite.id}}";
+      inputNomEnt.name = "nom"+"{{entite.id}}";
+      inputNomEnt.type="text";
+      inputNomEnt.placeholder="Nom de l'entité";
+      inputNomEnt.required="required";
+      inputNomEnt.value="{{entite.nomEntite}}";
+      p1.appendChild(labNomEnt);
+      p1.appendChild(inputNomEnt);
+
+
+      var divatt=document.createElement("div");
+      divatt.className="lesattributs";
+      divEntite.appendChild(divatt);
+
+    {% for attribut in form.listeAttribut.choices %}
+      {% if attribut.entite_id == entite.id %}
+        var nbAttloc = document.getElementById("hiddeAtt"+"{{entite.id}}");
+        nbAttloc.value++;
+
+
+        var parent = document.getElementById("ent"+"{{entite.id}}");
+
+        var divAttribut = document.createElement("div");
+        divAttribut.className="attEntite";
+        divAttribut.id = "idDivAtt"+"{{entite.id}}"+nbAttloc.value;
+
+        var listeAttributEnt = document.getElementById("lesattPEnt"+"{{entite.id}}");
+        listeAttributEnt.value += "{{attribut.id}}";
+
+        var idAttIndiv = document.createElement("inupt");
+        idAttIndiv.id = "idAttIndiv"+"{{entite.id}}"+"{{attribut.id}}";
+        idAttIndiv.type = "hidden";
+        idAttIndiv.name= "idAttIndiv"+"{{entite.id}}"+"{{attribut.id}}";
+        idAttIndiv.value = "{{attribut.id}}";
+        divAttribut.appendChild(idAttIndiv);
+
+
+
+        var bouton = document.createElement("button");
+        divAttribut.appendChild(bouton);
+        var textBouton = document.createTextNode("-");
+        bouton.appendChild(textBouton);
+        bouton.className = "btn btn-danger";
+        bouton.type = "button";
+        bouton.id = divAttribut.id;
+        bouton.onclick = function(){
+              var child = document.getElementById("idDivAtt"+"{{entite.id}}"+"{{attribut.id}}");
+              var parent = document.getElementById("ent"+"{{entite.id}}");
+              var divattParent = parent.querySelector(".lesattributs");
+              var idIndiv=document.getElementById("idAttIndiv"+"{{entite.id}}"+"{{attribut.id}}");
+
+              var listedesatt = document.getElementById("lesattPEnt"+"{{entite.id}}");
+              listedesatt.value = listedesatt.value.toString().replace(idIndiv.value, '');
+
+              divattParent.removeChild(child);};
+
+        var nbAttloc = document.getElementById("hiddeAtt"+"{{entite.id}}")
+        var p2 = document.createElement("p");
+        divAttribut.appendChild(p2);
+        var labTypeAtt = document.createElement("label");
+        labTypeAtt.for = "select";
+        var textType = document.createTextNode("Choisir un attribut :");
+        labTypeAtt.appendChild(textType);
+        var selTypeAtt = document.createElement("select");
+        selTypeAtt.id = "lesatt"+"{{entite.id}}"+"{{attribut.id}}";
+        selTypeAtt.name = "lesatt"+"{{entite.id}}"+"{{attribut.id}}";
+        p2.appendChild(labTypeAtt);
+        p2.appendChild(selTypeAtt);
+        {% for attribut in form.listeAttribut.choices %}
+          {% if attribut.entite_id == entite.id %}
+              var optatt = document.createElement("option");
+              optatt.selected = "selected";
+              optatt.value = "{{ attribut.id }}";
+              var textOptatt = document.createTextNode("{{ attribut.nomAttribut }}");
+              optatt.appendChild(textOptatt);
+              selTypeAtt.appendChild(optatt);
+
+          {% else %}
+              var optatt = document.createElement("option");
+              optatt.value = "{{ attribut.id }}";
+              var textOptatt = document.createTextNode("{{ attribut.nomAttribut }}");
+              optatt.appendChild(textOptatt);
+              selTypeAtt.appendChild(optatt);
+          {% endif %}
+        {% endfor %}
+
+        var nbAttloc = document.getElementById("hiddeAtt"+"{{entite.id}}")
+        var p1 = document.createElement("p");
+        divAttribut.appendChild(p1)
+        var labCle = document.createElement("label");
+        labCle.for="input";
+        var textCle = document.createTextNode(" Clé primaire ");
+        labCle.appendChild(textCle);
+        var inputCle = document.createElement("input");
+        inputCle.name="checkprimary"+"{{entite.id}}"+"{{attribut.id}}";
+        inputCle.id="checkprimary"+"{{entite.id}}"+"{{attribut.id}}";
+        inputCle.type="checkbox";
+        {% if attribut.primaryKey == True %}
+          inputCle.checked = true;
+        {% endif %}
+        p1.appendChild(labCle);
+        p1.appendChild(inputCle);
+
+        var lesatt=parent.querySelector(".lesattributs");
+        lesatt.appendChild(divAttribut);
+      {% endif %}
+    {% endfor %}
+
+    var p2 = document.createElement("p");
+    divEntite.appendChild(p2);
+    var bouton = document.createElement("button");
+    var textBouton = document.createTextNode("Ajouter Attribut");
+    bouton.appendChild(textBouton);
+    bouton.className = "btn btn-info";
+    bouton.type = "button";
+    bouton.id = nbEnt;
+    bouton.onclick = function(){
+      var nbAttloc = document.getElementById("hiddeAtt"+"{{entite.id}}");
+      nbAttloc.value++;
+
+      var parent = document.getElementById("ent"+"{{entite.id}}");
+
+      var divAttribut = document.createElement("div");
+      divAttribut.className="attEntite";
+      divAttribut.id = "idDivAtt"+"{{entite.id}}"+nbAttloc.value;
+
+      var listeAttributEnt = document.getElementById("lesattPEnt"+"{{entite.id}}");
+      listeAttributEnt.value += nbAttloc.value;
+
+
+      var idAttIndiv = document.createElement("input");
+      idAttIndiv.id = "idAttIndiv"+"{{entite.id}}"+nbAttloc.value;
+      idAttIndiv.type = "hidden";
+      idAttIndiv.name= "idAttIndiv"+"{{entite.id}}"+nbAttloc.value;
+      idAttIndiv.value = nbAttloc.value;
+
+      divAttribut.appendChild(idAttIndiv);
+
+      var bouton = document.createElement("button");
+      divAttribut.appendChild(bouton);
+      var textBouton = document.createTextNode("-");
+      bouton.appendChild(textBouton);
+      bouton.className = "btn btn-danger";
+      bouton.type = "button";
+      bouton.id = divAttribut.id;
+      bouton.onclick = function(){
+        var child = document.getElementById("idDivAtt"+"{{entite.id}}"+nbAttloc.value);
+        var parent = document.getElementById("ent"+"{{entite.id}}");
+        var divattParent = parent.querySelector(".lesattributs");
+        var idIndiv=document.getElementById("idAttIndiv"+"{{entite.id}}"+nbAttloc.value);
+
+        var listedesatt = document.getElementById("lesattPEnt"+"{{entite.id}}");
+        listedesatt.value = listedesatt.value.toString().replace(idIndiv.value, '');
+
+        divattParent.removeChild(child);};
+
+      var nbAttloc = document.getElementById("hiddeAtt"+"{{entite.id}}")
+      var p2 = document.createElement("p");
+      divAttribut.appendChild(p2);
+      var labTypeAtt = document.createElement("label");
+      labTypeAtt.for = "select";
+      var textType = document.createTextNode("Choisir un attribut :");
+      labTypeAtt.appendChild(textType);
+      var selTypeAtt = document.createElement("select");
+      selTypeAtt.id = "lesatt"+"{{entite.id}}"+nbAttloc.value;
+      selTypeAtt.name = "lesatt"+"{{entite.id}}"+nbAttloc.value;
+      p2.appendChild(labTypeAtt);
+      p2.appendChild(selTypeAtt);
+      {% for attribut in form.listeAttribut.choices %}
+          var optatt = document.createElement("option");
+          optatt.value = "{{ attribut.id }}";
+          var textOptatt = document.createTextNode("{{ attribut.nomAttribut }}");
+          optatt.appendChild(textOptatt);
+          selTypeAtt.appendChild(optatt);
+      {% endfor %}
+
+      var nbAttloc = document.getElementById("hiddeAtt"+"{{entite.id}}")
+      var p1 = document.createElement("p");
+      divAttribut.appendChild(p1)
+      var labCle = document.createElement("label");
+      labCle.for="input";
+      var textCle = document.createTextNode(" Clé primaire ");
+      labCle.appendChild(textCle);
+      var inputCle = document.createElement("input");
+      inputCle.name="checkprimary"+"{{entite.id}}"+nbAttloc.value;
+      inputCle.id="checkprimary"+"{{entite.id}}"+nbAttloc.value;
+      inputCle.type="checkbox";
+      p1.appendChild(labCle);
+      p1.appendChild(inputCle);
+
+      var lesatt=parent.querySelector(".lesattributs");
+      lesatt.appendChild(divAttribut);
+    };
+    p2.appendChild(bouton);
+
+{% endfor %}
+
+
+// supprime une entite
+function removeEntite(id,nbEntS){
+  var parent = document.querySelector(".lesentites");
+  var child = document.getElementById(id);
+
+  var listeEntite = document.getElementById("lesent");
+  listeEntite.value = listeEntite.value.toString().replace(nbEntS, '');
+
+  // document.write(parent.id);
+  // document.write(child.id);
+  parent.removeChild(child);
+  var hiddenEnt = document.getElementById("hiddenEnt");
+  hiddenEnt.value=nbEnt;
+
+}
+
+// supprime un attribut d'une entite
+  function removeAttribut(attid,entid,nbEntS,idAttIndiv){
+    var child = document.getElementById(attid);
+    var parent = document.getElementById(entid);
+    var divattParent = parent.querySelector(".lesattributs");
+    var idIndiv = document.getElementById(idAttIndiv);
+
+
+    var listedesatt = document.getElementById("lesattPEnt"+nbEntS);
+    listedesatt.value = listedesatt.value.toString().replace(idIndiv.value, '');
+    // document.write(parent);
+    divattParent.removeChild(child);
+
+}
+
+// ajoute une entite
+function ajouteEntite(){
+    nbEnt += 1;
+    var divEntite = document.createElement("div");
+    divEntite.className="bordmcd";
+    divEntite.id = "ent"+nbEnt;
+
+
+    var listeEntite = document.getElementById("lesent");
+    listeEntite.value += nbEnt;
+
+
+    var hiddenEnt = document.getElementById("hiddenEnt");
+    hiddenEnt.value= nbEnt;
+
+
+
+
+    var nbEntS = nbEnt;
+
+
+
+    var hidAtt = document.createElement("input");
+    hidAtt.id = "hiddeAtt"+nbEnt;
+    hidAtt.type = "hidden";
+    hidAtt.name= "nbAttEnt"+nbEnt;
+    hidAtt.value = 0;
+
+    divEntite.appendChild(hidAtt);
+
+
+    var attPEnt = document.createElement("input");
+    attPEnt.id = "lesattPEnt"+nbEnt;
+    attPEnt.type = "hidden";
+    attPEnt.name= "lesattPEnt"+nbEnt;
+    attPEnt.value = "";
+
+    divEntite.appendChild(attPEnt);
+
+    // var divActuel = document.querySelector(".bordmcd");
+    // document.querySelector(".lesentites").insertBefore(divEntite,divActuel.nextSibling);
+
+    var divActuel = document.querySelector(".lesentites");
+    divActuel.appendChild(divEntite);
+
+    ajouteSuppButtonEnt(divEntite,nbEntS);
+    ajouteNom(divEntite);
+    ajouteDivAtt(divEntite);
+    ajouteAttribut(nbEntS);
+    ajouteAttributBouton(divEntite);
+    // ajouteValeur(divAttribut);
+    // ajouteQuantite(divAttribut);
+    // ajouteGenre(divAttribut);
+    // document.write(divEntite.querySelector(".lesattributs"));
+
+
+}
+
+// ajoute le bouton de supression d'une entité
+function ajouteSuppButtonEnt(divEntite,nbEntS){
+  var bouton = document.createElement("button");
+  divEntite.appendChild(bouton);
+  var textBouton = document.createTextNode("-");
+  bouton.appendChild(textBouton);
+  bouton.className = "btn btn-danger";
+  bouton.type = "button";
+  bouton.id = divEntite.id;
+  bouton.onclick = function(){removeEntite(divEntite.id,nbEntS)};
+}
+
+// ajoute le champde saisie du nom d'une entite
+function ajouteNom(divEntite){
+    var p1 = document.createElement("p");
+    divEntite.appendChild(p1)
+    var labNomEnt = document.createElement("label");
+    labNomEnt.for="input";
+    var textNom = document.createTextNode("Nom Entité :");
+    labNomEnt.appendChild(textNom);
+    var inputNomEnt = document.createElement("input");
+    inputNomEnt.id = "nom"+nbEnt;
+    inputNomEnt.name = "nom"+nbEnt;
+    inputNomEnt.type="text";
+    inputNomEnt.placeholder="Nom de l'entité";
+    inputNomEnt.required="required";
+    p1.appendChild(labNomEnt);
+    p1.appendChild(inputNomEnt);
+}
+
+function ajouteAttributBouton(divEntite){
+  var p2 = document.createElement("p");
+  divEntite.appendChild(p2);
+  var bouton = document.createElement("button");
+  var textBouton = document.createTextNode("Ajouter Attribut");
+  bouton.appendChild(textBouton);
+  bouton.className = "btn btn-info";
+  bouton.type = "button";
+  var nbEntStati = nbEnt;
+  bouton.id = nbEnt;
+  bouton.onclick = function(){ajouteAttribut(nbEntStati)};
+  p2.appendChild(bouton);
+}
+
+// ajoute la division des attributs
+function ajouteDivAtt(divEntite){
+  var divatt=document.createElement("div");
+  divatt.className="lesattributs";
+  divEntite.appendChild(divatt);
+}
+
+// ajoute un attribut
+function ajouteAttribut(nbEntS){
+    var nbAttloc = document.getElementById("hiddeAtt"+nbEntS);
+    nbAttloc.value++;
+
+    var parent = document.getElementById("ent"+nbEntS);
+
+    var divAttribut = document.createElement("div");
+    divAttribut.className="attEntite";
+    divAttribut.id = "idDivAtt"+nbEntS+nbAttloc.value;
+
+    var listeAttributEnt = document.getElementById("lesattPEnt"+nbEntS);
+    listeAttributEnt.value += nbAttloc.value;
+
+    var idAttIndiv = document.createElement("input");
+    idAttIndiv.id = "idAttIndiv"+nbEntS+nbAttloc.value;
+    idAttIndiv.type = "hidden";
+    idAttIndiv.name= "idAttIndiv"+nbEntS+nbAttloc.value;
+    idAttIndiv.value = nbAttloc.value;
+
+    divAttribut.appendChild(idAttIndiv);
+
+
+
+    ajouteSuppButtonAtt(divAttribut,parent,nbEntS,idAttIndiv);
+    ajouteNomAtt(divAttribut,nbEntS);
+    ajouteCle(divAttribut,nbEntS);
+    // ajouteValeur(divAttribut);
+    // ajouteQuantite(divAttribut);
+    // ajouteGenre(divAttribut);
+    // var divActuel = document.querySelector(".attEntite");
+    // divEntite.querySelector(".lesattributs").insertBefore(divAttribut, divActuel.nextSibling);
+    var lesatt=parent.querySelector(".lesattributs");
+    lesatt.appendChild(divAttribut);
+
+    // document.write(divEntiteCourante.id);
+    // document.write(divEntiteCourante.id);
+    // document.write(divAttribut.id);
+    // document.write(divActuel.id);
+
+    // divEntite.appendChild(divAttribut);
+}
+
+// ajoute le bouton de supression d'une entité
+function ajouteSuppButtonAtt(divAttribut,parent,nbEntS,idAttIndiv){
+  var bouton = document.createElement("button");
+  divAttribut.appendChild(bouton);
+  var textBouton = document.createTextNode("-");
+  bouton.appendChild(textBouton);
+  bouton.className = "btn btn-danger";
+  bouton.type = "button";
+  bouton.id = divAttribut.id;
+  bouton.onclick = function(){removeAttribut(divAttribut.id,parent.id,nbEntS,idAttIndiv.id)};
+}
+
+// ajoute le champ de choix des attributs
+function ajouteNomAtt(divAttribut,nbEntS){
+  var nbAttloc = document.getElementById("hiddeAtt"+nbEntS)
+  var p2 = document.createElement("p");
+  divAttribut.appendChild(p2);
+  var labTypeAtt = document.createElement("label");
+  labTypeAtt.for = "select";
+  var textType = document.createTextNode("Choisir un attribut :");
+  labTypeAtt.appendChild(textType);
+  var selTypeAtt = document.createElement("select");
+  selTypeAtt.id = "lesatt"+nbEntS+nbAttloc.value;
+  selTypeAtt.name = "lesatt"+nbEntS+nbAttloc.value;
+  p2.appendChild(labTypeAtt);
+  p2.appendChild(selTypeAtt);
+  {% for attribut in form.listeAttribut.choices %}
+    // var hidAtt = document.getElementById("hiddenAtt");
+    // hidAtt.value=attribut.id;
+    var optatt = document.createElement("option");
+    optatt.value = "{{ attribut.id }}";
+    var textOptatt = document.createTextNode("{{ attribut.nomAttribut }}");
+    optatt.appendChild(textOptatt);
+    selTypeAtt.appendChild(optatt);
+  {% endfor %}
+}
+
+function ajouteCle(divAttribut,nbEntS){
+  var nbAttloc = document.getElementById("hiddeAtt"+nbEntS)
+  var p1 = document.createElement("p");
+  divAttribut.appendChild(p1)
+  var labCle = document.createElement("label");
+  labCle.for="input";
+  var textCle = document.createTextNode(" Clé primaire ");
+  labCle.appendChild(textCle);
+  var inputCle = document.createElement("input");
+  inputCle.name="checkprimary"+nbEntS+nbAttloc.value;
+  inputCle.id="checkprimary"+nbEntS+nbAttloc.value;
+  inputCle.type="checkbox";
+  p1.appendChild(labCle);
+  p1.appendChild(inputCle);
+}
+
+
+
+
+
+</script>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+    {% if message!= "Please log in to access this page." %}
+      <li>{{ message }}</li>
+      {% endif %}
+    {% endfor %}
+    </ul>
+  {% endif %}
+
+
+{% endwith %}
+{% endif %}
+{% endblock %}

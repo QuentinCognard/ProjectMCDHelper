@@ -117,8 +117,18 @@ def get_proj(idProj):
     return projet
 
 def get_nbid_entity():
-    req = db.session.query(db.func.count(Entite.id)).scalar()
-    return req
+    allent= Entite.query.all()
+    res=[0]
+    for a in allent:
+        res.append(a.id)
+    return max(res)
+
+def get_relationEntite_idEnt(idEntite):
+    allrelent = Relationentite.query.filter(Relationentite.entite_id == idEntite).all()
+    res=[]
+    for a in allrelent:
+        res.append(a)
+    return res
 
 def get_nbid_attribut():
     req = db.session.query(db.func.count(Attributs.id)).scalar()
@@ -204,6 +214,26 @@ def get_attributs_projet(idProj):
         res.append(a)
     return res
 
+def get_nom_entites_projet(idProj):
+    allent= Entite.query.join(Projet).filter(Projet.id==idProj).all()
+    res=[]
+    for a in allent:
+        res.append(a.nomEntite)
+    return res
+
+def get_id_entites_projet(idProj):
+    allent= Entite.query.join(Projet).filter(Projet.id==idProj).all()
+    res=[]
+    for a in allent:
+        res.append(a.id)
+    return res
+
+def get_entites_projet(idProj):
+    allent= Entite.query.join(Projet).filter(Projet.id==idProj).all()
+    res=[]
+    for a in allent:
+        res.append(a)
+    return res
 
 def get_user_projet(nomProj):
     gerer=get_gerer_byProjet(nomProj)
@@ -215,6 +245,9 @@ def get_user_projet(nomProj):
 
 def get_attributs_proj(idProj):
     return Attributs.query.filter(Attributs.projet_id == idProj).all()
+
+def get_entite_proj(idProj):
+    return Entite.query.filter(Entite.projet_id == idProj).all()
 
 def get_master_proj(nomProj):
     projet=get_gerer_byProjet(nomProj)

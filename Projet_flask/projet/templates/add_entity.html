@@ -4,6 +4,11 @@
 <link rel="stylesheet" href= "{{url_for('static',filename='create_mcd.css') }}"/>
 {% endblock %}
 {% block contain %}
+
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
+
 <form role="form" method="POST" class="bd-example" action="{{ url_for('save_entity', username=username, idProj=id) }}">
   <fieldset class="lesentites">
 
@@ -18,11 +23,15 @@
       </p>
 
       <input id="hiddenEnt" type="hidden" name="nbEnt" value=1></input>
+
+      <input name="lesent" type="hidden" type="text" id="lesent" value="1" autocomplete='off'>
       <input id="hiddeAtt1" type="hidden" name="nbAttEnt1" value=1 autocomplete='off'></input>
+      <input name="lesattPEnt1" type="hidden" type="text" id="lesattPEnt1" value="1" autocomplete='off'>
 
 
     <div class="lesattributs">
     <div id="idDivAtt11" class="attEntite">
+      <input name="idAttIndiv11" type="hidden" type="text" id="idAttIndiv11" value=1 autocomplete='off'>
       <p>
         <label for="select">Nom attribut :</label>
         <select id="lesatt11" name="lesatt11">
@@ -46,17 +55,16 @@
 
     </div>
 
-    <div>
-      <p>
-        <button class ="btn btn-primary" type="button" onClick="ajouteEntite()">Ajouter Entité</button>
-      </p>
-      <a href="/projets" class="btn btn-danger" role="button">Annuler</a>
-
-
-      <input class="btn btn-success" type="submit" value="Ajouter les Entités"></input>
-    </div>
-
   </fieldset>
+  <div>
+    <p>
+      <button class ="btn btn-primary" type="button" onClick="ajouteEntite()">Ajouter Entité</button>
+    </p>
+    <a href="/projets" class="btn btn-danger" role="button">Annuler</a>
+
+
+    <input class="btn btn-success" type="submit" value="Ajouter les Entités"></input>
+  </div>
 </form>
 
 <script>
@@ -67,43 +75,57 @@
   firstdiv.id="ent"+nbEnt;
 
   // supprime une entite
-  function removeEntite(id){
+  function removeEntite(id,nbEntS){
     var parent = document.querySelector(".lesentites");
     var child = document.getElementById(id);
+
+    var listeEntite = document.getElementById("lesent");
+    listeEntite.value = listeEntite.value.toString().replace(nbEntS, '');
+
     // document.write(parent.id);
     // document.write(child.id);
     parent.removeChild(child);
-    console.log(nbEnt);
-    nbEnt -= 1;
-    console.log(nbEnt);
-    var hidEnt=document.getElementById("hiddenEnt");
-    hidEnt.value=nbEnt;
+    var hiddenEnt = document.getElementById("hiddenEnt");
+    hiddenEnt.value=nbEnt;
+
   }
 
   // supprime un attribut d'une entite
-    function removeAttribut(attid,entid,nbEntS){
+    function removeAttribut(attid,entid,nbEntS,idAttIndiv){
       var child = document.getElementById(attid);
       var parent = document.getElementById(entid);
       var divattParent = parent.querySelector(".lesattributs");
+      var idIndiv = document.getElementById(idAttIndiv);
+
+
+      var listedesatt = document.getElementById("lesattPEnt"+nbEntS);
+      listedesatt.value = listedesatt.value.toString().replace(idIndiv.value, '');
       // document.write(parent);
       divattParent.removeChild(child);
-      var hidAtt=document.getElementById("hiddeAtt"+nbEntS);
-      console.log(hidAtt.value);
-      hidAtt.value --;
-      console.log(hidAtt.value);
 
   }
 
   // ajoute une entite
   function ajouteEntite(){
       nbEnt += 1;
-      console.log(nbEnt);
       var divEntite = document.createElement("div");
       divEntite.className="bordmcd";
       divEntite.id = "ent"+nbEnt;
 
-      var hidEnt=document.getElementById("hiddenEnt");
-      hidEnt.value=nbEnt;
+
+      var listeEntite = document.getElementById("lesent");
+      listeEntite.value += nbEnt;
+
+
+      var hiddenEnt = document.getElementById("hiddenEnt");
+      hiddenEnt.value= nbEnt;
+
+
+
+
+      var nbEntS = nbEnt;
+
+
 
       var hidAtt = document.createElement("input");
       hidAtt.id = "hiddeAtt"+nbEnt;
@@ -114,13 +136,24 @@
       divEntite.appendChild(hidAtt);
 
 
-      var divActuel = document.querySelector(".bordmcd");
-      document.querySelector(".lesentites").insertBefore(divEntite,divActuel.nextSibling);
+      var attPEnt = document.createElement("input");
+      attPEnt.id = "lesattPEnt"+nbEnt;
+      attPEnt.type = "hidden";
+      attPEnt.name= "lesattPEnt"+nbEnt;
+      attPEnt.value = "";
 
-      ajouteSuppButtonEnt(divEntite);
+      divEntite.appendChild(attPEnt);
+
+      // var divActuel = document.querySelector(".bordmcd");
+      // document.querySelector(".lesentites").insertBefore(divEntite,divActuel.nextSibling);
+
+      var divActuel = document.querySelector(".lesentites");
+      divActuel.appendChild(divEntite);
+
+      ajouteSuppButtonEnt(divEntite,nbEntS);
       ajouteNom(divEntite);
       ajouteDivAtt(divEntite);
-      ajouteAttribut(nbEnt);
+      ajouteAttribut(nbEntS);
       ajouteAttributBouton(divEntite);
       // ajouteValeur(divAttribut);
       // ajouteQuantite(divAttribut);
@@ -131,7 +164,7 @@
   }
 
   // ajoute le bouton de supression d'une entité
-  function ajouteSuppButtonEnt(divEntite){
+  function ajouteSuppButtonEnt(divEntite,nbEntS){
     var bouton = document.createElement("button");
     divEntite.appendChild(bouton);
     var textBouton = document.createTextNode("-");
@@ -139,7 +172,7 @@
     bouton.className = "btn btn-danger";
     bouton.type = "button";
     bouton.id = divEntite.id;
-    bouton.onclick = function(){removeEntite(divEntite.id)};
+    bouton.onclick = function(){removeEntite(divEntite.id,nbEntS)};
   }
 
   // ajoute le champde saisie du nom d'une entite
@@ -192,28 +225,30 @@
       divAttribut.className="attEntite";
       divAttribut.id = "idDivAtt"+nbEntS+nbAttloc.value;
 
+      var listeAttributEnt = document.getElementById("lesattPEnt"+nbEntS);
+      listeAttributEnt.value += nbAttloc.value;
 
-      ajouteSuppButtonAtt(divAttribut,parent,nbEntS);
+      var idAttIndiv = document.createElement("input");
+      idAttIndiv.id = "idAttIndiv"+nbEntS+nbAttloc.value;
+      idAttIndiv.type = "hidden";
+      idAttIndiv.name= "idAttIndiv"+nbEntS+nbAttloc.value;
+      idAttIndiv.value = nbAttloc.value;
+
+      divAttribut.appendChild(idAttIndiv);
+
+
+
+      ajouteSuppButtonAtt(divAttribut,parent,nbEntS,idAttIndiv);
       ajouteNomAtt(divAttribut,nbEntS);
       ajouteCle(divAttribut,nbEntS);
-      // ajouteValeur(divAttribut);
-      // ajouteQuantite(divAttribut);
-      // ajouteGenre(divAttribut);
-      // var divActuel = document.querySelector(".attEntite");
-      // divEntite.querySelector(".lesattributs").insertBefore(divAttribut, divActuel.nextSibling);
       var lesatt=parent.querySelector(".lesattributs");
       lesatt.appendChild(divAttribut);
 
-      // document.write(divEntiteCourante.id);
-      // document.write(divEntiteCourante.id);
-      // document.write(divAttribut.id);
-      // document.write(divActuel.id);
 
-      // divEntite.appendChild(divAttribut);
   }
 
   // ajoute le bouton de supression d'une entité
-  function ajouteSuppButtonAtt(divAttribut,parent,nbEntS){
+  function ajouteSuppButtonAtt(divAttribut,parent,nbEntS,idAttIndiv){
     var bouton = document.createElement("button");
     divAttribut.appendChild(bouton);
     var textBouton = document.createTextNode("-");
@@ -221,7 +256,7 @@
     bouton.className = "btn btn-danger";
     bouton.type = "button";
     bouton.id = divAttribut.id;
-    bouton.onclick = function(){removeAttribut(divAttribut.id,parent.id,nbEntS)};
+    bouton.onclick = function(){removeAttribut(divAttribut.id,parent.id,nbEntS,idAttIndiv.id)};
   }
 
   // ajoute le champ de choix des attributs
@@ -239,8 +274,6 @@
     p2.appendChild(labTypeAtt);
     p2.appendChild(selTypeAtt);
     {% for attribut in form.listeAttribut.choices %}
-      // var hidAtt = document.getElementById("hiddenAtt");
-      // hidAtt.value=attribut.id;
       var optatt = document.createElement("option");
       optatt.value = "{{ attribut.id }}";
       var textOptatt = document.createTextNode("{{ attribut.nomAttribut }}");
@@ -280,5 +313,7 @@
     </ul>
   {% endif %}
 
+
 {% endwith %}
+{% endif %}
 {% endblock %}

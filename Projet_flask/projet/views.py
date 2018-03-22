@@ -484,6 +484,8 @@ def page_creer_relations(username, idProj):
 
 class CreaMCDForm(FlaskForm):#Formulaire de création d'un MCD
 	listeAttribut=SelectField('Attributs',choices=[])
+	listeEntite=SelectField('Entites',choices=[])
+
 
 	def addEntite(self,nomEntite,idEntite):
 		E=Entite(nomEntite=nomEntite)
@@ -513,13 +515,27 @@ def page_ajouter_entite(username,idProj):
 @app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
 def save_entity(username,idProj):
 	nbAtt = request.form.get("nbAtt")
-	nbEnt = request.form.get("nbEnt")
+	liindEnt= request.form.get("lesent")
+	nbEnt = len(liindEnt)
+	lientitepresente = get_nom_entites_projet(idProj)
+	liIdEntitePresente = get_id_entites_projet(idProj)
 	proj = get_proj(idProj)
 	mcdAtt = []
+	for i in range (len(liIdEntitePresente)):
+		if str(liIdEntitePresente[i]) not in liindEnt :
+			listeRelEntite = get_relationEntite_idEnt(liIdEntitePresente[i])
+			for relEnt in listeRelEntite :
+				db.session.delete(relEnt)
+				db.session.commit()
+			ent = Entite.query.get((liIdEntitePresente[i],idProj))
+			db.session.delete(ent)
+			db.session.commit()
 	for i in range(int(nbEnt)):
-		nbAttEnt = request.form.get("nbAttEnt"+str(i+1))
+		listedesatt = request.form.get("lesattPEnt"+liindEnt[i])
+		idEnt= request.form.get("lesent"+liindEnt[i])
+		nbAttEnt = len(listedesatt)
 		for y in range(int(nbAttEnt)):
-			nomattselec = request.form.get("lesatt"+str(i+1)+str(y+1))
+			nomattselec = request.form.get("lesatt"+liindEnt[i]+listedesatt[y])
 			mcdAtt.append(nomattselec)
 
 	if len(mcdAtt) != len(list(set(mcdAtt))):
@@ -529,14 +545,21 @@ def save_entity(username,idProj):
 	else:
 		for i in range(int(nbEnt)):
 			if request.method=="POST":
-				nbAttEnt = request.form.get("nbAttEnt"+str(i+1))
-				ent = Entite(id=get_nbid_entity()+1, projet_id=idProj, nomEntite=request.form.get("nom"+str(i+1)), positionEntite=i+1)
-				db.session.add(ent)
-				db.session.commit()
+				listedesatt = request.form.get("lesattPEnt"+liindEnt[i])
+				nbAttEnt = len(listedesatt)
+				nom = request.form.get("nom"+liindEnt[i])
+				if nom in lientitepresente :
+					idbdEnt = liindEnt[i]
+					ent = Entite.query.get((idbdEnt,idProj))
+					db.session.commit()
+				else :
+					ent = Entite(id=get_nbid_entity()+1, projet_id=idProj, nomEntite=request.form.get("nom"+liindEnt[i]))
+					db.session.add(ent)
+					db.session.commit()
 			for y in range(int(nbAttEnt)):
 				if request.method=="POST":
-					idbdAtt = request.form.get("lesatt"+str(i+1)+str(y+1))
-					cleprimaire = request.form.get("checkprimary"+str(i+1)+str(y+1))
+					idbdAtt = request.form.get("lesatt"+liindEnt[i]+listedesatt[y])
+					cleprimaire = request.form.get("checkprimary"+liindEnt[i]+listedesatt[y])
 					att = Attributs.query.get((idbdAtt,idProj))
 					if cleprimaire == "on":
 						att.primaryKey = True;
@@ -545,6 +568,16 @@ def save_entity(username,idProj):
 					att.entite_id = ent.id
 					db.session.commit()
 		return render_template("relation_resume.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+
+@app.route("/projets/<string:username>/<int:idProj>/consult/modif_entity")
+def modif_entity(username,idProj):
+	M=CreaMCDForm(request.form)
+	M.listeAttribut.choices = get_attributs_projet(idProj)
+	M.listeEntite.choices = get_entites_projet(idProj)
+	proj = get_proj(idProj)
+	print(len(M.listeEntite.choices))
+	print(M.listeAttribut.choices)
+	return render_template("modif_entity.html", projet = proj,username=username,id=idProj,form=M,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 # @app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
 # def save_entity(username,idProj):
