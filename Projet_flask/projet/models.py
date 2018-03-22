@@ -3,6 +3,9 @@ from flask_login import UserMixin
 from sqlalchemy import func
 from datetime import datetime
 
+
+# Classe User contenant les infos sur les utilisateurs
+
 class User(db.Model, UserMixin):
     prenom = db.Column(db.String(100))
     nom = db.Column(db.String(100))
@@ -14,6 +17,8 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return self.login
 
+# Classe contenant les infos sur les projets
+
 class Projet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nomProj = db.Column(db.String(100))
@@ -21,10 +26,14 @@ class Projet(db.Model):
     descProj = db.Column(db.String(500))
     mcd_textuel = db.Column(db.String(500))
 
+# Classe contenant les droits d'un utilisateur sur un projet
+
 class Droit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nomDroit = db.Column(db.String(100))
     descDroit = db.Column(db.String(500))
+
+#classe liant Projet, Droit et User
 
 class Gerer(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -40,6 +49,8 @@ class Gerer(db.Model):
         self.user_login=user_login
         self.droit_id=droit_id
 
+# Classe pour stocker les infos des entités d'un mcd d'un projet
+
 class Entite(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key = True)
@@ -49,6 +60,8 @@ class Entite(db.Model):
 
     def __repr__(self):
         return "{};{};{};{}".format(self.id,self.projet_id,self.nomEntite,self.positionEntite)
+
+# Classe pour stocker les infos sur les attributs
 
 class Attributs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -64,6 +77,8 @@ class Attributs(db.Model):
     def __repr__(self):
         return "{};{};{};{};{};{};{}".format(self.id,self.projet_id,self.entite_id,self.nomAttribut,self.genreAttribut,self.typeAttribut,self.primaryKey)
 
+# Classe pour stocker les infos sur les Relations
+
 class Relation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key=True)
@@ -72,6 +87,8 @@ class Relation(db.Model):
 
     def __repr__(self):
         return "{};{};{}".format(self.id,self.projet_id,self.nomRelation)
+
+# Classe reliant entité et relation
 
 class Relationentite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -84,6 +101,8 @@ class Relationentite(db.Model):
     def __repr__(self):
         return "{};{};{};{}".format(self.id,self.relation_id,self.entite_id,self.cardinaliteE)
 
+# classe stockant les attributs des relations
+
 class Relationattributs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     projet_id = db.Column(db.Integer, db.ForeignKey("projet.id"), primary_key=True)
@@ -95,6 +114,7 @@ class Relationattributs(db.Model):
     def __repr__(self):
         return "{};{};{};{}".format(self.id,self.relation_id,self.relation,self.attribut_id)
 
+# Permet de récupérer toutes information sur les projets
 
 def get_tout_du_projet(idprojet):
     liste = []
@@ -114,6 +134,8 @@ def get_tout_du_projet(idprojet):
     liste.append(listeRA)
     return liste
 
+# classe pour stocker toutes les informations sur les Notification
+
 class Notification(db.Model):
     nom= db.Column(db.Integer, primary_key=True)
     expediteur=db.Column(db.String(100),db.ForeignKey("user.login"),primary_key=True)
@@ -122,32 +144,47 @@ class Notification(db.Model):
     texte=db.Column(db.String(300))
     date=db.Column(db.DateTime, nullable=False,default=datetime.utcnow)
 
+# Permet de trouver le nombre de notifs
 
 def get_nb_notifications(nom):
     return len(Notification.query.filter(Notification.destinataire==nom).all())
 
+# trouve les notification en fonction des du nom de la personne
+
 def get_notifications(nom):
     return Notification.query.filter(Notification.destinataire==nom).order_by(Notification.date.desc()).all()
+
+# trouver les users
 
 def get_user(login):
     User = User.query.filter(User.login==login).all()
     return User
 
+# trouve un projet selon sont id
+
 def get_proj(idProj):
     projet = Projet.query.filter(Projet.id==idProj).all()
     return projet
+
+#  compte le nomnbre total d'entité
 
 def get_nbid_entity():
     req = db.session.query(db.func.count(Entite.id)).scalar()
     return req
 
+#  compte le nomnbre total d'attributs
+
 def get_nbid_attribut():
     req = db.session.query(db.func.count(Attributs.id)).scalar()
     return req
 
+# load les user selon leur login
+
 @login_manager.user_loader
 def load_user(login):
     return User.query.get(login)
+
+# trouve les logins des users
 
 def get_all_login():
     users=User.query.all()
@@ -156,12 +193,16 @@ def get_all_login():
         res.append((u.login,u.login))
     return res
 
+# retounr les droits
+
 def get_all_droit():
     droits=Droit.query.all()
     res=[]
     for d in droits:
         res.append((d.id,d.nomDroit))
     return res
+
+# retourne les projets d'un certain user selon sont nom
 
 def get_projet_user(username,n):
     p= Projet.query.join(Gerer).filter(Gerer.user_login==username).all()
@@ -179,6 +220,8 @@ def get_projet_user(username,n):
         res.append(p[i])
     return res
 
+# trouve les projets selon sont id et selon l'utilisateur connecté
+
 def get_projet(username, idProj):
     projets = Projet.query.join(Gerer).filter(Gerer.user_login==username).all()
     for p in projets:
@@ -186,8 +229,12 @@ def get_projet(username, idProj):
             return p
     return None
 
+# trouve le projet selon sont nom
+
 def get_Projet_byName(name):
     return Projet.query.filter(Projet.nomProj==name).first()
+
+# trouve le Gerer selon le nom du projet
 
 def get_gerer_byProjet(nomProj):
     return Gerer.query.join(Projet).filter(Projet.nomProj==nomProj).all()
@@ -195,9 +242,12 @@ def get_gerer_byProjet(nomProj):
 def get_gerer_byNom(nomProj,nom):
     # print(Gerer.query.join(Projet).filter(Projet.nomProj==nomProj,Gerer.user_login==nom).all())
     return Gerer.query.join(Projet).filter(Projet.nomProj==nomProj,Gerer.user_login==nom).first()
+# trouve l'id d'un droit
 
 def get_id_droit(nomDroit):
     return Droit.query.filter(Droit.nomDroit==nomDroit).first().id
+
+# trouve le droit selon sont id
 
 def get_nom_droit(id):
     return Droit.query.filter(Droit.id==id).first().nomDroit
@@ -218,6 +268,8 @@ def get_all_projets(n):
         res.append(p[i])
     return res
 
+#  trouve les attributs de tout un projet
+
 def get_attributs_projet(idProj):
     allatt= Attributs.query.join(Projet).filter(Projet.id==idProj).all()
     res=[]
@@ -225,6 +277,7 @@ def get_attributs_projet(idProj):
         res.append(elem)
     return res
 
+#  trouve un user selon le nom d'un projet
 
 def get_user_projet(nomProj):
     gerer=get_gerer_byProjet(nomProj)
@@ -233,9 +286,12 @@ def get_user_projet(nomProj):
         res.append(g.user_login)
     return res
 
+#  trouve les attributs d'un projet selon sont id
 
 def get_attributs_proj(idProj):
     return Attributs.query.filter(Attributs.projet_id == idProj).all()
+
+# trouve les masters d'un projet
 
 def get_master_proj(nomProj):
     projet=get_gerer_byProjet(nomProj)
@@ -255,35 +311,54 @@ def get_notif_byexp_dest_nom(nom,exp,dest,id):
 def test(test):
      return db.session.query(Projet).filter(Projet.nomProj.like("%" + test + "%")).all()
 
+# trouve les entités d'un projet selon sont id
+
 def get_entity(idProj):
     return Entite.query.filter(Entite.projet_id == idProj).all()
+
+# trouve une entité d'un projet selon son nom
 
 def get_entitybyname(idProj,nom):
     return Entite.query.filter(Entite.projet_id == idProj,Entite.nomEntite==nom).first()
 
+# trouve les attributs d'un projet selon son nom
+
 def getattributbyname(idProj,nom):
     return Attributs.query.filter(Attributs.projet_id == idProj,Attributs.nomAttribut==nom).first()
 
+# trouve les relations d'un projet grâce à l'id
+
 def getrelations(idProj):
     return Relation.query.filter(Relation.projet_id== idProj).all()
+# trouve toutes les classes relationsentites
 
 def getrelationsentites():
     return Relationentite.query.all()
 
+# trouve toutes les classes Relationattributs
 def getrelationsattributs(idProj):
     return Relationattributs.query.filter(Relationattributs.projet_id==idProj).all()
+
+# trouve les Relationattributs selon le projet et l'id d'une relation
 
 def get_relAtt_byProjRel(idProj, idRel):
     return Relationattributs.query.filter(Relationattributs.projet_id==idProj).filter(Relationattributs.relation_id==idRel).all()
 
+#  trouve l'entitéRelation selon l'id d'une relation
+
 def get_entityrel_byIdRel(idRel):
     return Relationentite.query.filter(Relationentite.relation_id==idRel).all()
+# trouve la premiere relation selon l'id d'une relation et le projet actuel
 
 def get_relation_byId(idRel, idProj):
     return Relation.query.filter(Relation.id == idRel).filter(Relation.projet_id == idProj).one()
 
+# trouve les droits d'un user sur un projet
+
 def getDroitUser(username,idProj):
     return (Gerer.query.filter(Gerer.user_login==username,Gerer.projet_id==idProj).first()).droit.nomDroit
+
+# trouve les relationsAttribut selon l'id d'un attribut et le projet actuel  
 
 def get_relAtt_byAtt(attId, idProj):
     return Relationattributs.query.filter(Relationattributs.attribut_id == attId).filter(Relationattributs.projet_id == idProj).all()
