@@ -653,8 +653,16 @@ def page_ajouter_entite(username,idProj):
 @login_required
 def save_entity(username,idProj):
 	nbAtt = request.form.get("nbAtt")
-	liindEnt= request.form.get("lesent")
-	nbEnt = len(liindEnt)
+	stridEnt= request.form.get("lesent")
+	liindEnt = stridEnt.split(',')
+	liindEnt = list(filter(None,liindEnt))
+	print(liindEnt)
+	# print(liindEnt)
+	# for sup in (assupEnt):
+	# 	print(sup)
+	# 	liindEnt.pop(sup)
+	# print(liindEnt)
+	nbEnt = request.form.get("cptEnt")
 	lientitepresente = get_nom_entites_projet(idProj)
 	liIdEntitePresente = get_id_entites_projet(idProj)
 	proj = get_proj(idProj)
@@ -668,23 +676,27 @@ def save_entity(username,idProj):
 			ent = Entite.query.get((liIdEntitePresente[i],idProj))
 			db.session.delete(ent)
 			db.session.commit()
-	for i in range(int(nbEnt)):
-		listedesatt = request.form.get("lesattPEnt"+liindEnt[i])
-		idEnt= request.form.get("lesent"+liindEnt[i])
-		nbAttEnt = len(listedesatt)
-		for y in range(int(nbAttEnt)):
-			nomattselec = request.form.get("lesatt"+liindEnt[i]+listedesatt[y])
+	for i in range(len(liindEnt)-1):
+		strlistedesIndDesatt = request.form.get("lesattPEnt"+liindEnt[i])
+		# print(strlistedesIndDesatt)
+		listedesIndDesatt=strlistedesIndDesatt.split(',')
+		listedesIndDesatt = list(filter(None,listedesIndDesatt))
+		# print(listedesIndDesatt)
+		for x in range(len(listedesIndDesatt)):
+			nomattselec = request.form.get("lesatt"+liindEnt[i]+listedesIndDesatt[x])
 			mcdAtt.append(nomattselec)
-
+	# print(mcdAtt)
 	if len(mcdAtt) != len(list(set(mcdAtt))):
 		flash("Impossible! Des attributs sont utilisés plusieurs fois")
 		return redirect(url_for('page_ajouter_entite',username=username,idProj=idProj))
 
 	else:
-		for i in range(int(nbEnt)):
+		for i in range(len(liindEnt)):
 			if request.method=="POST":
-				listedesatt = request.form.get("lesattPEnt"+liindEnt[i])
-				nbAttEnt = len(listedesatt)
+				strlistedesIndDesatt = request.form.get("lesattPEnt"+liindEnt[i])
+				listedesIndDesatt=strlistedesIndDesatt.split(',')
+				listedesIndDesatt = list(filter(None,listedesIndDesatt))
+
 				nom = request.form.get("nom"+liindEnt[i])
 				if nom in lientitepresente :
 					idbdEnt = liindEnt[i]
@@ -694,10 +706,12 @@ def save_entity(username,idProj):
 					ent = Entite(id=get_nbid_entity()+1, projet_id=idProj, nomEntite=request.form.get("nom"+liindEnt[i]))
 					db.session.add(ent)
 					db.session.commit()
-			for y in range(int(nbAttEnt)):
+			for y in range(len(listedesIndDesatt)):
+				print(liindEnt[i])
+				print(listedesIndDesatt)
 				if request.method=="POST":
-					idbdAtt = request.form.get("lesatt"+liindEnt[i]+listedesatt[y])
-					cleprimaire = request.form.get("checkprimary"+liindEnt[i]+listedesatt[y])
+					idbdAtt = request.form.get("lesatt"+liindEnt[i]+listedesIndDesatt[y])
+					cleprimaire = request.form.get("checkprimary"+liindEnt[i]+listedesIndDesatt[y])
 					att = Attributs.query.get((idbdAtt,idProj))
 					if cleprimaire == "on":
 						att.primaryKey = True;
