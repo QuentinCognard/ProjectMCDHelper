@@ -621,10 +621,9 @@ def page_ajouter_entite(username,idProj):
 		return render_template("add_entity.html", projet = proj,username=username,id=idProj,attributs=M.listeAttribut.choices, form=M,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 	return redirect(url_for('page_projets', username=username, n=1, i=1))
 
-# route pour la sauvegarde d'une nouvelle entite
-@app.route("/projets/<string:username>/<int:idProj>/new_entity/save", methods=['GET', 'POST'])
+@app.route("/projets/<string:username>/<int:idProj>/new_entity/save/<string:type>", methods=['GET', 'POST'])
 @login_required
-def save_entity(username,idProj):
+def save_entity(username,idProj,type):
 	nbAtt = request.form.get("nbAtt")
 	stridEnt= request.form.get("lesent")
 	liindEnt = stridEnt.split(',')
@@ -691,18 +690,20 @@ def save_entity(username,idProj):
 						att.primaryKey = False;
 					att.entite_id = ent.id
 					db.session.commit()
-		return render_template("new_relations.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
-
-# route vers la page de modification d'une entite
+		if type=="add":
+			return render_template("new_relations.html",username=username,idProj=idProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+		else:
+			return redirect(url_for('consulter',username=username,idProj=idProj))
 @app.route("/projets/<string:username>/<int:idProj>/consult/modif_entity")
 def modif_entity(username,idProj):
 	M=CreaMCDForm(request.form)
 	M.listeAttribut.choices = get_attributs_projet(idProj)
 	M.listeEntite.choices = get_entites_projet(idProj)
 	proj = get_proj(idProj)
-	return render_template("modif_entity.html", projet = proj,username=username,id=idProj,form=M,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
-# route vers la page d'ajout d'une remlation
+	return render_template("modif_entity.html",idProj=idProj ,projet = proj,username=username,id=idProj,form=M,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+
+
 @app.route("/projets/<string:username>/<int:idProj>/new_relation")
 @login_required
 def page_ajouter_relation(username,idProj):
