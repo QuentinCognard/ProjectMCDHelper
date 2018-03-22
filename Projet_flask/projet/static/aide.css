@@ -5,3 +5,7 @@ button{
 .div{
   margin-left: 2em;
 }
+
+fieldset>img{
+  display: none;
+}

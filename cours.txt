@@ -38,7 +38,7 @@ Cours sur les Entités :
 
 Une entité est un objet dotée d'une existence propre et est décrite
 par un identifiant et plusieurs attributs qui lui sont propre.
-Une entité possède au moins un attribut et au moins un identifiant
+Une entité possède au moins un attribut et au moins un identifiant.
 
 <h3> Représentation et exemple </h3>
 
