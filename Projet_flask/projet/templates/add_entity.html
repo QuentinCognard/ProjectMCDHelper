@@ -24,9 +24,9 @@
 
       <input id="hiddenEnt" type="hidden" name="nbEnt" value=1></input>
 
-      <input name="lesent" type="hidden" type="text" id="lesent" value="1" autocomplete='off'>
+      <input name="lesent" type="hidden" type="text" id="lesent" value="1," autocomplete='off'>
       <input id="hiddeAtt1" type="hidden" name="nbAttEnt1" value=1 autocomplete='off'></input>
-      <input name="lesattPEnt1" type="hidden" type="text" id="lesattPEnt1" value="1" autocomplete='off'>
+      <input name="lesattPEnt1" type="hidden" type="text" id="lesattPEnt1" value="1," autocomplete='off'>
 
 
     <div class="lesattributs">
@@ -86,7 +86,7 @@
     // document.write(child.id);
     parent.removeChild(child);
     var hiddenEnt = document.getElementById("hiddenEnt");
-    hiddenEnt.value=nbEnt;
+    hiddenEnt.value++;
 
   }
 
@@ -114,11 +114,14 @@
 
 
       var listeEntite = document.getElementById("lesent");
-      listeEntite.value += nbEnt;
+      listeEntite.value += nbEnt+",";
+
+      console.log(listeEntite.value);
 
 
       var hiddenEnt = document.getElementById("hiddenEnt");
-      hiddenEnt.value= nbEnt;
+      hiddenEnt.value++;
+
 
 
 
@@ -226,7 +229,8 @@
       divAttribut.id = "idDivAtt"+nbEntS+nbAttloc.value;
 
       var listeAttributEnt = document.getElementById("lesattPEnt"+nbEntS);
-      listeAttributEnt.value += nbAttloc.value;
+      listeAttributEnt.value += nbAttloc.value+",";
+
 
       var idAttIndiv = document.createElement("input");
       idAttIndiv.id = "idAttIndiv"+nbEntS+nbAttloc.value;
@@ -241,10 +245,20 @@
       ajouteSuppButtonAtt(divAttribut,parent,nbEntS,idAttIndiv);
       ajouteNomAtt(divAttribut,nbEntS);
       ajouteCle(divAttribut,nbEntS);
+      // ajouteValeur(divAttribut);
+      // ajouteQuantite(divAttribut);
+      // ajouteGenre(divAttribut);
+      // var divActuel = document.querySelector(".attEntite");
+      // divEntite.querySelector(".lesattributs").insertBefore(divAttribut, divActuel.nextSibling);
       var lesatt=parent.querySelector(".lesattributs");
       lesatt.appendChild(divAttribut);
 
+      // document.write(divEntiteCourante.id);
+      // document.write(divEntiteCourante.id);
+      // document.write(divAttribut.id);
+      // document.write(divActuel.id);
 
+      // divEntite.appendChild(divAttribut);
   }
 
   // ajoute le bouton de supression d'une entité
@@ -274,6 +288,8 @@
     p2.appendChild(labTypeAtt);
     p2.appendChild(selTypeAtt);
     {% for attribut in form.listeAttribut.choices %}
+      // var hidAtt = document.getElementById("hiddenAtt");
+      // hidAtt.value=attribut.id;
       var optatt = document.createElement("option");
       optatt.value = "{{ attribut.id }}";
       var textOptatt = document.createTextNode("{{ attribut.nomAttribut }}");

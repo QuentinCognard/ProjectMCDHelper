@@ -17,7 +17,7 @@
 <legend>Nouveau MCD</legend>
 <input name="lesent" type="hidden" type="text" id="lesent" value="" autocomplete='off'>
 
-<input id="hiddenEnt" type="hidden" name="nbEnt" value=0></input>
+<input id="hiddenEnt" type="hidden" name="cptEnt" value=0 autocomplete='off'></input>
 
 
   </fieldset>
@@ -36,23 +36,23 @@
 
 var nbEnt = {{ form.listeEntite.choices|length }};
 
-
 {% for entite in form.listeEntite.choices %}
-
-
-    nbEnt += 1;
+    nbEnt = {{ entite.id }}
+    // nbEnt += 1;
     console.log(nbEnt);
     var divEntite = document.createElement("div");
     divEntite.className="bordmcd";
     divEntite.id = "ent"+"{{entite.id}}";
 
     var listeEntite = document.getElementById("lesent");
-    listeEntite.value += nbEnt;
+    listeEntite.value += "{{entite.id}}"+",";
 
     var hidEnt=document.getElementById("hiddenEnt");
-    hidEnt.value=nbEnt;
+    hidEnt.value++;
 
-    var nbEntS = nbEnt
+    console.log(hidEnt);
+
+    var nbEntS = nbEnt;
 
 
 
@@ -92,7 +92,7 @@ var nbEnt = {{ form.listeEntite.choices|length }};
         listeEntite.value = listeEntite.value.toString().replace({{entite.id}}, '');
         parent.removeChild(child);
         var hidEnt=document.getElementById("hiddenEnt");
-        hidEnt.value=nbEnt;};
+        hidEnt.value--;};
 
       var p1 = document.createElement("p");
       divEntite.appendChild(p1)
@@ -128,8 +128,9 @@ var nbEnt = {{ form.listeEntite.choices|length }};
         divAttribut.id = "idDivAtt"+"{{entite.id}}"+nbAttloc.value;
 
         var listeAttributEnt = document.getElementById("lesattPEnt"+"{{entite.id}}");
-        listeAttributEnt.value += "{{attribut.id}}";
+        listeAttributEnt.value += nbAttloc.value+",";
 
+        console.log(listeAttributEnt.value);
         var idAttIndiv = document.createElement("inupt");
         idAttIndiv.id = "idAttIndiv"+"{{entite.id}}"+"{{attribut.id}}";
         idAttIndiv.type = "hidden";
@@ -165,8 +166,8 @@ var nbEnt = {{ form.listeEntite.choices|length }};
         var textType = document.createTextNode("Choisir un attribut :");
         labTypeAtt.appendChild(textType);
         var selTypeAtt = document.createElement("select");
-        selTypeAtt.id = "lesatt"+"{{entite.id}}"+"{{attribut.id}}";
-        selTypeAtt.name = "lesatt"+"{{entite.id}}"+"{{attribut.id}}";
+        selTypeAtt.id = "lesatt"+"{{entite.id}}"+nbAttloc.value;
+        selTypeAtt.name = "lesatt"+"{{entite.id}}"+nbAttloc.value;
         p2.appendChild(labTypeAtt);
         p2.appendChild(selTypeAtt);
         {% for attribut in form.listeAttribut.choices %}
@@ -228,7 +229,8 @@ var nbEnt = {{ form.listeEntite.choices|length }};
       divAttribut.id = "idDivAtt"+"{{entite.id}}"+nbAttloc.value;
 
       var listeAttributEnt = document.getElementById("lesattPEnt"+"{{entite.id}}");
-      listeAttributEnt.value += nbAttloc.value;
+      listeAttributEnt.value += nbAttloc.value+",";
+      console.log(listeAttributEnt.value);
 
 
       var idAttIndiv = document.createElement("input");
@@ -296,6 +298,7 @@ var nbEnt = {{ form.listeEntite.choices|length }};
     };
     p2.appendChild(bouton);
 
+
 {% endfor %}
 
 
@@ -311,7 +314,7 @@ function removeEntite(id,nbEntS){
   // document.write(child.id);
   parent.removeChild(child);
   var hiddenEnt = document.getElementById("hiddenEnt");
-  hiddenEnt.value=nbEnt;
+  hiddenEnt.value++;
 
 }
 
@@ -339,11 +342,15 @@ function ajouteEntite(){
 
 
     var listeEntite = document.getElementById("lesent");
-    listeEntite.value += nbEnt;
+    listeEntite.value += nbEnt+",";
+
+    console.log(listeEntite.value);
 
 
     var hiddenEnt = document.getElementById("hiddenEnt");
-    hiddenEnt.value= nbEnt;
+    hiddenEnt.value++;
+
+    console.log(hidEnt);
 
 
 
@@ -451,7 +458,8 @@ function ajouteAttribut(nbEntS){
     divAttribut.id = "idDivAtt"+nbEntS+nbAttloc.value;
 
     var listeAttributEnt = document.getElementById("lesattPEnt"+nbEntS);
-    listeAttributEnt.value += nbAttloc.value;
+    listeAttributEnt.value += nbAttloc.value+",";
+
 
     var idAttIndiv = document.createElement("input");
     idAttIndiv.id = "idAttIndiv"+nbEntS+nbAttloc.value;
