@@ -12,33 +12,33 @@
 
 <section id="questionnaire">
     <h2> Questionnez vous sur votre MCD  ! </h2><br>
-    <h4> Répondez à toutes ces infirmations ci-dessous pour vérifier votre MCD : </h4>
+    <h4> Répondez à toutes les affirmations ci-dessous pour vérifier votre MCD : </h4>
 
-    <legend id="quest1" >1. Les entités possèdes au moins un identifiant ( primary Key)</legend>
+    <legend id="quest1" >1. Les entités possèdent au moins un identifiant (primary Key)</legend>
 
     <button  id="oui1"  onclick="oui(1)" class="btn btn-success" role="button">Oui</button>
     <button  id="non1"  onclick="non(1)"  class="btn btn-danger" role="button">Non / Je ne sais pas</button>
 
-    <p id="expl1" class="invisibl"> Chaque entités doit être composé d'au moins un attributs identifiant celle-ci.
-       Un identifiant sera forcement unique et permettera de reconnaître à quel itération de l'entité on à affaire.
-       Par exemple : une entité Personne aura un identifiants unique " Id " et des attributs plus classique " nom " et " prénom ".
+    <p id="expl1" class="invisibl"> Chaque entité doit être composée d'au moins un attribut identifiant celle-ci.
+       Un identifiant sera forcément unique et permettra de reconnaître à quelle itération de l'entité on a affaire.
+       Par exemple : une entité Personne aura un identifiant unique " Id " et des attributs plus classique " nom " et " prénom ".
      </p>
-     <p id="exploui1" class="invisibl"> Bravo ! il important d'avoir un identifiant pour chaque entité pour pouvoir un attribut unique permettant de rendre unique chaque itération </p>
+     <p id="exploui1" class="invisibl"> Bravo ! il est important d'avoir un identifiant pour chaque entité pour avoir un attribut unique permettant de rendre unique chaque itération </p>
      <a id="modif1" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
 
-    <legend id="quest2">2. Les identifiants sont tous pertinants et unique</legend>
+    <legend id="quest2">2. Les identifiants sont tous pertinants et uniques</legend>
 
         <button id="oui2" href="" onclick="oui(2)" class="btn btn-success boutton" role="button">Oui</button>
         <button id="non2" href="" onclick="non(2)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
 
         <p id="expl2" class="invisibl" >
-Un identifiants ( primary key ) est un attributs qui doit être unique. Un identifiants
-va donc être la pluspart du temps une entrée statique et qui n'est pas rentrée par l'utilisateur
+Un identifiant (Primary key) est un attribut qui doit être unique. Un identifiant
+va donc être la plupart du temps une entrée statique et qui n'est pas entrée par l'utilisateur
 comme un ID par exemple.
          </p>
-         <p id="exploui2" class="invisibl"> Bien joué , un identifiant est est unique !  </p>
+         <p id="exploui2" class="invisibl"> Bien joué , un identifiant est unique !  </p>
          <a id="modif2" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
-    <legend id="quest3">3. Chaque attributs possède une seul valeur pour une valeur de sont entité</legend>
+    <legend id="quest3">3. Chaque attribut possède une seule valeur pour une valeur de son entité</legend>
 
             <button id="oui3" href="" onclick="oui(3)" class="btn btn-success boutton" role="button">Oui</button>
             <button id="non3" href="" onclick="non(3)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
@@ -48,10 +48,10 @@ comme un ID par exemple.
                Par exemple dans une entité " Élève " on pourra très bien avoir un attribut " Prénom " mais pas " Notes " car l'élève possède
                plusieurs notes. On créera donc une entités " Notes ".
             </p>
-            <p id="exploui3" class="invisibl"> Très bien ! Un attributs possèdant plusieurs valeurs pour un exemple d'entité n'existe pas et doit être sous la forme d'une entité.</p>
+            <p id="exploui3" class="invisibl"> Très bien ! Un attribut possèdant plusieurs valeurs pour un exemple d'entité n'existe pas et doit être sous la forme d'une entité.</p>
             <a id="modif3" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
 
-          <legend id="quest4">4. Il n'y à aucun attributs nommé pareil dans le MCD et tous les attributs ont un nom cohérant </legend>
+          <legend id="quest4">4. Il n'y a aucun attribut nommé pareil dans le MCD et tous les attributs ont un nom cohérent </legend>
 
                     <button id="oui4" href="" onclick="oui(4)" class="btn btn-success boutton" role="button">Oui</button>
                     <button id="non4" href="" onclick="non(4)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
@@ -59,7 +59,7 @@ comme un ID par exemple.
                     <p id="expl4" class="invisibl">
                       Pour des raisons de clareté et pour éviter les problèmes lors de la création de la base de données, un MCD ne doit pas contenir
                       2 attributs ou même 2 entités nommées pareil. Si on doit par exemple donner un nom à l'entité A et à l'entité B on nommera donc les attributs "nomA" et "nomB" par exemple.
-                      Enfin la facilité de compréhension des noms des attributs sont important si quelqu'un un jour reprend notre base de données, elle doit être facilement compréhensible.
+                      Enfin la facilité de compréhension des noms des attributs est importante si quelqu'un un jour reprend notre base de données, elle doit être facilement compréhensible.
 
                     </p>
                     <p id="exploui4" class="invisibl"> Bien. Pour éviter les problèmes, un bon nommage des attributs en important ! </p>
@@ -69,7 +69,7 @@ comme un ID par exemple.
                       <button id="non5" href="" onclick="non(5)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
 
                       <p id="expl5" class="invisibl">
-                        Les cardinalitées servent à compter le nombre minimum et maximum de possibilités que chaque entités contiennent dans la relation liant 2 ou plusieurs objets.
+                        Les cardinalitées servent à compter le nombre minimum et maximum de possibilités que chaque entité contien dans la relation liant 2 ou plusieurs objets.
                         Certaines règles sont établies pour vous aidez à bien comprendre comment utiliser les cardinalitées. Voici un exemple de règles : <br>
                         0 - 1 : présence 0 ou 1 fois maximum<br>
 		                    0 - n : présence de 0 à n fois<br>
@@ -79,7 +79,7 @@ comme un ID par exemple.
                             <p id="exploui5" class="invisibl">Impressionant ! les règles sur les cardinalitées sont importantes pour la bonne compréhension de l'utilité des entités. </p>
                      <a id="modif5" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button> </a>
 
-                <legend id="quest6">6. si une association est porteuse de données, les attributs identifiants des entités reliées
+                <legend id="quest6">6. Si une association est porteuse de données, les attributs identifiants des entités reliées
 par cette association permettent elles de determiner les données de l'association et de définir
 la dépendance : identifiants -> données de la relation ?
  </legend>
@@ -88,33 +88,33 @@ la dépendance : identifiants -> données de la relation ?
                 <button id="non6" href="" onclick="non(6)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
 
                       <p id="expl6" class="invisibl">
-                        Les identifiants des entités reliées par une relation doivent pouvoir detérminé l'identifiants de cette relation ! On doit donc pouvoir retrouver
-                        à coup sûr cette identifiants en connaissant ceux des entités.
+                        Les identifiants des entités reliées par une relation doivent pouvoir déterminer l'identifiant de cette relation ! On doit donc pouvoir retrouver
+                        à coup sûr cet identifiant en connaissant ceux des entités.
                        </p>
-                       <p id="exploui6" class="invisibl">Pas mal. les identifiants des entités doivent absolument permettres de retrouver celui de la relation associé. </p>
+                       <p id="exploui6" class="invisibl">Pas mal. les identifiants des entités doivent absolument permettre de retrouver celui de la relation associée. </p>
                        <a id="modif6" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
 
-              <legend id="quest7">7. Les attributs des relations sont des verbes à l'infinitif
+              <legend id="quest7">7. Les attributs des relations sont des verbes à l'infinitif ?
         </legend>
 
                  <button id="oui7" href="" onclick="oui(7)" class="btn btn-success boutton" role="button">Oui</button>
                  <button id="non7" href="" onclick="non(7)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
 
                   <p id="expl7" class="invisibl">
-                  C'est une règle dans la conception de base de données. Si les attributs de votre relation n'est pas un verbe à l'infinitif ( souvent accompagné d'un adverbe)
-                  alors il y n'a sans doute rien à faire dans cette relation ou est mal formulé.
+                  C'est une règle dans la conception de base de données. Si les noms de vos relations ne sont pas des verbes à l'infinitif ( souvent accompagné d'un adverbe)
+                  alors ils sont mal formulés.
                             </p>
-                            <p id="exploui7" class="invisibl"> Super ! Les identifiants sont toujours des verbes à l'infinitif. </p>
+                            <p id="exploui7" class="invisibl"> Super ! Les noms des relations sont toujours des verbes à l'infinitif. </p>
                   <a id="modif7" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button> </a>
 
-        <legend id="quest8"> 8. Aucune entité est vide
+        <legend id="quest8"> 8. Aucune entité n'est vide ?
             </legend>
 
                   <button id="oui8" href="" onclick="oui(8)" class="btn btn-success boutton" role="button">Oui</button>
                  <button id="non8" href="" onclick="non(8)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
 
                   <p id="expl8" class="invisibl">
-Aie ! attention une entité vide ne sert à rien. si vous avez crée une entité en ne savant pas quoi mettre comme attribut,
+Aie ! Attention une entité vide ne sert à rien. si vous avez crée une entité en ne sachant pas quoi mettre comme attributs,
 c'est probablement qu'il faut plutôt en faire un attribut dans une autre entité.
                                 </p>
                                 <p id="exploui8" class="invisibl"> Et oui c'est tout bête mais il faut y faire attention ! </p>
