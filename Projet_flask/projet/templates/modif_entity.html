@@ -34,13 +34,14 @@
 
 <script>
 
-var nbEnt = 0;
+var nbEnt = {{ form.listeEntite.choices|length }};
 
 
 {% for entite in form.listeEntite.choices %}
 
 
     nbEnt += 1;
+    console.log(nbEnt);
     var divEntite = document.createElement("div");
     divEntite.className="bordmcd";
     divEntite.id = "ent"+"{{entite.id}}";
@@ -56,7 +57,7 @@ var nbEnt = 0;
 
 
     var hidAtt = document.createElement("input");
-    hidAtt.id = "hiddeAtt"+nbEnt;
+    hidAtt.id = "hiddeAtt"+"{{entite.id}}";
     hidAtt.type = "hidden";
     hidAtt.name= "nbAttEnt"+"{{entite.id}}";
     hidAtt.value = 0;
