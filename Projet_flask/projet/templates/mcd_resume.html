@@ -51,7 +51,7 @@
       {% if droitUser!="visiteur" %}
         <section id="bouton">
           <a href="{{url_for('page_modif_attributs',idProj=idProj,username=username)}}" class="btn btn-primary" role="button">Modifier les attributs</a>
-          <a href="" class="btn btn-success" role="button">Modifier les entités</a>
+          <a href="{{ url_for('page_ajouter_entite', idProj=idProj, username=username) }}" class="btn btn-success" role="button">Modifier les entités</a>
           <a href="{{ url_for('page_ajouter_relation', idProj=idProj, username=username) }}" class="btn btn-warning" role="button">Modifier les relations</a>
           <a class="btn btn-primary" role="button" onclick='draw()'>Charger le MCD</a>
         </section>
@@ -118,6 +118,7 @@
       return liste_finale;
     }
     function drawE(e){
+      var largeur = e[2].length;
       if(e.length <5){
         if(e[3] == "None"){
           if(posx == 10){
@@ -138,24 +139,36 @@
             liste_att_entite.push(liste_atts[j]);
           }
         }
+        for(var j=0; j <liste_att_entite.length;++j){
+          if(liste_att_entite[j][0] != "None"){
+            if(liste_att_entite[j][3].length > largeur){
+              largeur = liste_att_entite[j][3].length;
+            }
+          }
+        }
         var positionEnt = [];
         positionEnt.push(px,py);
         ctx.beginPath();
         ctx.moveTo(px,py);
-        ctx.lineTo(px + e[2].length * 10 ,py);
-        ctx.lineTo(px + e[2].length * 10 ,py + 35 +  liste_att_entite.length * 10);
-        ctx.lineTo(px,py + 35 +  liste_att_entite.length * 10);
+        ctx.lineTo(px + largeur * 10 ,py);
+        ctx.lineTo(px + largeur * 10 ,py + 35 +  liste_att_entite.length * 20);
+        ctx.lineTo(px,py + 35 +  liste_att_entite.length * 20);
         ctx.lineTo(px,py);
         ctx.moveTo(px,py+20);
-        ctx.lineTo(px + e[2].length * 10 ,py + 20 );
+        ctx.lineTo(px + largeur * 10 ,py + 20 );
         ctx.font = "10px Arial";
         ctx.fillText(e[2], px + 10, py+50/3);
         for(var i=0;i<liste_att_entite.length;++i){
           ctx.fillText(liste_att_entite[i][3], px + 10, py+35);
-          py += 10;
+          if(liste_att_entite[i][6] == "True"){
+            console.log("coucou");
+            ctx.moveTo(px + 10,py+40);
+            ctx.lineTo(px + liste_att_entite[i][3].length * 10,py + 40 );
+          }
+          py += 20;
         }
-        posx = px + e[2].length * 10;
-        posy = py +35
+        posx = px + largeur * 10;
+        posy = py + 35
         positionEnt.push(posx,posy);
         e[3] = positionEnt;
         posy = 10;
@@ -192,7 +205,7 @@
       ctx.fillText(rel[2], posX + 100 - (rel[2].length * 3 / 2), posY - 5);
       for(var k=0; k<entites.length;++k){
         if(k == 0){
-          ctx.moveTo(posX + 100,posY);
+          ctx.moveTo(posX + 60,posY);
           ctx.lineTo(posX,posY);
           ctx.fillText(l_r_e[k][3], posX, posY);
           if(entites[k].length != 5){
@@ -202,7 +215,7 @@
           }
         }
         else if(k == 1){
-          ctx.moveTo(posX + 100,posY);
+          ctx.moveTo(posX + 140,posY);
           ctx.lineTo(posX + 200,posY);
           ctx.fillText(l_r_e[k][3], posX + 180, posY);
           if(entites[k].length != 5){
@@ -211,13 +224,35 @@
             entites[k][3] = newpos;
           }
         }
+        else if(k == 2){
+          if(entites.length != 4){
+            ctx.moveTo(posX + 100,posY + 20);
+            ctx.lineTo(posX + 100,posY + 50);
+            ctx.fillText(l_r_e[k][3], posX + 100, posY + 30);
+            if(entites[k].length != 5){
+              var newpos = [];
+              newpos.push(posX + 100 - (entites[k][2].length * 3 / 2),posY + 50);
+              entites[k][3] = newpos;
+            }
+          }
+          else{
+            ctx.moveTo(posX+100,posY + 20);
+            ctx.lineTo(posX+75,posY + 50);
+            ctx.fillText(l_r_e[k][3], posX+75, posY + 30);
+            if(entites[k].length != 5){
+              var newpos = [];
+              newpos.push(posX + 75 - (entites[k][2].length * 3 / 2),posY + 50);
+              entites[k][3] = newpos;
+            }
+          }
+        }
         else{
-          ctx.moveTo(posX + 100,posY);
-          ctx.lineTo(posX + 100,posY + 100);
-          ctx.fillText(l_r_e[k][3], posX + 100, posY + 80);
+          ctx.moveTo(posX + 100,posY + 20);
+          ctx.lineTo(posX + 150,posY + 50);
+          ctx.fillText(l_r_e[k][3], posX + 150, posY + 30);
           if(entites[k].length != 5){
             var newpos = [];
-            newpos.push(posX + 100 - (entites[k][2].length * 3 / 2),posY + 100);
+            newpos.push(posX + 150 - (entites[k][2].length * 3 / 2),posY + 50);
             entites[k][3] = newpos;
           }
         }
@@ -247,7 +282,7 @@
       ctx.fillText(rel[2], posX - rel[2].length * 3 /2, posY +50);
       for(var k=0; k<entites.length;++k){
         if(k == 0){
-          ctx.moveTo(posX,posY+50);
+          ctx.moveTo(posX,posY+30);
           ctx.lineTo(posX,posY);
           ctx.fillText(l_r_e[k][3], posX, posY + 20);
           if(entites[k].length != 5){
@@ -257,7 +292,7 @@
           }
         }
         else{
-          ctx.moveTo(posX,posY);
+          ctx.moveTo(posX,posY+70);
           ctx.lineTo(posX,posY+100);
           ctx.fillText(l_r_e[k][3], posX, posY+80);
           if(entites[k].length != 5){
@@ -276,21 +311,35 @@
       var entites;
       var posX = posx;
       var posY = posy;
-        for(var j=0;j<liste_entite.length;++j){
-          if(l_r_e[0][2] == liste_entite[j][0]){
-            entites = liste_entite[j];
-            if(liste_entite[j].length == 5){
-              posX = Math.abs(liste_entite[j][3][0] + liste_entite[j][3][2]) / 2;
-              posY = Math.max(liste_entite[j][3][1],liste_entite[j][3][3]);
-            }
+      var largeur = e[2].length;
+      var liste_att_entite = [];
+      for(var j=0; j <liste_atts.length;++j){
+        if(liste_atts[j][2] == e[0]){
+          liste_att_entite.push(liste_atts[j]);
+        }
+      }
+      for(var j=0; j <liste_att_entite.length;++j){
+        if(liste_att_entite[j][0] != "None"){
+          if(liste_att_entite[j][3].length > largeur){
+            largeur = liste_att_entite[j][3].length;
           }
         }
+      }
+      for(var j=0;j<liste_entite.length;++j){
+        if(l_r_e[0][2] == liste_entite[j][0]){
+          entites = liste_entite[j];
+          if(liste_entite[j].length == 5){
+            posX = Math.abs(liste_entite[j][3][0] + liste_entite[j][3][2]) / 2;
+            posY = Math.max(liste_entite[j][3][1],liste_entite[j][3][3]);
+          }
+        }
+      }
       ctx.beginPath();
       ctx.ellipse(posX,posY + 50 ,20,40,90*Math.PI/180,0,2*Math.PI)
       ctx.fillText(rel[2], posX - rel[2].length * 3 /2, posY +50);
       for(var k=0; k<entites.length;++k){
         if(k == 0){
-          ctx.moveTo(posX,posY+50);
+          ctx.moveTo(posX,posY+30);
           ctx.lineTo(posX,posY);
           ctx.fillText(l_r_e[0][3], posX, posY + 20);
           if(entites[k].length != 5){
@@ -300,7 +349,7 @@
           }
         }
         else{
-          ctx.moveTo(posX,posY);
+          ctx.moveTo(posX,posY+70);
           ctx.lineTo(posX,posY+100);
           ctx.lineTo(posX + 50,posY+100);
           ctx.lineTo(posX + 50,posY - 20);
@@ -350,7 +399,6 @@
       }
     }
     function draw(){
-      console.log("Coucou");
       //Fonction qui lance le dessin du MCD
       init();
       // INFOS AFFICHAGES
