@@ -186,9 +186,9 @@ def send_mail(recipients,login,password):
 def send_mail_notif(recipients,mail_sender):
 	try:
 		msg = Message("You ask to join a project",
-			sender = mail_sender,
+			sender = "arthur.fauvin45@gmail.com",
 			recipients = [recipients])
-		msg.body = "Welcome in a new project good work !!!"
+		msg.body = "Welcome in a new project of " + mail_sender + " good work !! "
 		mail.send(msg)
 		return "Mail Send"
 	except Exception as e:
