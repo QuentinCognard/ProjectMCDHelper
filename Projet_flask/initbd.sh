@@ -1,3 +1,5 @@
+rm -rf venv/
+source installvenv.sh
 rm MCDBD.db
 ./manage.py syncdb
 ./manage.py newuser admin admin
