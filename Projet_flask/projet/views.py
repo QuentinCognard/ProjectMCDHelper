@@ -161,8 +161,7 @@ def creer_compte():
 			m.update(f.password.data.encode())
 			passwd = m.hexdigest()
 			o = User(prenom = f.prenom.data, nom = f.nom.data, mail = f.mail.data, login = f.login.data, password = passwd)
-			##############################code a mettre
-			# send_mail(o.mail,o.login,o.password)
+			# send_mail(o.mail,o.login)
 			db.session.add(o)
 			db.session.commit()
 			login_user(o)
@@ -171,12 +170,12 @@ def creer_compte():
 	return render_template("home.html",form_bis = f, form = f_bis, title = "Exerciceur de MCD", error=False)
 
 @app.route("/send-mail/")
-def send_mail(recipients,login,password):
+def send_mail(recipients,login):
 	try:
 		msg = Message("Thank you for your confidence, and welcome to MCDHelper",
 			sender="arthur.fauvin45@gmail.com",
 			recipients=[recipients])
-		msg.body = "Welcome on our application, here u will can create new MCD and work on it. Concerning your information about your account, login :" + login + " password : " + password + ""
+		msg.body = "Welcome on our application, here u will can create new MCD and work on it. Concerning your information about your account, login :" + login + ""
 		mail.send(msg)
 		return "Mail Send"
 	except Exception as e:
