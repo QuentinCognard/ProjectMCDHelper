@@ -4,6 +4,9 @@
   <link rel="stylesheet" href= "{{url_for('static',filename='new_relation.css') }}"/>
 {% endblock %}
 {% block contain %}
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
 <form method='post' class="bd-example" action="{{url_for('save_relation_tablee',username=username,idProj=idProj)}}">
   <fieldset class="fieldset">
     <legend>Nouvelle relation</legend>
@@ -225,4 +228,5 @@
         }
 
 </script>
+{% endif %}
 {% endblock %}

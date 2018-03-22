@@ -21,6 +21,15 @@ la dépendance : identifiants -> données de la relation ?
 
 - Les entités ont au moins une clé primaire.
 
+
 -date
 
 - verbe infinitif
+
+- Toutes les entités possèdent des relations ?
+
+- La forme des attributs correspond bien à ce que vous souhaitez ?
+
+
+
+

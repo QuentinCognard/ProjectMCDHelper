@@ -169,8 +169,18 @@ def get_proj(idProj):
 #  compte le nomnbre total d'entité
 
 def get_nbid_entity():
-    req = db.session.query(db.func.count(Entite.id)).scalar()
-    return req
+    allent= Entite.query.all()
+    res=[0]
+    for a in allent:
+        res.append(a.id)
+    return max(res)
+
+def get_relationEntite_idEnt(idEntite):
+    allrelent = Relationentite.query.filter(Relationentite.entite_id == idEntite).all()
+    res=[]
+    for a in allrelent:
+        res.append(a)
+    return res
 
 #  compte le nomnbre total d'attributs
 
@@ -277,7 +287,35 @@ def get_attributs_projet(idProj):
         res.append(elem)
     return res
 
+
 #  trouve un user selon le nom d'un projet
+
+def get_nom_entites_projet(idProj):
+    allent= Entite.query.join(Projet).filter(Projet.id==idProj).all()
+    res=[]
+    for a in allent:
+        res.append(a.nomEntite)
+    return res
+
+# trouve l'id des entités du projet actuel
+
+def get_id_entites_projet(idProj):
+    allent= Entite.query.join(Projet).filter(Projet.id==idProj).all()
+    res=[]
+    for a in allent:
+        res.append(a.id)
+    return res
+
+# trouve les entités d'un projet
+
+def get_entites_projet(idProj):
+    allent= Entite.query.join(Projet).filter(Projet.id==idProj).all()
+    res=[]
+    for a in allent:
+        res.append(a)
+    return res
+
+#  trouve les user d'un projet grâce au nom
 
 def get_user_projet(nomProj):
     gerer=get_gerer_byProjet(nomProj)
@@ -291,8 +329,13 @@ def get_user_projet(nomProj):
 def get_attributs_proj(idProj):
     return Attributs.query.filter(Attributs.projet_id == idProj).all()
 
-# trouve les masters d'un projet
 
+# trouve les entité grâce au projet actuel
+
+def get_entite_proj(idProj):
+    return Entite.query.filter(Entite.projet_id == idProj).all()
+
+# trouve les masters d'un projet
 def get_master_proj(nomProj):
     projet=get_gerer_byProjet(nomProj)
     for p in projet:
@@ -358,7 +401,7 @@ def get_relation_byId(idRel, idProj):
 def getDroitUser(username,idProj):
     return (Gerer.query.filter(Gerer.user_login==username,Gerer.projet_id==idProj).first()).droit.nomDroit
 
-# trouve les relationsAttribut selon l'id d'un attribut et le projet actuel  
+# trouve les relationsAttribut selon l'id d'un attribut et le projet actuel
 
 def get_relAtt_byAtt(attId, idProj):
     return Relationattributs.query.filter(Relationattributs.attribut_id == attId).filter(Relationattributs.projet_id == idProj).all()

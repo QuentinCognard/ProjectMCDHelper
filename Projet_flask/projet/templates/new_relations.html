@@ -4,6 +4,9 @@
   <link rel="stylesheet" href= "{{url_for('static',filename='new_relation.css') }}"/>
 {% endblock %}
 {% block contain %}
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
   <fieldset class="fieldset">
     <legend>Nouveau MCD</legend>
       {% for elem in relations %}
@@ -50,4 +53,5 @@
     location.reload();
   }
   </script>
+{% endif %}
 {% endblock %}

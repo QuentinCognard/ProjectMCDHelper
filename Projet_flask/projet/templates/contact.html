@@ -4,6 +4,9 @@
   <link rel="stylesheet" href= "{{url_for('static',filename='contact.css') }}"/>
 {% endblock %}
 {% block contain %}
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
 <section>
   <section class="team-section pb-5">
 
@@ -116,5 +119,5 @@
 </section>
 
 
-
+{% endif %}
 {% endblock %}
