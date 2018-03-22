@@ -14,7 +14,7 @@
     <!-- Vu d'ensemble du dictionnaire (valeurs d'exemple) -->
       <legend id="mcd_name">{{proj.nomMCD}}</legend>
       <p id="tmp" hidden>{{proj.nomMCD}}</p>
-
+<section id="donne">
       <!-- for entité in dictionnaire -->
       <label> Données du MCD : </label>
       {% for e in ent %}
@@ -52,6 +52,7 @@
 
       <!-- for relation in bdd -->
       {% if droitUser!="visiteur" %}
+    </section>
         <section id="bouton">
           <a href="{{url_for('page_modif_attributs',idProj=idProj,username=username)}}" class="btn btn-primary" role="button">Modifier les attributs</a>
           <a href="{{ url_for('modif_entity', idProj=idProj, username=username) }}" class="btn btn-success" role="button">Modifier les entités</a>
@@ -69,7 +70,7 @@
       <p id="relsA" hidden>{{r_relsA}}</p>
       <canvas style="border:solid;" id="canvas" width="980"  height="300"></canvas>
     </section>
-    <section>
+    <section id="verifdiv">
       <a href="/projets/{{current_user.login}}/{{proj.id}}/consult/verifProjet"  role="button"> <button id="verif" class="btn btn-info">Vérifier le MCD </button></a>
     </section>
     <script>
