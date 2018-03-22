@@ -10,8 +10,9 @@
 
 <section id="questionnaire">
     <h2> Questionnez vous sur votre MCD  ! </h2><br>
+    <h4> Répondez à toutes ces infirmations ci-dessous pour vérifier votre MCD : </h4>
 
-    <legend id="quest1" >1. Les entités possèdes au moins un identifiant ( primary Key). </legend>
+    <legend id="quest1" >1. Les entités possèdes au moins un identifiant ( primary Key)</legend>
 
     <button  id="oui1"  onclick="oui(1)" class="btn btn-success" role="button">Oui</button>
     <button  id="non1"  onclick="non(1)"  class="btn btn-danger" role="button">Non / Je ne sais pas</button>
@@ -23,7 +24,7 @@
      <p id="exploui1" class="invisibl"> Bravo ! il important d'avoir un identifiant pour chaque entité pour pouvoir un attribut unique permettant de rendre unique chaque itération </p>
      <a id="modif1" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
 
-    <legend id="quest2">2. Les identifiants sont tous pertinants et unique.</legend>
+    <legend id="quest2">2. Les identifiants sont tous pertinants et unique</legend>
 
         <button id="oui2" href="" onclick="oui(2)" class="btn btn-success boutton" role="button">Oui</button>
         <button id="non2" href="" onclick="non(2)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
@@ -35,7 +36,7 @@ comme un ID par exemple.
          </p>
          <p id="exploui2" class="invisibl"> Bien joué , un identifiant est est unique !  </p>
          <a id="modif2" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
-    <legend id="quest3">3. Chaque attributs possède une seul valeur pour une valeur de sont entité.</legend>
+    <legend id="quest3">3. Chaque attributs possède une seul valeur pour une valeur de sont entité</legend>
 
             <button id="oui3" href="" onclick="oui(3)" class="btn btn-success boutton" role="button">Oui</button>
             <button id="non3" href="" onclick="non(3)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
@@ -48,7 +49,7 @@ comme un ID par exemple.
             <p id="exploui3" class="invisibl"> Très bien ! Un attributs possèdant plusieurs valeurs pour un exemple d'entité n'existe pas et doit être sous la forme d'une entité.</p>
             <a id="modif3" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
 
-          <legend id="quest4">4. Il n'y à aucun attributs nommé pareil dans le MCD et tous les attributs ont un nom cohérant. </legend>
+          <legend id="quest4">4. Il n'y à aucun attributs nommé pareil dans le MCD et tous les attributs ont un nom cohérant </legend>
 
                     <button id="oui4" href="" onclick="oui(4)" class="btn btn-success boutton" role="button">Oui</button>
                     <button id="non4" href="" onclick="non(4)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
@@ -61,7 +62,7 @@ comme un ID par exemple.
                     </p>
                     <p id="exploui4" class="invisibl"> Bien. Pour éviter les problèmes, un bon nommage des attributs en important ! </p>
                     <a id="modif4" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button></a>
-            <legend id="quest5" >5. Les cardinalitées respectent les règles universelles des MCD. </legend>
+            <legend id="quest5" >5. Les cardinalitées respectent les règles universelles des MCD </legend>
                       <button id="oui5" href="" onclick="oui(5)" class="btn btn-success boutton" role="button">Oui</button>
                       <button id="non5" href="" onclick="non(5)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
 
@@ -104,16 +105,17 @@ la dépendance : identifiants -> données de la relation ?
                             <p id="exploui7" class="invisibl"> Super ! Les identifiants sont toujours des verbes à l'infinitif. </p>
                   <a id="modif7" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD </button> </a>
 
-        <legend id="quest8"> 8. Une question sera poser ici mais je sais pas laquelle LUL
+        <legend id="quest8"> 8. Aucune entité est vide
             </legend>
 
                   <button id="oui8" href="" onclick="oui(8)" class="btn btn-success boutton" role="button">Oui</button>
                  <button id="non8" href="" onclick="non(8)"  class="btn btn-danger boutton" role="button">Non / Je ne sais pas</button>
 
                   <p id="expl8" class="invisibl">
-Bang
+Aie ! attention une entité vide ne sert à rien. si vous avez crée une entité en ne savant pas quoi mettre comme attribut,
+c'est probablement qu'il faut plutôt en faire un attribut dans une autre entité.
                                 </p>
-                                <p id="exploui8" class="invisibl"> BOOM ! </p>
+                                <p id="exploui8" class="invisibl"> Et oui c'est tout bête mais il faut y faire attention ! </p>
                 <a id="modif8" href="{{url_for('consulter',username=current_user.login,idProj=idProj)}}" class="invisibl" role="button"><button  class="btn btn-info"> Modifier mon MCD</button> </a>
               <br>  <button id="valid" class="btn btn-success invisibl" onclick="valid()" > Valider </button>
          <script>

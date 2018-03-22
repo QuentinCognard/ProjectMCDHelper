@@ -1,0 +1,120 @@
+{% extends "base_excerciseur.html" %}
+{% block styles %}
+{{ super() }}
+  <link rel="stylesheet" href= "{{url_for('static',filename='contact.css') }}"/>
+{% endblock %}
+{% block contain %}
+<section>
+  <section class="team-section pb-5">
+
+              <!--Section heading-->
+              <h3 class="h1 text-center py-5">Notre équipe</h3>
+              <!--Section description-->
+              <p class="grey-text pb-5 text-center">Salut :)</br>Nous sommes les membres de l'équipe qui a réalisé cette application. En cas de problèmes vous pouvez nous contacter
+                  via les adresses mail indiquées ci-dessous.</br>Bonne création de MCD !!!</p>
+
+              <!-- Grid row -->
+              <div class="row text-center">
+
+                  <!-- Grid column -->
+                  <div class="col-lg-3 col-md-6 mb-4">
+                      <div class="card card-body">
+                          <div class="avatar mx-auto my-3">
+                              <img src="{{url_for('static', filename='images/User/louis.jpg')}}" class="rounded-circle img-fluid" alt="First sample avatar image">
+                          </div>
+                          <h5 class="font-weight-bold">
+                              <strong>Louis Belhen</strong>
+                          </h5>
+                          <p class="grey-text">Chef de projet</p>
+                          <p class="grey-text">louis.belhen@etu.univ-orleans.fr</p>
+                      </div>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-lg-3 col-md-6 mb-4">
+                      <div class="card card-body">
+                          <div class="avatar mx-auto my-3">
+                              <img src="{{url_for('static', filename='images/User/corentin.jpg')}}" class="rounded-circle img-fluid" alt="First sample avatar image">
+                          </div>
+                          <h5 class="font-weight-bold">
+                              <strong>Corentin Berthias</strong>
+                          </h5>
+                          <p class="grey-text">Développeur</p>
+                          <p class="grey-text">corentin.berthias@etu.univ-orleans.fr</p>
+                      </div>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-lg-3 col-md-6 mb-4">
+                      <div class="card card-body">
+                          <div class="avatar mx-auto my-3">
+                              <img src="{{url_for('static', filename='images/User/quentin.jpg')}}" class="rounded-circle img-fluid" alt="First sample avatar image">
+                          </div>
+                          <h5 class="font-weight-bold">
+                              <strong>Quentin Cognard</strong>
+                          </h5>
+                          <p class="grey-text">Développeur</p>
+                          <p class="grey-text">quentin.cognard@etu.univ-orleans.fr</p>
+                      </div>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-lg-3 col-md-6 mb-4">
+                      <div class="card card-body">
+                          <div class="avatar mx-auto my-3">
+                              <img src="{{url_for('static', filename='images/User/erwan.jpg')}}" class="rounded-circle img-fluid" alt="First sample avatar image">
+                          </div>
+                          <h5 class="font-weight-bold">
+                              <strong>Erwan Durand</strong>
+                          </h5>
+
+                          <p class="grey-text">Développeur</p>
+                          <p class="grey-text">erwan.durand@etu.univ-orleans.fr</p>
+                      </div>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-lg-3 col-md-6 mb-4">
+                      <div class="card card-body">
+                          <div class="avatar mx-auto my-3">
+                              <img src="{{url_for('static', filename='images/User/arthur.jpg')}}" class="rounded-circle img-fluid" alt="First sample avatar image">
+                          </div>
+                          <h5 class="font-weight-bold">
+                              <strong>Arthur Fauvin</strong>
+                          </h5>
+
+                          <p class="grey-text">Secrétaire</p>
+                          <p class="grey-text">arthur.fauvin@etu.univ-orleans.fr</p>
+                      </div>
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-lg-3 col-md-6 mb-4">
+                      <div class="card card-body">
+                          <div class="avatar mx-auto my-3">
+                              <img src="{{url_for('static', filename='images/User/lucas.jpg')}}" class="rounded-circle img-fluid" alt="First sample avatar image">
+                          </div>
+                          <h5 class="font-weight-bold">
+                              <strong>Lucas Filleul</strong>
+                          </h5>
+
+                          <p class="grey-text">Chef de projet adjoint</p>
+                          <p class="grey-text">lucas.filleul@etu.univ-orleans.fr</p>
+                      </div>
+                  </div>
+                  <!-- Grid column -->
+
+              </div>
+              <!-- Grid row -->
+
+          </section>
+</section>
+
+
+
+{% endblock %}

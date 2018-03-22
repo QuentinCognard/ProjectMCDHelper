@@ -64,6 +64,11 @@ def home():
 	f_bis = LoginForm()
 	return render_template("home.html", title= "Exerciseur MCD",form_bis=f, form=f_bis)
 
+@app.route("/<string:username>/contact")
+@login_required
+def contacter(username):
+	return render_template("contact.html", username = username, nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+
 # @app.route("/lucas/test/<id_projet>", methods=('GET', 'POST')) #route pour la page de connexion
 # def lucas(id_projet):
 # 	ecrire_Entite("test2.txt", id_projet)
@@ -103,14 +108,14 @@ def connexion():
 @login_required
 def accueil_compte():
 	user = current_user
-	return render_template("profil_user.html", sujet='accueil', user = user,nbnotif=get_nb_notifications(user.login),notifs=get_notifications(user.login))
+	return render_template("profil_user.html", sujet='accueil', username=user.login,user = user,nbnotif=get_nb_notifications(user.login),notifs=get_notifications(user.login))
 
 @app.route("/profil/editer/", methods=('GET', 'POST'))
 @login_required
 def editer_compte():
 	user = current_user
 	form = UserForm(nom = user.nom, prenom = user.prenom, photo = user.image)
-	return render_template("profil_user.html", sujet='edit', user = user, form = form,nbnotif=get_nb_notifications(user.login),notifs=get_notifications(user.login))
+	return render_template("profil_user.html", sujet='edit',  username=user.login,user = user, form = form,nbnotif=get_nb_notifications(user.login),notifs=get_notifications(user.login))
 
 @app.route("/profil/save_edit/", methods=('GET', 'POST'))
 @login_required
@@ -269,7 +274,7 @@ def add_projets(username):
 @login_required
 def description(username,nomProj):
 	membres=get_gerer_byProjet(get_Projet_byName(nomProj).nomProj)
-	return render_template("description-projet.html",projet=get_Projet_byName(nomProj),membres=membres,nbnotif=get_nb_notifications(username),master=get_master_proj(nomProj),notifs=get_notifications(username),m=get_gerer_byNom(nomProj,username))
+	return render_template("description-projet.html",username=username,projet=get_Projet_byName(nomProj),membres=membres,nbnotif=get_nb_notifications(username),master=get_master_proj(nomProj),notifs=get_notifications(username),m=get_gerer_byNom(nomProj,username))
 
 @app.route("/projets/<string:username>/<string:nomProj>/description/<string:master>/notif")
 @login_required
@@ -286,6 +291,7 @@ def demande(username,nomProj,master):
 		flash("Demande envoyée")
 	return redirect("projets/"+username+"/1/1")
 @app.route("/projets/<string:username>/<string:user>/<int:id>/<string:reponse>")
+@login_required
 def reponsedemande(username,id,reponse,user):
 	if reponse=="y":
 		db.session.add(Gerer(id,username,3))
@@ -303,6 +309,7 @@ def parametresProj(username,nomProj):
 	return render_template("parametres.html",username=username,nomProj=nomProj,gerer=gerer,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/suppProj")
+@login_required
 def suppProj(username,nomProj):
 	idProj=get_Projet_byName(nomProj).id
 	if( get_nom_droit(get_gerer_byNom(nomProj,username).droit_id) == "master"):
@@ -715,6 +722,7 @@ def page_resume_mcd(username,idProj):
 	return render_template("mcd_resume.html",username=username,idProj=idProj)
 
 @app.route("/projets/<string:username>/<int:idProj>/new_relation/create")
+@login_required
 def page_creer_relation(username,idProj):
 	attributs=get_attributs_proj(idProj)
 	entites=get_entity(idProj)
@@ -769,6 +777,13 @@ def delete_relation(username, idProj, idRel):
 	return redirect((url_for('page_ajouter_relation', username=username, idProj=idProj)))
 
 @app.route("/projets/<string:username>/<int:idProj>/consult/verifProjet",methods=['GET','POST'])
+@login_required
 def verifProjet(username,idProj):
 	proj=get_projet(username,idProj)
 	return render_template("verifProj.html",username=username,idProj=idProj,proj=proj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
+
+
+@app.route("/projets/<string:username>/Aide",methods=['GET','POST'])
+@login_required
+def aide(username):
+	return render_template("aide.html",username=username,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))

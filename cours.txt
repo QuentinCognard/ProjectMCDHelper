@@ -1,0 +1,100 @@
+Cours sur les attributs : 
+
+<h3> Qu'est ce qu'un attribut en mérise ? </h3>
+
+Un attribut ou propriété est une donnée élémentaire d'informations ayant un sens en-elle même
+( sans besoins d'autre éléments ) et appartenant à la description d'un objet ou d'une association
+Un objet ( ou entité ) possède au minimum un attribut.
+
+<h3> Typage et nommage </h3>
+
+chaque attribut possède un type ( par exemple un id sera de type int ). Sur le MCD, les type 
+n'apparaissent pas mais le dévellopeur aura besoins plustard de connaître les types de chaque
+attributs pour crée sa base de données.
+
+Il est important de nommer de façon clair ses attributs afin que n'importe qui puissent regarder
+votre MCD et comprendre chaque propriété. Il est aussi important de nommer differement chaque 
+attributs du MCD car dans le cas contraire, la conversion vers le SQL par exemple, créera beaucoup
+de conflits.
+
+<h3> Et les occurences ? <h3>
+
+Les occurences sont les valeurs prise par une propriété pour une itération d'une entité.
+Par exemple un attribut " nom " pourra avoir comme occurence " Erwan " ou encore " Ludivine ".
+
+
+<h3> Exemple d'attributs </h3>
+
+Voici un exemple d'attributs pour un auteur ainsi que des exemple d'occurences possible.
+
+INSERER ICI CAPTURE NUMERO 1 
+
+On à donc ici les attributs id_a de type int, nom_a de type string, prenom_a de type string
+et date_naissance_a de type date.
+
+Cours sur les Entités : 
+
+<h3> Qu'est ce qu'une entité ? </h3>
+
+Une entité est un objet dotée d'une existence propre et est décrite
+par un identifiant et plusieurs attributs qui lui sont propre.
+Une entité possède au moins un attribut et au moins un identifiant.
+
+<h3> Représentation et exemple </h3>
+
+Une entité est représenté par un rectangle avec en haut le nom suivi des attributs avec
+les identifiants soulignés. Voici un exemple pour une entité Personne :
+
+INSÉRER ICI CAPTURE NUMERO 2
+
+Ici l'entité Personne est identifié par sont numéro de sécurité social et possède un nom,
+un prénom et une adresse 
+
+
+Cours sur les relations : 
+
+<h3> Définition </h3>
+
+Une relation ou association décrit un lien existant entre 2 entités ou plus. Une relation
+n'a pas d'existance propre et peut ou non posséder des attributs.
+
+<h3> CIF </h3>
+
+La CIF ( contrainte d'integrité fonctionnelle ) exprime le faite que l'une des entités participant à l'association est complétement
+déterminée par la connaissance d'une ou plusieurs autres entités participant dans cette même 
+association.
+
+Voici un exemple avec une ville et un département : 
+
+INSÉRER ICI CAPTURE NUMERO 3
+
+ici si on connait la ville , on connait forcément le département.
+
+<h3> Exemple de relations : </h3>
+
+Ici nous avons des entités auteur, livre et éditeur avec leurs relation écrire,
+possédant un pourcentage et une relation publier qui est une CIF.
+
+ICI INSÉRER CAPTURE NUMERO 4
+
+Cours sur les cardinalités :
+
+<h3> Définition </h3>
+
+Une cardinalité d'un lien entre une entité et une relation indique
+le minimum et le maximum de fois qu'une itération de l'entité peut être concerné
+par la relation. Souvent la cardinalité minimum sera représenté par 0 ou 1
+et la maximum par 1 ou n ( n pour autant d'exemple que l'on veut ).
+
+<h3> Les cardinalités les plus courantes </h3> 
+
+0-1 : L'entité est optionnel 
+1-1 : L'entité doit être utilisé une fois quoi qu'il arrive
+0-n : L'entité peut être utilisé une , plusieurs ou 0 fois.
+1-n : L'entité doit être utilisé une ou plusieurs fois.
+
+<h3> Exemple </h3>
+
+Ici une personne peut être auteur de 0 - n  livre(s) et un livre à un seul auteur
+
+INSÉRER ICI CAPTURE NUMÉRO 5  

@@ -1,0 +1,11 @@
+button{
+  background-color: lightgrey;
+  margin: 1em;
+}
+.div{
+  margin-left: 2em;
+}
+
+fieldset>img{
+  display: none;
+}
