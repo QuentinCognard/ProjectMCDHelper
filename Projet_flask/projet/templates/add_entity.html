@@ -9,7 +9,7 @@
   <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
 {% else %}
 
-<form role="form" method="POST" class="bd-example" action="{{ url_for('save_entity', username=username, idProj=id) }}">
+<form role="form" method="POST" class="bd-example" action="{{ url_for('save_entity', username=username, idProj=id,type='add') }}">
   <fieldset class="lesentites">
 
 
