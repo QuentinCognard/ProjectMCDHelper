@@ -14,6 +14,8 @@ import shutil
 from flask_wtf import FlaskForm
 from functools import wraps
 from flask import g, request, redirect, url_for
+import smtplib
+from flask_mail import Mail,Message
 
 
 class LoginForm(FlaskForm):
@@ -154,6 +156,8 @@ def creer_compte():
 			m.update(f.password.data.encode())
 			passwd = m.hexdigest()
 			o = User(prenom = f.prenom.data, nom = f.nom.data, mail = f.mail.data, login = f.login.data, password = passwd)
+			##############################code a mettre
+			send_mail(o.mail,o.login,o.password)
 			db.session.add(o)
 			db.session.commit()
 			login_user(o)
@@ -161,8 +165,29 @@ def creer_compte():
 			return redirect(url_for('page_projets',username=o.login,n=1,i=1))
 	return render_template("home.html",form_bis = f, form = f_bis, title = "Exerciceur de MCD", error=False)
 
+@app.route("/send-mail/")
+def send_mail(recipients,login,password):
+	try:
+		msg = Message("Thank you for your confidence, and welcome to MCDHelper",
+			sender="arthur.fauvin45@gmail.com",
+			recipients=[recipients])
+		msg.body = "Welcome on our application, here u will can create new MCD and work on it. Concerning your information about your account, login :" + login + " password : " + password + ""
+		mail.send(msg)
+		return "Mail Send"
+	except Exception as e:
+		return str(e)
 
-
+@app.route("/send-mail-notif/")
+def send_mail_notif(recipients,mail_sender):
+	try:
+		msg = Message("You ask to join a project",
+			sender = mail_sender,
+			recipients = [recipients])
+		msg.body = "Welcome in a new project good work !!!"
+		mail.send(msg)
+		return "Mail Send"
+	except Exception as e:
+		return str(e)
 
 # @app.route("/traitement", methods=("POST",))
 # def traitement():
@@ -255,6 +280,7 @@ def demande(username,nomProj,master):
 		N=Notification(nom="Demande de "+username,
 		expediteur=username,destinataire=master,idProj=get_Projet_byName(nomProj).id,
 		texte="Demande de participation à votre projet "+nomProj+" de "+username+". Il sera ajouté en visiteur.")
+		send_mail_notif(User.query.filter(User.login==master).first().mail,User.query.filter(User.login==username).first().mail)
 		db.session.add(N)
 		db.session.commit()
 		flash("Demande envoyée")
@@ -387,7 +413,7 @@ def search_results(search,username):
 
 @app.route("/projets/<string:username>/<string:nomProj>/parametres/modifProj")
 @login_required
-def modifProj(username,nomProj):
+def Proj(username,nomProj):
 	P = ProjetForm(name=nomProj,description=get_Projet_byName(nomProj).descProj)
 	return render_template('modifProj.html',form=P,username=username,nomProj=nomProj,nbnotif=get_nb_notifications(username),notifs=get_notifications(username))
 

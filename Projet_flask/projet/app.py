@@ -2,6 +2,8 @@ from flask import Flask
 import os
 from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
+import smtplib
+from flask_mail import Mail,Message
 
 UPLOAD_FOLDER = '/path/to/the/uploads'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -34,4 +36,15 @@ def mkpath(p):
 from flask_sqlalchemy import SQLAlchemy
 
 app.config['SQLALCHEMY_DATABASE_URI'] = ('sqlite:///'+mkpath('../MCDBD.db'))
+
+app.config.update(
+DEBUG = True,
+MAIL_SERVER = 'smtp.gmail.com',
+MAIL_PORT = 512,
+MAIL_USE_SSL = True,
+MAIL_USERNAME = 'arthur.fauvin@free.fr',
+MAIL_PASSWORD = 'wxcvbn'
+)
+
+mail=Mail(app)
 db = SQLAlchemy(app)
