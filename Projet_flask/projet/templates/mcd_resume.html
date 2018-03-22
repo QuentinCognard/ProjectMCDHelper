@@ -54,7 +54,7 @@
       {% if droitUser!="visiteur" %}
         <section id="bouton">
           <a href="{{url_for('page_modif_attributs',idProj=idProj,username=username)}}" class="btn btn-primary" role="button">Modifier les attributs</a>
-          <a href="{{ url_for('page_ajouter_entite', idProj=idProj, username=username) }}" class="btn btn-success" role="button">Modifier les entités</a>
+          <a href="{{ url_for('modif_entity', idProj=idProj, username=username) }}" class="btn btn-success" role="button">Modifier les entités</a>
           <a href="{{ url_for('page_ajouter_relation', idProj=idProj, username=username) }}" class="btn btn-warning" role="button">Modifier les relations</a>
           <a class="btn btn-primary" role="button" onclick='draw()'>Charger le MCD</a>
           <button class="btn" id="download"><img id="pdfpic" src="{{url_for('static',filename='images/pdf.png') }}"></button>
