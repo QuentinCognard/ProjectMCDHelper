@@ -4,7 +4,9 @@
 <link rel="stylesheet" href= "{{url_for('static',filename='verifProj.css') }}"/>
 {% endblock %}
 {% block contain %}
-
+{% if current_user.login != username %}
+  <h1>Vous n'avez pas le droit d'accéder à cette page</h1>
+{% else %}
   <fieldset>
 
 
@@ -158,4 +160,5 @@ c'est probablement qu'il faut plutôt en faire un attribut dans une autre entit�
 
          </script>
        </section>
+{% endif %}
 {% endblock %}
